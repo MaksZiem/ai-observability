@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/layout/sidebar";
+import { AppShell } from "@/components/layout/app-shell";
 import { apiFetch } from "@/lib/api";
 import { getAccessToken } from "@/lib/session";
 import type { User } from "@/features/auth/types";
@@ -20,9 +20,8 @@ export default async function AppLayout({ children }: AppLayoutProps) {
   ]);
 
   return (
-    <div className="flex h-full flex-col md:flex-row">
-      <Sidebar user={user} projects={projects} />
-      <main className="min-w-0 flex-1 overflow-y-auto">{children}</main>
-    </div>
+    <AppShell user={user} projects={projects}>
+      {children}
+    </AppShell>
   );
 }

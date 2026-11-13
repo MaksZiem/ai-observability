@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
 import { formatCount, formatDayTime } from "@/lib/format";
 import { ErrorStatusBadge } from "@/features/errors/components/error-status-badge";
+import { ERROR_STATUS } from "@/features/errors/labels";
 import type { ErrorGroup } from "@/features/errors/types";
 
 const COLUMNS =
@@ -13,10 +15,10 @@ type ErrorGroupTableProps = {
 
 export function ErrorGroupTable({ projectId, groups }: ErrorGroupTableProps) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+    <div className="overflow-x-auto">
       <div className="min-w-[760px] text-[13px]">
         <div
-          className={`${COLUMNS} border-b border-border py-2 text-xs font-medium text-fg-muted`}
+          className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
           <span>Error</span>
           <span>Service</span>
@@ -27,13 +29,10 @@ export function ErrorGroupTable({ projectId, groups }: ErrorGroupTableProps) {
 
         <ul>
           {groups.map((group) => (
-            <li
-              key={group.id}
-              className="border-b border-border last:border-b-0"
-            >
+            <li key={group.id} className="border-b border-border">
               <Link
                 href={`/projects/${projectId}/errors/${group.id}`}
-                className={`${COLUMNS} py-2.5 transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
+                className={`${COLUMNS} ${statusRail(ERROR_STATUS[group.status].tone)} py-2.5 transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
               >
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="truncate font-mono font-medium">

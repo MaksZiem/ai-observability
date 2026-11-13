@@ -97,8 +97,8 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 
 ## Layout
 
-- **App shell:** fixed left sidebar `w-56`, `bg-surface`, `border-r border-border`; main area `bg-bg`, scrolls independently.
-- **Sidebar top:** project switcher (project name + environment badge). Bottom: user email + logout.
+- **App shell** (`components/layout/app-shell.tsx`): icon rail on the left (`w-[76px]`, `bg-surface`, `border-r border-border`), top bar above the content, main area `bg-bg` scrolls independently. The shell owns the single live (SSE) connection and passes status and counts down.
+- **Top bar** (`topbar.tsx`): `h-14 bg-surface border-b border-border px-4`. Left: project switcher (select + new project + environment badge) and the Live indicator. Right: user name/email and logout. On mobile it also holds the menu button that slides the rail in.
 - **Page header:** title, optional one-line description; on the right: time-range selector (`15m / 1h / 24h / 7d`) and actions. `px-6 py-5`, bottom border.
 - **Content:** `p-6`, blocks `gap-6`, inside cards `gap-3` / `gap-4`.
 - **Metric row:** `grid grid-cols-2 lg:grid-cols-4 gap-2.5`.
@@ -115,7 +115,9 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 
 ## Components
 
-**Sidebar nav.** Overview, Services, Errors, Logs, Traces, Metrics, Incidents, Deployments, AI Analysis, Alerts, Settings. `text-sm text-fg-muted rounded-md px-2.5 py-1.5`; hover `bg-surface-hover text-fg`; active `bg-surface-2 text-fg`. Incidents and Errors show a count pill (`bg-danger/15 text-danger text-[11px] rounded-full px-1.5`) only when open count > 0.
+**Icon rail.** Groups separated by a 1px `border-border` line: Overview, Services, Metrics | Errors, Logs, Traces | Incidents, Deploys, AI, Alerts | Settings; Platform health pinned to the bottom. Item: 18px icon over a `text-[10.5px]` short label, `rounded-md px-1 py-2`, full label in `title` and `aria-label`. Inactive `text-fg-muted`, hover `bg-surface-hover text-fg`; active `bg-surface-2 text-fg` with the icon in `accent`. Errors and Incidents show a count pill in the item's top-right corner (`bg-danger/15 text-danger text-[10px] rounded-full`) only when open count > 0.
+
+**Logo.** `LogoMark` (`components/ui/logo-mark.tsx`): a teal signal trace (`stroke-accent`) on a `surface-2` tile with a `border-strong` outline, `rx` 7 on a 32 grid. Used in the icon rail (`size-8`) and the auth screens (`size-7`). `app/icon.svg` is the same mark with hard-coded hex values for the browser tab.
 
 **Buttons.** `h-[34px] rounded-md px-3.5 text-sm font-medium`.
 - Primary `bg-accent text-accent-fg hover:bg-accent-hover`, one per region.
@@ -126,11 +128,11 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 
 **Status badge.** `inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium` + 6px dot, colours from the state table.
 
-**Stat card.** `bg-surface border border-border rounded-lg px-3 py-2.5`. Label `text-xs text-fg-muted`, value metric style, optional delta below (`text-xs font-mono`, `danger` when worse, `success` when better, `fg-muted` when flat).
+**Stat card.** `bg-surface border border-border border-l-[3px] rounded-lg px-3 py-2.5`; the left edge takes the tone colour (`border-strong` when healthy, else `warning` / `danger` / `critical`). Top row: label `text-xs text-fg-muted`, optional status word on the right in the tone colour (`Degraded`, `Critical`, `Slow`). Value: metric style in the tone colour. Optional threshold gauge below: 4px track `bg-surface-2`, fill in the tone colour (`accent` when healthy), 1px `fg-muted` ticks at each health threshold with mono `text-[10px]` labels underneath. Error rate shows ticks at 2% and 25%, P95 at 1s; thresholds come from `features/metrics/health.ts`.
 
 **Card.** `bg-surface border border-border rounded-xl p-[18px]`, title row on top.
 
-**Table.** `text-[13px]`. Header `text-xs font-medium text-fg-muted border-b border-border`. Rows `py-2.5 border-b border-border hover:bg-surface-hover`, whole row clickable. IDs, timestamps, durations mono.
+**Table.** No card around it: no outer border, no background, only 1px `border-border` lines. `text-[13px]`. Header `text-xs font-medium text-fg-muted border-b border-border` with `RAIL_SPACER` so columns align. Rows `py-2.5 border-b border-border hover:bg-surface`, whole row clickable, with a 3px left status rail from `statusRail(tone)` (`components/ui/status-rail.ts`) using the row's tone from the state table (`success` at 45% so healthy rows stay quiet). Numeric cells over a health threshold take the state colour (error rate, P95). IDs, timestamps, durations mono.
 
 **Inputs / select / textarea.** `bg-bg border border-border-strong rounded-md h-[34px] px-2.5 text-sm placeholder:text-fg-subtle focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25`. Label `text-[13px] font-medium`, help `text-xs text-fg-muted`, error `text-xs text-danger`.
 

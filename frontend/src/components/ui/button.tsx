@@ -4,8 +4,7 @@ type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: "bg-accent text-accent-fg hover:bg-accent-hover",
-  secondary:
-    "border border-border bg-surface-2 text-fg hover:bg-surface-hover",
+  secondary: "border border-border bg-surface-2 text-fg hover:bg-surface-hover",
   danger:
     "border border-border bg-surface-2 text-danger hover:bg-surface-hover",
   ghost: "text-fg-muted hover:bg-surface-hover hover:text-fg",

@@ -1,8 +1,8 @@
 import type { RequestStats, ServiceStatus } from "@/features/metrics/types";
 
-const DEGRADED_ERROR_RATE = 0.02;
-const CRITICAL_ERROR_RATE = 0.25;
-const DEGRADED_P95_MS = 1000;
+export const DEGRADED_ERROR_RATE = 0.02;
+export const CRITICAL_ERROR_RATE = 0.25;
+export const DEGRADED_P95_MS = 1000;
 
 export function errorRateTone({ errorRate }: RequestStats) {
   if (errorRate >= CRITICAL_ERROR_RATE) return "critical";

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
 import { formatDayTime, formatLatency } from "@/lib/format";
 import { SpanStatusBadge } from "@/features/traces/components/span-status-badge";
+import { SPAN_STATUS } from "@/features/traces/labels";
 import { tracePath } from "@/features/traces/paths";
 import type { Span } from "@/features/traces/types";
 
@@ -16,10 +18,10 @@ export function TraceTable({ projectId, traces }: TraceTableProps) {
   const slowest = Math.max(...traces.map((trace) => trace.durationMs), 1);
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+    <div className="overflow-x-auto">
       <div className="min-w-[760px] text-[13px]">
         <div
-          className={`${COLUMNS} border-b border-border py-2 text-xs font-medium text-fg-muted`}
+          className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
           <span>Started</span>
           <span>Operation</span>
@@ -30,13 +32,10 @@ export function TraceTable({ projectId, traces }: TraceTableProps) {
 
         <ul>
           {traces.map((trace) => (
-            <li
-              key={trace.id}
-              className="border-b border-border last:border-b-0"
-            >
+            <li key={trace.id} className="border-b border-border">
               <Link
                 href={tracePath(projectId, trace.traceId)}
-                className={`${COLUMNS} py-2.5 transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
+                className={`${COLUMNS} ${statusRail(SPAN_STATUS[trace.status].tone)} py-2.5 transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
               >
                 <span className="font-mono text-fg-muted tabular-nums">
                   {formatDayTime(trace.startTime)}

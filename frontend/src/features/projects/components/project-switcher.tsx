@@ -28,14 +28,14 @@ export function ProjectSwitcher({
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1.5">
+    <div className="flex min-w-0 items-center gap-2">
+      <div className="flex min-w-0 items-center gap-1.5">
         {projects.length > 0 && (
           <Select
             aria-label="Project"
             value={current?.id ?? ""}
             onChange={(event) => switchProject(event.target.value)}
-            className="min-w-0 flex-1"
+            className="w-40 min-w-0 sm:w-56"
           >
             {!current && (
               <option value="" disabled>
@@ -58,7 +58,7 @@ export function ProjectSwitcher({
         </Link>
       </div>
       {current && (
-        <div>
+        <div className="hidden sm:block">
           <EnvironmentBadge environment={current.environment} />
         </div>
       )}

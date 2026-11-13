@@ -4,6 +4,7 @@ import { FileSearch } from "lucide-react";
 import { buttonClasses } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
+import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
 import { formatDayTime } from "@/lib/format";
 import { AnalysisStatusBadge } from "@/features/analysis/components/analysis-status-badge";
 import { listAnalyses } from "@/features/analysis/queries";
@@ -11,6 +12,7 @@ import {
   IncidentSeverityBadge,
   IncidentStatusBadge,
 } from "@/features/incidents/components/incident-badges";
+import { INCIDENT_STATUS } from "@/features/incidents/labels";
 import { incidentPath } from "@/features/incidents/paths";
 import { listIncidents } from "@/features/incidents/queries";
 import { getProject } from "@/features/projects/queries";
@@ -60,10 +62,10 @@ export default async function AnalysisPage({
             }
           />
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+          <div className="overflow-x-auto">
             <div className="min-w-[760px] text-[13px]">
               <div
-                className={`${COLUMNS} border-b border-border py-2 text-xs font-medium text-fg-muted`}
+                className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
               >
                 <span>#</span>
                 <span>Incident</span>
@@ -76,13 +78,10 @@ export default async function AnalysisPage({
                   const analysis = latestAnalyses[index];
 
                   return (
-                    <li
-                      key={incident.id}
-                      className="border-b border-border last:border-b-0"
-                    >
+                    <li key={incident.id} className="border-b border-border">
                       <Link
                         href={incidentPath(projectId, incident.id)}
-                        className={`${COLUMNS} py-2.5 transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
+                        className={`${COLUMNS} ${statusRail(INCIDENT_STATUS[incident.status].tone)} py-2.5 transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
                       >
                         <span className="font-mono text-fg-muted tabular-nums">
                           #{incident.number}
