@@ -1,29 +1,30 @@
 ---
 name: AI Observability Platform
-description: Dark, dense developer-tool dashboard for monitoring production systems and investigating incidents. Quality bar is Vercel / Linear / Grafana.
+description: Dark, dense developer-tool dashboard for monitoring production systems and investigating incidents. Direction "Signal": cool slate-blue control room, teal signal accent. Quality bar is Grafana / Datadog / Linear.
 colors:
-  bg: "#0a0a0a"
-  surface: "#121317"
-  surface-2: "#17191e"
-  surface-hover: "#1c1f25"
-  border: "#23262d"
-  border-strong: "#30343c"
-  fg: "#ededed"
-  fg-muted: "#8b8f99"
-  fg-subtle: "#62666f"
-  accent: "#6e6af0"
-  accent-hover: "#7f7bf3"
-  success: "#3fb67a"
-  warning: "#e5a83b"
-  danger: "#e5534b"
-  critical: "#f0436b"
+  bg: "#0b1016"
+  surface: "#101720"
+  surface-2: "#162029"
+  surface-hover: "#1b2733"
+  border: "#1f2b38"
+  border-strong: "#2c3b4b"
+  fg: "#e4ebf2"
+  fg-muted: "#8798ab"
+  fg-subtle: "#5a6a7c"
+  accent: "#1fb5a6"
+  accent-hover: "#3cc8b8"
+  accent-fg: "#04201d"
+  success: "#74c25a"
+  warning: "#e9b44c"
+  danger: "#ef5d55"
+  critical: "#ff4f87"
 ---
 
 # Design System: AI Observability Platform
 
 ## Overview
 
-**Creative North Star: "The Quiet Control Room".** A dark, neutral, dense developer tool. The chrome is monochrome; colour appears only where it carries meaning: health state, log level, severity, the primary action, focus and selection. Telemetry is the content.
+**Creative North Star: "Signal".** A dark, cool slate-blue control room. The chrome is quiet blue-grey; colour appears only where it carries meaning: health state, log level, severity, the primary action, focus and selection. Telemetry is the content.
 
 Dark-first. Personality: precise, technical, calm under pressure. Never playful, never "AI magic".
 
@@ -31,18 +32,20 @@ Dark-first. Personality: precise, technical, calm under pressure. Never playful,
 
 | Token | Hex | Use |
 |---|---|---|
-| `bg` | `#0a0a0a` | App background, main content |
-| `surface` | `#121317` | Sidebar, cards, stat cards, tables |
-| `surface-2` | `#17191e` | Secondary buttons, active nav, code blocks, chart tooltips |
-| `surface-hover` | `#1c1f25` | Row / nav / button hover, selected span |
-| `border` | `#23262d` | Every 1px divider, card border, chart grid lines |
-| `border-strong` | `#30343c` | Input borders, focused rows |
-| `fg` | `#ededed` | Primary text |
-| `fg-muted` | `#8b8f99` | Labels, metadata, axis labels, inactive nav |
-| `fg-subtle` | `#62666f` | Placeholders, DEBUG logs, disabled. Never body copy. |
-| `accent` | `#6e6af0` | Primary button, focus, links, selection, main chart series, span bars |
-| `success` | `#3fb67a` | Healthy, resolved, OK |
-| `warning` | `#e5a83b` | Degraded, WARN, investigating, medium |
+| `bg` | `#0b1016` | App background, main content |
+| `surface` | `#101720` | Sidebar, cards, stat cards, tables |
+| `surface-2` | `#162029` | Secondary buttons, active nav, code blocks, chart tooltips |
+| `surface-hover` | `#1b2733` | Row / nav / button hover, selected span |
+| `border` | `#1f2b38` | Every 1px divider, card border, chart grid lines |
+| `border-strong` | `#2c3b4b` | Input borders, focused rows |
+| `fg` | `#e4ebf2` | Primary text |
+| `fg-muted` | `#8798ab` | Labels, metadata, axis labels, inactive nav |
+| `fg-subtle` | `#5a6a7c` | Placeholders, DEBUG logs, disabled. Never body copy. |
+| `accent` | `#1fb5a6` | Primary button, focus, links, selection, main chart series, span bars |
+| `accent-hover` | `#3cc8b8` | Primary button hover |
+| `accent-fg` | `#04201d` | Text and icons on an `accent` background (primary button) |
+| `success` | `#74c25a` | Healthy, resolved, OK. Shifted toward yellow-green so it never reads as the teal accent. |
+| `warning` | `#e9b44c` | Degraded, WARN, investigating, medium |
 | `danger` | `#e5534b` | ERROR, open errors, high, failed, firing |
 | `critical` | `#f0436b` | CRITICAL service, FATAL log, critical severity |
 
@@ -77,7 +80,7 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 
 ## Typography
 
-- **Geist** for UI, **Geist Mono** for machine values (`next/font/google` in `layout.tsx`).
+- **IBM Plex Sans** (400/500/600) for UI, **IBM Plex Mono** (400/500) for machine values (`next/font/google` in `layout.tsx`).
 - **Mono is semantic:** trace IDs, span IDs, request IDs, endpoints (`POST /payments`), service names, versions (`v1.42.3`), durations, timestamps, counts, percentages, log messages, JSON metadata, API keys.
 - Every number uses `tabular-nums`.
 
@@ -107,7 +110,7 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 ## Elevation & Shapes
 
 - Flat. Depth from tonal layers (`bg` → `surface` → `surface-2`) and 1px borders. Shadows only on floating layers: `shadow-lg shadow-black/40 border-border-strong`.
-- Radii: `rounded` (chips), `rounded-md` (buttons, inputs, nav), `rounded-lg` (stat cards, code), `rounded-xl` (cards, dialogs), `rounded-full` (badges, dots). Max 12px.
+- Radii: the Tailwind scale is overridden in `globals.css`: `rounded` 4px (chips), `rounded-md` 4px (buttons, inputs, nav), `rounded-lg` 5px (stat cards, code), `rounded-xl` 6px (cards, dialogs), `rounded-full` (badges, dots). Max 6px except pills.
 - Icons: `lucide-react`, `size-4`, `strokeWidth={1.75}`, `text-fg-muted` unless they signal state.
 
 ## Components
@@ -115,7 +118,7 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 **Sidebar nav.** Overview, Services, Errors, Logs, Traces, Metrics, Incidents, Deployments, AI Analysis, Alerts, Settings. `text-sm text-fg-muted rounded-md px-2.5 py-1.5`; hover `bg-surface-hover text-fg`; active `bg-surface-2 text-fg`. Incidents and Errors show a count pill (`bg-danger/15 text-danger text-[11px] rounded-full px-1.5`) only when open count > 0.
 
 **Buttons.** `h-[34px] rounded-md px-3.5 text-sm font-medium`.
-- Primary `bg-accent text-white hover:bg-accent-hover`, one per region.
+- Primary `bg-accent text-accent-fg hover:bg-accent-hover`, one per region.
 - Secondary `bg-surface-2 border border-border hover:bg-surface-hover`.
 - Danger: secondary chrome + `text-danger`, always confirmed.
 - Ghost `text-fg-muted hover:text-fg hover:bg-surface-hover`.
@@ -156,7 +159,7 @@ Badges are tinted: text in the state colour, background ~10% alpha, border ~30% 
 **Don't**
 - No gradients, glows, glass, "AI sparkle" icons.
 - No colour on decoration.
-- No shadows on in-flow cards, no radius above 12px.
+- No shadows on in-flow cards, no radius above 6px (pills excepted).
 - No more than one primary button per region.
 - No `fg-subtle` text the user must read.
 - No chat bubbles for AI analysis (the incident chat uses plain rows with a role label).

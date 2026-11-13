@@ -1,29 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0a0a0a;
-  --color-surface: #121317;
-  --color-surface-2: #17191e;
-  --color-surface-hover: #1c1f25;
+  --color-bg: #0b1016;
+  --color-surface: #101720;
+  --color-surface-2: #162029;
+  --color-surface-hover: #1b2733;
 
-  --color-border: #23262d;
-  --color-border-strong: #30343c;
+  --color-border: #1f2b38;
+  --color-border-strong: #2c3b4b;
 
-  --color-fg: #ededed;
-  --color-fg-muted: #8b8f99;
-  --color-fg-subtle: #62666f;
+  --color-fg: #e4ebf2;
+  --color-fg-muted: #8798ab;
+  --color-fg-subtle: #5a6a7c;
 
-  --color-accent: #6e6af0;
-  --color-accent-hover: #7f7bf3;
-  --color-success: #3fb67a;
-  --color-warning: #e5a83b;
-  --color-danger: #e5534b;
-  --color-critical: #f0436b;
+  --color-accent: #1fb5a6;
+  --color-accent-hover: #3cc8b8;
+  --color-accent-fg: #04201d;
+  --color-success: #74c25a;
+  --color-warning: #e9b44c;
+  --color-danger: #ef5d55;
+  --color-critical: #ff4f87;
+
+  --radius-md: 0.25rem;
+  --radius-lg: 0.3125rem;
+  --radius-xl: 0.375rem;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 @layer base {
