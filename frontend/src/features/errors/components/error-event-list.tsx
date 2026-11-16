@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { JsonBlock } from "@/components/ui/json-block";
-import { formatDayTime } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import type { ErrorEvent } from "@/features/errors/types";
 import { tracePath } from "@/features/traces/paths";
 
@@ -25,6 +26,9 @@ function Field({ label, children }: FieldProps) {
 }
 
 export function ErrorEventList({ projectId, events }: ErrorEventListProps) {
+  const t = useTranslations("errorGroups.event");
+  const format = useFormat();
+
   return (
     <ul className="flex flex-col">
       {events.map((event) => (
@@ -35,15 +39,15 @@ export function ErrorEventList({ projectId, events }: ErrorEventListProps) {
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <p className="min-w-0 font-mono text-[13px]">{event.message}</p>
             <span className="font-mono text-xs text-fg-muted tabular-nums">
-              {formatDayTime(event.timestamp)}
+              {format.dayTime(event.timestamp)}
             </span>
           </div>
 
           <dl className="grid grid-cols-[96px_1fr] gap-x-3 gap-y-1.5 text-[13px] sm:grid-cols-[96px_1fr_96px_1fr]">
-            <Field label="Service">{event.service}</Field>
-            {event.endpoint && <Field label="Endpoint">{event.endpoint}</Field>}
+            <Field label={t("service")}>{event.service}</Field>
+            {event.endpoint && <Field label={t("endpoint")}>{event.endpoint}</Field>}
             {event.traceId && (
-              <Field label="Trace">
+              <Field label={t("trace")}>
                 <Link
                   href={tracePath(projectId, event.traceId)}
                   className="text-accent hover:underline"
@@ -53,14 +57,14 @@ export function ErrorEventList({ projectId, events }: ErrorEventListProps) {
               </Field>
             )}
             {event.requestId && (
-              <Field label="Request">{event.requestId}</Field>
+              <Field label={t("request")}>{event.requestId}</Field>
             )}
           </dl>
 
           {event.stackTrace && (
             <details>
               <summary className="cursor-pointer text-[13px] text-fg-muted hover:text-fg">
-                Stack trace
+                {t("stackTrace")}
               </summary>
               <pre className="mt-2 max-h-80 overflow-auto rounded-lg border border-border bg-surface-2 p-3 font-mono text-xs leading-relaxed">
                 {event.stackTrace}
@@ -71,7 +75,7 @@ export function ErrorEventList({ projectId, events }: ErrorEventListProps) {
           {Object.keys(event.attributes).length > 0 && (
             <details>
               <summary className="cursor-pointer text-[13px] text-fg-muted hover:text-fg">
-                Attributes
+                {t("attributes")}
               </summary>
               <div className="mt-2">
                 <JsonBlock value={event.attributes} />

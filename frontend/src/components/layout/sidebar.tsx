@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Activity,
   Bell,
@@ -21,41 +22,44 @@ import {
 import { LogoMark } from "@/components/ui/logo-mark";
 import type { OpenCounts } from "@/features/realtime/types";
 
+type NavKey =
+  | "overview"
+  | "services"
+  | "metrics"
+  | "errors"
+  | "logs"
+  | "traces"
+  | "incidents"
+  | "deployments"
+  | "analysis"
+  | "alerts"
+  | "settings";
+
 type NavItem = {
   section: string;
-  label: string;
-  short?: string;
+  key: NavKey;
+  hasShort?: boolean;
   icon: LucideIcon;
 };
 
 const NAV_GROUPS: NavItem[][] = [
   [
-    { section: "", label: "Overview", icon: LayoutDashboard },
-    { section: "services", label: "Services", icon: Boxes },
-    { section: "metrics", label: "Metrics", icon: ChartLine },
+    { section: "", key: "overview", icon: LayoutDashboard },
+    { section: "services", key: "services", icon: Boxes },
+    { section: "metrics", key: "metrics", icon: ChartLine },
   ],
   [
-    { section: "errors", label: "Errors", icon: Bug },
-    { section: "logs", label: "Logs", icon: ScrollText },
-    { section: "traces", label: "Traces", icon: Waypoints },
+    { section: "errors", key: "errors", icon: Bug },
+    { section: "logs", key: "logs", icon: ScrollText },
+    { section: "traces", key: "traces", icon: Waypoints },
   ],
   [
-    { section: "incidents", label: "Incidents", icon: Siren },
-    {
-      section: "deployments",
-      label: "Deployments",
-      short: "Deploys",
-      icon: Rocket,
-    },
-    {
-      section: "analysis",
-      label: "AI Analysis",
-      short: "AI",
-      icon: FileSearch,
-    },
-    { section: "alerts", label: "Alerts", icon: Bell },
+    { section: "incidents", key: "incidents", icon: Siren },
+    { section: "deployments", key: "deployments", hasShort: true, icon: Rocket },
+    { section: "analysis", key: "analysis", hasShort: true, icon: FileSearch },
+    { section: "alerts", key: "alerts", icon: Bell },
   ],
-  [{ section: "settings", label: "Settings", icon: Settings }],
+  [{ section: "settings", key: "settings", icon: Settings }],
 ];
 
 const MAX_COUNT = 99;
@@ -99,12 +103,14 @@ function RailLink({
   count,
   onNavigate,
 }: RailLinkProps) {
+  const t = useTranslations("nav");
+
   return (
     <Link
       href={href}
       onClick={onNavigate}
       title={label}
-      aria-label={count > 0 ? `${label}, ${count} open` : label}
+      aria-label={count > 0 ? t("withOpen", { label, count }) : label}
       aria-current={active ? "page" : undefined}
       className={`${ITEM_CLASSES} ${
         active
@@ -138,6 +144,7 @@ type SidebarProps = {
 };
 
 export function Sidebar({ projectId, counts, open, onClose }: SidebarProps) {
+  const t = useTranslations("nav");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -163,7 +170,7 @@ export function Sidebar({ projectId, counts, open, onClose }: SidebarProps) {
 
       <aside
         id="app-sidebar"
-        aria-label="Main"
+        aria-label={t("label")}
         className={`fixed inset-y-0 left-0 z-50 flex w-[76px] shrink-0 flex-col overflow-y-auto border-r border-border bg-surface px-1.5 py-3 transition-[transform,visibility] duration-200 motion-reduce:transition-none md:static md:visible md:translate-x-0 ${
           open ? "translate-x-0" : "invisible -translate-x-full"
         }`}
@@ -171,7 +178,7 @@ export function Sidebar({ projectId, counts, open, onClose }: SidebarProps) {
         <Link
           href="/"
           onClick={onClose}
-          aria-label="Observability home"
+          aria-label={t("home")}
           className="mx-auto mb-3 flex size-9 shrink-0 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-accent"
         >
           <LogoMark className="size-8" />
@@ -186,15 +193,15 @@ export function Sidebar({ projectId, counts, open, onClose }: SidebarProps) {
                   index > 0 ? "mt-1.5 border-t border-border pt-1.5" : ""
                 }`}
               >
-                {group.map(({ section, label, short, icon }) => {
+                {group.map(({ section, key, hasShort, icon }) => {
                   const href = sectionHref(projectId, section);
 
                   return (
                     <RailLink
                       key={section || "overview"}
                       href={href}
-                      label={label}
-                      short={short}
+                      label={t(`items.${key}`)}
+                      short={hasShort ? t(`short.${key as "deployments" | "analysis"}`) : undefined}
                       icon={icon}
                       active={isActive(pathname, href, section)}
                       count={countFor(section, counts)}
@@ -210,8 +217,8 @@ export function Sidebar({ projectId, counts, open, onClose }: SidebarProps) {
         <div className="mt-auto flex flex-col border-t border-border pt-1.5">
           <RailLink
             href="/platform"
-            label="Platform health"
-            short="Platform"
+            label={t("platform")}
+            short={t("platformShort")}
             icon={Activity}
             active={pathname === "/platform"}
             count={0}

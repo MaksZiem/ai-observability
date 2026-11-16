@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ScrollText } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { LogFilters } from "@/features/logs/components/log-filters";
@@ -10,9 +11,10 @@ import { TimeRangePicker } from "@/features/metrics/components/time-range-picker
 import { parseTimeRange, rangeStart } from "@/features/metrics/time-range";
 import { getProject } from "@/features/projects/queries";
 
-export const metadata: Metadata = {
-  title: "Logs",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("logs");
+  return { title: t("title") };
+}
 
 export default async function LogsPage({
   params,
@@ -24,14 +26,15 @@ export default async function LogsPage({
   const filters = readLogFilters(query);
   const filter = { ...filters, from: rangeStart(range) };
 
+  const t = await getTranslations("logs");
   await getProject(projectId);
   const page = await listLogs(projectId, filter);
 
   return (
     <div>
       <PageHeader
-        title="Logs"
-        description="Newest first. Click a line to see its metadata."
+        title={t("title")}
+        description={t("lead")}
         actions={<TimeRangePicker value={range} />}
       />
 
@@ -41,8 +44,8 @@ export default async function LogsPage({
         {page.items.length === 0 ? (
           <EmptyState
             icon={ScrollText}
-            title="No logs match these filters"
-            description="Widen the time range or clear some filters. Logs arrive through /api/ingest/logs."
+            title={t("empty")}
+            description={t("emptyHint")}
           />
         ) : (
           <LogStream

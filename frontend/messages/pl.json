@@ -1,0 +1,687 @@
+{
+  "alerts": {
+    "title": "Alerty",
+    "lead": "Reguły są sprawdzane co minutę. Uruchomiona reguła może otworzyć incydent albo wywołać webhook.",
+    "empty": "Nie ma jeszcze reguł alertów",
+    "emptyHint": "Utwórz regułę, żeby dostać sygnał, gdy odsetek błędów, opóźnienie lub ruch przekroczy próg.",
+    "new": "Nowy alert",
+    "metrics": {
+      "error_rate": "Odsetek błędów",
+      "p95_latency": "Opóźnienie P95",
+      "request_count": "Liczba żądań"
+    },
+    "units": {
+      "error_rate": "%",
+      "p95_latency": "ms",
+      "request_count": "żądania"
+    },
+    "states": {
+      "paused": "Wstrzymany",
+      "firing": "Aktywny",
+      "ok": "OK"
+    },
+    "condition": "{metric} {comparator} {threshold} przez {minutes} min",
+    "actions": {
+      "createsIncident": "tworzy incydent o ważności: {severity}",
+      "calls": "wywołuje {host}",
+      "then": "Następnie {actions}.",
+      "and": " i ",
+      "none": "Bez akcji."
+    },
+    "list": {
+      "lastValue": "Ostatnia wartość",
+      "evaluated": "Sprawdzono",
+      "lastFired": "Ostatnio uruchomiony",
+      "never": "nigdy",
+      "evaluate": "Sprawdź teraz",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "delete": "Usuń",
+      "deleteConfirm": "Usunąć alert „{name}”?"
+    },
+    "form": {
+      "name": "Nazwa",
+      "namePlaceholder": "Błędy płatności",
+      "metric": "Metryka",
+      "condition": "Warunek",
+      "threshold": "Próg",
+      "thresholdHint": "W jednostce metryki, np. 5 dla 5%.",
+      "window": "Okno (minuty)",
+      "service": "Usługa",
+      "serviceHint": "Zostaw puste, żeby obserwować cały ruch wejściowy.",
+      "whenFires": "Gdy alert się uruchomi",
+      "createIncident": "Utwórz incydent",
+      "severity": "Ważność incydentu",
+      "webhook": "URL webhooka",
+      "webhookHint": "Opcjonalnie. Dostaje JSON-owego POST-a, gdy alert się uruchamia i wygasa.",
+      "created": "Utworzono „{name}”.",
+      "submit": "Utwórz alert",
+      "pending": "Tworzenie…",
+      "errors": {
+        "nameRequired": "Nazwij alert.",
+        "choicesRequired": "Wybierz metrykę, warunek i ważność.",
+        "threshold": "Próg musi być liczbą równą 0 lub większą.",
+        "window": "Okno musi mieć od 1 do {max} pełnych minut.",
+        "failed": "Nie udało się utworzyć alertu. Spróbuj ponownie."
+      }
+    }
+  },
+  "analysis": {
+    "title": "Analiza AI",
+    "lead": "Uporządkowane analizy ostatnich incydentów: zaobserwowane fakty, hipotezy i kolejne kroki.",
+    "empty": "Brak incydentów do analizy",
+    "emptyHint": "Utwórz incydent i podepnij dowody – analiza działa na ich podstawie.",
+    "columns": {
+      "number": "#",
+      "incident": "Incydent",
+      "severity": "Ważność",
+      "status": "Status",
+      "latest": "Ostatnia analiza"
+    },
+    "notAnalyzed": "Bez analizy",
+    "status": {
+      "pending": "Analizowanie",
+      "completed": "Ukończona",
+      "failed": "Błąd"
+    },
+    "confidence": {
+      "low": "Niska pewność",
+      "medium": "Średnia pewność",
+      "high": "Wysoka pewność"
+    },
+    "report": {
+      "summary": "Podsumowanie",
+      "facts": "Zaobserwowane fakty",
+      "deployments": "Powiązane wdrożenia",
+      "causes": "Możliwe przyczyny",
+      "hypothesis": "Hipoteza",
+      "investigation": "Sugerowane kroki"
+    },
+    "panel": {
+      "title": "Analiza AI",
+      "runAgain": "Uruchom ponownie",
+      "analyze": "Analizuj incydent",
+      "requesting": "Zlecanie…",
+      "intro": "Analiza czyta oś czasu i podpięte dowody incydentu, a potem oddziela zaobserwowane fakty od hipotez. Dla lepszego wyniku najpierw podepnij dowody.",
+      "pending": "Analizuję dowody. Strona odświeży się, gdy wynik będzie gotowy.",
+      "failed": "Analiza nie powiodła się.",
+      "tokens": "{count} tokenów",
+      "history": "Historia analiz ({count})"
+    },
+    "chat": {
+      "you": "Ty",
+      "assistant": "Asystent",
+      "suggestions": {
+        "latency": "Dlaczego wzrosło opóźnienie?",
+        "changes": "Co zmieniło się, zanim pojawiły się błędy?",
+        "service": "Której usługi to najpewniej dotyczy?"
+      },
+      "waiting": "Czekam na odpowiedź asystenta…",
+      "question": "Pytanie",
+      "placeholder": "Zapytaj o ten incydent",
+      "ask": "Zapytaj",
+      "asking": "Pytam…",
+      "errors": {
+        "empty": "Najpierw zadaj pytanie.",
+        "tooLong": "Pytanie może mieć maksymalnie {max} znaków.",
+        "AI_UNAVAILABLE": "Asystent AI jest niedostępny. Spróbuj później.",
+        "rateLimited": "Za dużo pytań naraz. Odczekaj chwilę.",
+        "failed": "Asystent nie zdołał odpowiedzieć. Spróbuj ponownie."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Zaloguj się",
+      "lead": "Monitoruj swoje usługi i badaj incydenty.",
+      "submit": "Zaloguj się",
+      "pending": "Logowanie…",
+      "noAccount": "Nie masz jeszcze konta?",
+      "toSignUp": "Załóż konto"
+    },
+    "signUp": {
+      "title": "Załóż konto",
+      "lead": "Utwórz projekt i zacznij wysyłać telemetrię.",
+      "submit": "Załóż konto",
+      "pending": "Tworzenie konta…",
+      "hasAccount": "Masz już konto?",
+      "toSignIn": "Zaloguj się"
+    },
+    "fields": {
+      "name": "Imię",
+      "email": "E-mail",
+      "password": "Hasło",
+      "passwordHint": "Co najmniej 8 znaków."
+    },
+    "errors": {
+      "credentialsRequired": "Podaj e-mail i hasło.",
+      "fillAll": "Wypełnij wszystkie pola.",
+      "nameTooLong": "Imię może mieć maksymalnie 100 znaków.",
+      "passwordLength": "Hasło musi mieć od 8 do 128 znaków.",
+      "invalidCredentials": "Nieprawidłowy e-mail lub hasło.",
+      "emailTaken": "Konto z tym adresem e-mail już istnieje.",
+      "tooManyAttempts": "Za dużo prób. Odczekaj minutę i spróbuj ponownie."
+    }
+  },
+  "common": {
+    "language": "Język",
+    "languages": {
+      "pl": "Polski",
+      "en": "English"
+    },
+    "loading": "Ładowanie…",
+    "cancel": "Anuluj",
+    "retry": "Spróbuj ponownie",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "refresh": "Odśwież",
+    "copy": "Kopiuj",
+    "copied": "Skopiowano",
+    "copyToClipboard": "Kopiuj do schowka",
+    "backToOverview": "Wróć do przeglądu"
+  },
+  "deployments": {
+    "title": "Wdrożenia",
+    "lead": "Wydania pojawiają się jako znaczniki na każdym wykresie metryk.",
+    "empty": "Brak wdrożeń w tym przedziale czasu",
+    "emptyHint": "Zarejestruj wdrożenie formularzem albo wyślij je ze swojego pipeline’u CI.",
+    "allServices": "wszystkie usługi",
+    "register": "Zarejestruj wdrożenie",
+    "registering": "Rejestrowanie…",
+    "registered": "Zarejestrowano <code>{version}</code>.",
+    "fromCi": "Z CI",
+    "fromCiLead": "Po każdym wydaniu wywołaj API ingestu z kluczem API projektu.",
+    "fields": {
+      "version": "Wersja",
+      "service": "Usługa",
+      "serviceHint": "Zostaw puste, jeśli dotyczy wszystkich usług.",
+      "commitSha": "SHA commita",
+      "description": "Opis"
+    },
+    "errors": {
+      "versionRequired": "Podaj wdrożoną wersję.",
+      "tooLong": "Pole „{field}” może mieć maksymalnie {max} znaków.",
+      "failed": "Nie udało się zarejestrować wdrożenia. Spróbuj ponownie."
+    }
+  },
+  "errorGroups": {
+    "title": "Błędy",
+    "lead": "Podobne błędy pogrupowane według typu, komunikatu i usługi.",
+    "emptyAll": "Nie ma jeszcze błędów",
+    "emptyStatus": "Brak błędów z tym statusem",
+    "emptyHint": "Błędy pojawiają się, gdy Twoje usługi wysyłają je do /api/ingest/errors.",
+    "status": {
+      "open": "Otwarty",
+      "investigating": "W analizie",
+      "resolved": "Rozwiązany"
+    },
+    "statusLabel": "Status błędu",
+    "filter": {
+      "label": "Filtruj po statusie",
+      "all": "Wszystkie"
+    },
+    "columns": {
+      "error": "Błąd",
+      "service": "Usługa",
+      "status": "Status",
+      "occurrences": "Wystąpienia",
+      "lastSeen": "Ostatnio"
+    },
+    "detail": {
+      "service": "Usługa",
+      "endpoint": "Endpoint",
+      "occurrences": "Wystąpienia",
+      "firstSeen": "Pierwszy raz",
+      "lastSeen": "Ostatnio",
+      "addToIncident": "Dodaj do incydentu",
+      "recentEvents": "Ostatnie zdarzenia",
+      "noEvents": "Brak zapisanych zdarzeń."
+    },
+    "event": {
+      "service": "Usługa",
+      "endpoint": "Endpoint",
+      "trace": "Ślad",
+      "request": "Żądanie",
+      "stackTrace": "Stos wywołań",
+      "attributes": "Atrybuty"
+    }
+  },
+  "errors": {
+    "title": "Coś poszło nie tak",
+    "description": "Nie udało się wczytać tej strony. Backend może być niedostępny.",
+    "errorId": "ID błędu: {id}",
+    "notFoundTitle": "Nie ma takiej strony",
+    "notFoundDescription": "Ta strona nie istnieje albo należy do innego konta.",
+    "unreachable": "Nie udało się połączyć z serwerem. Spróbuj ponownie.",
+    "validation": "Popraw dane i spróbuj ponownie.",
+    "unknown": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+  },
+  "incidents": {
+    "title": "Incydenty",
+    "lead": "Wszystkie incydenty w tym projekcie, od najnowszych.",
+    "new": "Nowy incydent",
+    "newLead": "Incydent zaczyna się teraz. Dowody podepniesz po jego utworzeniu.",
+    "emptyAll": "Nie ma jeszcze incydentów",
+    "emptyStatus": "Brak incydentów z tym statusem",
+    "emptyHint": "Otwórz incydent, gdy coś jest nie tak na produkcji. Jego oś czasu powstaje z wdrożeń, anomalii i błędów.",
+    "status": {
+      "open": "Otwarty",
+      "investigating": "W analizie",
+      "resolved": "Rozwiązany"
+    },
+    "severity": {
+      "low": "Niski",
+      "medium": "Średni",
+      "high": "Wysoki",
+      "critical": "Krytyczny"
+    },
+    "linkKinds": {
+      "error_group": "Grupa błędów",
+      "trace": "Ślad",
+      "deployment": "Wdrożenie",
+      "log": "Log"
+    },
+    "statusLabel": "Status incydentu",
+    "filter": {
+      "label": "Filtruj po statusie",
+      "all": "Wszystkie"
+    },
+    "columns": {
+      "number": "#",
+      "title": "Tytuł",
+      "severity": "Ważność",
+      "status": "Status",
+      "started": "Start"
+    },
+    "form": {
+      "title": "Tytuł",
+      "titleHint": "Co widzą użytkownicy, np. „API płatności działa wolno”.",
+      "severity": "Ważność",
+      "description": "Opis",
+      "descriptionHint": "Opcjonalnie. Co już wiadomo.",
+      "create": "Utwórz incydent",
+      "creating": "Tworzenie incydentu…",
+      "errors": {
+        "titleRequired": "Podaj tytuł.",
+        "titleTooLong": "Tytuł może mieć maksymalnie {max} znaków.",
+        "descriptionTooLong": "Opis może mieć maksymalnie {max} znaków.",
+        "severityRequired": "Wybierz ważność.",
+        "createFailed": "Nie udało się utworzyć incydentu. Spróbuj ponownie."
+      }
+    },
+    "detail": {
+      "timeline": "Oś czasu",
+      "evidence": "Dowody",
+      "details": "Szczegóły",
+      "started": "Start",
+      "resolved": "Rozwiązano",
+      "duration": "Czas trwania",
+      "soFar": "{duration} do teraz",
+      "assistant": "Zapytaj asystenta",
+      "similar": "Podobne incydenty"
+    },
+    "note": {
+      "label": "Notatka",
+      "placeholder": "Co sprawdziłeś albo zmieniłeś?",
+      "add": "Dodaj notatkę",
+      "errors": {
+        "empty": "Najpierw napisz notatkę.",
+        "tooLong": "Notatka może mieć maksymalnie {max} znaków.",
+        "failed": "Nie udało się zapisać notatki. Spróbuj ponownie."
+      }
+    },
+    "link": {
+      "noActive": "Brak aktywnych incydentów.",
+      "create": "Utwórz incydent",
+      "incident": "Incydent",
+      "add": "Dodaj do incydentu",
+      "adding": "Dodawanie…",
+      "linked": "Podpięto jako dowód.",
+      "type": "Rodzaj dowodu",
+      "id": "ID",
+      "placeholder": "ID śladu albo UUID błędu, wdrożenia lub logu",
+      "submit": "Podepnij",
+      "pending": "Podpinanie…",
+      "remove": "Usuń z incydentu",
+      "errors": {
+        "incidentRequired": "Wybierz incydent.",
+        "kindRequired": "Wybierz, co podpiąć.",
+        "idRequired": "Podaj ID do podpięcia.",
+        "notFound": "Nie znaleziono w tym projekcie.",
+        "failed": "Nie udało się podpiąć dowodu. Spróbuj ponownie.",
+        "INCIDENT_LINK_EXISTS": "To jest już podpięte do tego incydentu.",
+        "INCIDENT_TARGET_INVALID": "ID musi być poprawnym UUID."
+      }
+    },
+    "evidence": {
+      "occurrences": "{service} · {count} wystąpień",
+      "trace": "Ślad · {duration} · {spans}",
+      "deployment": "Wdrożenie · {service} · {date}",
+      "log": "Log · {service} · {date}",
+      "empty": "Nic jeszcze nie podpięto. Dodaj błędy, ślady, wdrożenia lub logi, które wyjaśniają ten incydent – analiza AI używa ich jako dowodów."
+    },
+    "timeline": {
+      "deployment": "Wdrożenie {version}",
+      "latency_spike": "Opóźnienie P95 wzrosło do {value}",
+      "error_rate_spike": "Odsetek błędów wzrósł do {value}",
+      "error_first_seen": "Pierwszy {errorType}",
+      "incident_created": "Utworzono incydent #{number}",
+      "note": "Notatka: {author}",
+      "incident_resolved": "Rozwiązano incydent #{number}",
+      "baseline": "Poziom bazowy {value}"
+    },
+    "similar": {
+      "empty": "W tym projekcie nie ma jeszcze podobnych incydentów.",
+      "error": "Ten sam błąd: {value}",
+      "service": "Ta sama usługa: {value}",
+      "title": "Podobny tytuł"
+    }
+  },
+  "live": {
+    "connecting": "Łączenie…",
+    "live": "Na żywo",
+    "offline": "Ponowne łączenie…",
+    "hint": "Strony odświeżają się same, gdy przychodzi nowa telemetria."
+  },
+  "logs": {
+    "title": "Logi",
+    "lead": "Od najnowszych. Kliknij wiersz, żeby zobaczyć metadane.",
+    "empty": "Żaden log nie pasuje do filtrów",
+    "emptyHint": "Poszerz przedział czasu albo usuń część filtrów. Logi przychodzą przez /api/ingest/logs.",
+    "filters": {
+      "service": "Usługa",
+      "endpoint": "Endpoint",
+      "traceId": "ID śladu",
+      "requestId": "ID żądania",
+      "level": "Poziom",
+      "clear": "Wyczyść",
+      "apply": "Zastosuj filtry"
+    },
+    "row": {
+      "service": "Usługa",
+      "timestamp": "Czas",
+      "endpoint": "Endpoint",
+      "trace": "Ślad",
+      "span": "Span",
+      "request": "Żądanie"
+    },
+    "loadMore": "Wczytaj starsze logi"
+  },
+  "meta": {
+    "title": "Observability",
+    "description": "Monitoruj systemy produkcyjne i badaj incydenty."
+  },
+  "metrics": {
+    "overview": "Przegląd",
+    "title": "Metryki",
+    "lead": "Liczba żądań, odsetek błędów i opóźnienia w czasie.",
+    "noRequests": "Brak żądań w tym przedziale czasu",
+    "noRequestsOverview": "Wysyłaj spany do /api/ingest/spans z kluczem API projektu albo wybierz dłuższy przedział czasu.",
+    "noRequestsMetrics": "Wybierz dłuższy przedział czasu albo inną usługę.",
+    "ranges": {
+      "label": "Przedział czasu",
+      "15m": "Ostatnie 15 minut",
+      "1h": "Ostatnia godzina",
+      "24h": "Ostatnie 24 godziny",
+      "7d": "Ostatnie 7 dni"
+    },
+    "service": {
+      "label": "Usługa",
+      "all": "Wszystkie usługi"
+    },
+    "stats": {
+      "requests": "Żądania",
+      "errorRate": "Odsetek błędów",
+      "p95": "Opóźnienie P95",
+      "errors": "Błędy",
+      "degraded": "Pogorszony",
+      "critical": "Krytyczny",
+      "slow": "Wolno"
+    },
+    "charts": {
+      "volume": "Liczba żądań",
+      "volumeLabel": "Żądania na przedział",
+      "errorRate": "Odsetek błędów",
+      "errorRateLabel": "Odsetek błędów na przedział",
+      "p95": "Opóźnienie P95",
+      "p95Label": "Opóźnienie P95 na przedział",
+      "noData": "Brak danych",
+      "time": "Czas",
+      "value": "Wartość"
+    }
+  },
+  "nav": {
+    "label": "Główna",
+    "home": "Strona główna Observability",
+    "openMenu": "Otwórz menu",
+    "signOut": "Wyloguj się",
+    "withOpen": "{label}, otwarte: {count}",
+    "platform": "Stan platformy",
+    "platformShort": "Platforma",
+    "items": {
+      "overview": "Przegląd",
+      "services": "Usługi",
+      "metrics": "Metryki",
+      "errors": "Błędy",
+      "logs": "Logi",
+      "traces": "Ślady",
+      "incidents": "Incydenty",
+      "deployments": "Wdrożenia",
+      "analysis": "Analiza AI",
+      "alerts": "Alerty",
+      "settings": "Ustawienia"
+    },
+    "short": {
+      "deployments": "Wdroż.",
+      "analysis": "AI"
+    }
+  },
+  "platform": {
+    "title": "Stan platformy",
+    "lead": "Jak działa sama platforma observability. Liczniki zerują się po restarcie; działa od {uptime}.",
+    "stats": {
+      "ingestP95": "Ingest P95",
+      "queueLag": "Opóźnienie kolejki P95",
+      "telemetryLag": "Opóźnienie telemetrii P95",
+      "deadLettered": "Zadania w dead-letter"
+    },
+    "ingestion": "Ingest",
+    "ingestionHint": "Przyjęta telemetria trafia do kolejki i jest zapisywana przez workera. Odrzucone żądania nie przeszły walidacji lub uwierzytelnienia; nieudane nie trafiły do kolejki. Zadania, które ciągle się nie udają, są ponawiane z opóźnieniem, a potem trafiają do dead-letter, więc nic nie ginie po cichu.",
+    "queue": "Kolejka ingestu",
+    "dependencies": "Zależności",
+    "background": "Praca w tle",
+    "alertRuns": "{runs} przebiegów alertów · {failed} nieudanych ocen · ostatnio {last}",
+    "never": "nigdy",
+    "telemetry": {
+      "logs": "Logi",
+      "spans": "Spany",
+      "errors": "Błędy",
+      "deployments": "Wdrożenia"
+    },
+    "outcomes": {
+      "analyses": "Analizy AI",
+      "chat": "Odpowiedzi asystenta",
+      "webhooks": "Webhooki alertów"
+    },
+    "outcome": "{ok} ok",
+    "outcomeFailed": "{failed} nieudanych",
+    "checks": {
+      "database": "Baza danych",
+      "alertScheduler": "Harmonogram alertów",
+      "ingestQueue": "Kolejka ingestu (Redis)"
+    },
+    "up": "Działa",
+    "down": "Nie działa",
+    "healthDown": "Endpoint health nie odpowiedział. API może nie działać.",
+    "columns": {
+      "telemetry": "Telemetria",
+      "requests": "Żądania",
+      "items": "Przyjęte",
+      "stored": "Zapisane",
+      "rejected": "Odrzucone",
+      "failed": "Nieudane",
+      "deadLettered": "Dead-letter"
+    },
+    "queueRows": {
+      "unavailable": "Głębokość kolejki niedostępna. Redis może być nieosiągalny.",
+      "waiting": "Oczekujące",
+      "processing": "W trakcie",
+      "delayed": "Czeka na ponowienie",
+      "deadLettered": "Dead-letter",
+      "retries": "Ponowienia od startu",
+      "lag": "Opóźnienie kolejki P50 / P95"
+    }
+  },
+  "projects": {
+    "new": "Nowy projekt",
+    "newLead": "Projekt grupuje usługi jednej aplikacji w jednym środowisku.",
+    "environments": {
+      "development": "Development",
+      "staging": "Staging",
+      "production": "Produkcja"
+    },
+    "switcher": {
+      "label": "Projekt",
+      "select": "Wybierz projekt",
+      "new": "Nowy projekt"
+    },
+    "form": {
+      "name": "Nazwa",
+      "nameHint": "Na przykład: Moje API sklepu.",
+      "environment": "Środowisko",
+      "create": "Utwórz projekt",
+      "creating": "Tworzenie projektu…",
+      "save": "Zapisz",
+      "saved": "Projekt zapisany.",
+      "errors": {
+        "nameRequired": "Podaj nazwę projektu.",
+        "nameTooLong": "Nazwa może mieć maksymalnie 100 znaków.",
+        "environmentRequired": "Wybierz środowisko.",
+        "createFailed": "Nie udało się utworzyć projektu. Spróbuj ponownie.",
+        "saveFailed": "Nie udało się zapisać projektu. Spróbuj ponownie."
+      }
+    },
+    "created": {
+      "title": "Projekt utworzony",
+      "lead": "Skopiuj teraz klucz API. Jest pokazywany tylko raz; jeśli go zgubisz, wygeneruj nowy w ustawieniach projektu.",
+      "usage": "Wysyłaj go w nagłówku <code>x-api-key</code> do <code>/api/ingest/*</code>.",
+      "continue": "Przejdź do projektu"
+    },
+    "apiKey": {
+      "rotateConfirm": "Wygenerować nowy klucz API? Obecny klucz od razu przestanie działać i trzeba będzie zaktualizować każde SDK.",
+      "newKey": "Utworzono nowy klucz. Skopiuj go teraz – jest pokazywany tylko raz.",
+      "current": "Obecny klucz zaczyna się od <code>{prefix}…</code>",
+      "rotate": "Wygeneruj nowy klucz",
+      "rotating": "Generowanie…"
+    },
+    "delete": {
+      "confirm": "Usunąć „{name}” razem z całą telemetrią, incydentami i alertami? Tego nie da się cofnąć.",
+      "lead": "Usuwa projekt ze wszystkimi logami, śladami, błędami, incydentami i alertami.",
+      "submit": "Usuń projekt",
+      "pending": "Usuwanie…"
+    },
+    "settings": {
+      "title": "Ustawienia",
+      "project": "Projekt",
+      "projectLead": "Nazwa i środowisko widoczne w całym panelu.",
+      "apiKey": "Klucz API",
+      "apiKeyLead": "Telemetria jest przyjmowana tylko z tym kluczem w nagłówku x-api-key.",
+      "account": "Konto",
+      "accountLead": "Zmień hasło, którym się logujesz.",
+      "language": "Język interfejsu",
+      "danger": "Strefa zagrożenia",
+      "dangerLead": "Tych działań nie da się cofnąć."
+    },
+    "password": {
+      "current": "Obecne hasło",
+      "new": "Nowe hasło",
+      "newHint": "Co najmniej 8 znaków.",
+      "confirm": "Powtórz nowe hasło",
+      "submit": "Zmień hasło",
+      "changed": "Hasło zostało zmienione.",
+      "errors": {
+        "fillAll": "Wypełnij wszystkie pola.",
+        "length": "Nowe hasło musi mieć od 8 do 128 znaków.",
+        "mismatch": "Nowe hasła się nie zgadzają.",
+        "sameAsCurrent": "Wybierz hasło inne niż obecne.",
+        "CURRENT_PASSWORD_INCORRECT": "Obecne hasło jest nieprawidłowe."
+      }
+    }
+  },
+  "services": {
+    "title": "Usługi",
+    "lead": "Stan każdej usługi, która obsługiwała żądania w tym przedziale czasu.",
+    "empty": "Brak usług w tym przedziale czasu",
+    "emptyHint": "Usługi pojawiają się, gdy wysyłają spany serwerowe do /api/ingest/spans. Spróbuj dłuższego przedziału czasu.",
+    "status": {
+      "healthy": "Zdrowa",
+      "degraded": "Pogorszona",
+      "critical": "Krytyczna"
+    },
+    "columns": {
+      "service": "Usługa",
+      "status": "Status",
+      "requests": "Żądania",
+      "errorRate": "Odsetek błędów",
+      "p95": "Opóźnienie P95"
+    },
+    "detail": {
+      "viewLogs": "Zobacz logi",
+      "noTraffic": "Ta usługa nie zgłaszała ostatnio spanów serwerowych. Wybierz dłuższy przedział czasu.",
+      "recentDeployments": "Ostatnie wdrożenia",
+      "noDeployments": "Brak wdrożeń zarejestrowanych dla tej usługi."
+    }
+  },
+  "traces": {
+    "title": "Ślady",
+    "trace": "Ślad",
+    "lead": "Najnowsze żądania – od spanu wejściowego po każde wywołanie w dół.",
+    "empty": "Brak śladów w tym przedziale czasu",
+    "emptyHint": "Ślady pojawiają się, gdy Twoje usługi wysyłają spany do /api/ingest/spans. Spróbuj dłuższego przedziału czasu.",
+    "status": {
+      "ok": "OK",
+      "error": "Błąd"
+    },
+    "kinds": {
+      "server": "Serwer",
+      "client": "Klient",
+      "internal": "Wewnętrzny"
+    },
+    "filter": {
+      "label": "Filtruj po statusie",
+      "all": "Wszystkie",
+      "error": "Błędy",
+      "ok": "OK"
+    },
+    "columns": {
+      "started": "Start",
+      "operation": "Operacja",
+      "service": "Usługa",
+      "status": "Status",
+      "duration": "Czas"
+    },
+    "detail": {
+      "spans": "{count, plural, one {# span} few {# spany} many {# spanów} other {# spanu}}",
+      "viewLogs": "Zobacz logi",
+      "traceId": "Ślad {id}"
+    },
+    "view": {
+      "spans": "Spany",
+      "span": "Span",
+      "duration": "Czas",
+      "details": "Szczegóły spanu",
+      "select": "Wybierz span, żeby zobaczyć szczegóły."
+    },
+    "span": {
+      "duration": "Czas",
+      "selfTime": "Czas własny",
+      "startsAt": "Start",
+      "kind": "Rodzaj",
+      "spanId": "ID spanu",
+      "parent": "Rodzic",
+      "attributes": "Atrybuty",
+      "logs": "Logi w tym spanie",
+      "noLogs": "Dla tego spanu nie zapisano logów."
+    }
+  }
+}

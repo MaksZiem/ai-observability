@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { unlinkEvidence } from "@/features/incidents/actions";
 
 type UnlinkButtonProps = {
@@ -15,12 +16,13 @@ export function UnlinkButton({
   incidentId,
   linkId,
 }: UnlinkButtonProps) {
+  const t = useTranslations("incidents.link");
   const [pending, startTransition] = useTransition();
 
   return (
     <button
       type="button"
-      aria-label="Remove from incident"
+      aria-label={t("remove")}
       disabled={pending}
       onClick={() =>
         startTransition(() => unlinkEvidence(projectId, incidentId, linkId))

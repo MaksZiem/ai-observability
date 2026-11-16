@@ -2,6 +2,7 @@ import {
   Injectable,
   Logger,
   ServiceUnavailableException,
+  HttpStatus,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,6 +18,7 @@ import {
   ChatRole,
   IncidentChatMessage,
 } from './entities/incident-chat-message.entity.js';
+import { errorBody } from '../common/error-body.js';
 
 const MAX_HISTORY_MESSAGES = 20;
 
@@ -89,7 +91,11 @@ export class IncidentChatService {
         `Chat answer for incident ${incident.id} failed: ${message}`,
       );
       throw new ServiceUnavailableException(
-        'The AI assistant is unavailable, try again later',
+        errorBody(
+          HttpStatus.SERVICE_UNAVAILABLE,
+          'AI_UNAVAILABLE',
+          'The AI assistant is unavailable, try again later',
+        ),
       );
     }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { requestAnalysis } from "@/features/analysis/actions";
 
@@ -17,6 +18,7 @@ export function RequestAnalysisButton({
   disabled,
   label,
 }: RequestAnalysisButtonProps) {
+  const t = useTranslations("analysis.panel");
   const [pending, startTransition] = useTransition();
 
   return (
@@ -27,7 +29,7 @@ export function RequestAnalysisButton({
         startTransition(() => requestAnalysis(projectId, incidentId))
       }
     >
-      {pending ? "Requesting…" : label}
+      {pending ? t("requesting") : label}
     </Button>
   );
 }

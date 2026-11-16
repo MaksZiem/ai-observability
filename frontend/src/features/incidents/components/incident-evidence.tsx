@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { formatCount, formatDayTime, formatLatency } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import { LogLevel } from "@/features/logs/components/log-level";
 import { UnlinkButton } from "@/features/incidents/components/unlink-button";
 import type {
@@ -29,6 +30,8 @@ export function IncidentEvidence({
   evidence,
   links,
 }: IncidentEvidenceProps) {
+  const t = useTranslations();
+  const format = useFormat();
   const linkId = (kind: IncidentLinkKind, targetId: string) =>
     links.find((link) => link.kind === kind && link.targetId === targetId)?.id;
 
@@ -43,7 +46,10 @@ export function IncidentEvidence({
         >
           <span className="truncate font-mono font-medium">{group.type}</span>
           <span className="truncate text-fg-muted">
-            {group.service} · {formatCount(group.occurrences)} occurrences
+            {t("incidents.evidence.occurrences", {
+              service: group.service,
+              count: format.count(group.occurrences),
+            })}
           </span>
         </Link>
       ),
@@ -60,7 +66,10 @@ export function IncidentEvidence({
             {trace.rootSpan?.name ?? trace.traceId}
           </span>
           <span className="truncate text-fg-muted">
-            Trace · {formatLatency(trace.durationMs)} · {trace.spanCount} spans
+            {t("incidents.evidence.trace", {
+              duration: format.latency(trace.durationMs),
+              spans: t("traces.detail.spans", { count: trace.spanCount }),
+            })}
           </span>
         </Link>
       ),
@@ -74,8 +83,10 @@ export function IncidentEvidence({
             {deployment.version}
           </span>
           <span className="truncate text-fg-muted">
-            Deployment · {deployment.service ?? "all services"} ·{" "}
-            {formatDayTime(deployment.deployedAt)}
+            {t("incidents.evidence.deployment", {
+              service: deployment.service ?? t("deployments.allServices"),
+              date: format.dayTime(deployment.deployedAt),
+            })}
           </span>
         </span>
       ),
@@ -90,7 +101,10 @@ export function IncidentEvidence({
             <span className="truncate font-mono">{log.message}</span>
           </span>
           <span className="truncate text-fg-muted">
-            Log · {log.service} · {formatDayTime(log.timestamp)}
+            {t("incidents.evidence.log", {
+              service: log.service,
+              date: format.dayTime(log.timestamp),
+            })}
           </span>
         </span>
       ),
@@ -100,8 +114,7 @@ export function IncidentEvidence({
   if (items.length === 0) {
     return (
       <p className="text-[13px] text-fg-muted">
-        Nothing linked yet. Add errors, traces, deployments or logs that explain
-        this incident; AI analysis uses them as evidence.
+        {t("incidents.evidence.empty")}
       </p>
     );
   }

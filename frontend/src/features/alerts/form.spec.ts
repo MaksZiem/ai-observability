@@ -39,14 +39,14 @@ describe("validateAlertForm", () => {
   });
 
   it.each([
-    [{ name: "" }, "Name the alert."],
-    [{ metric: "cpu" }, "Choose a metric, condition and severity."],
-    [{ threshold: "" }, "The threshold must be a number of 0 or more."],
-    [{ threshold: "-1" }, "The threshold must be a number of 0 or more."],
-    [{ threshold: "abc" }, "The threshold must be a number of 0 or more."],
-    [{ windowMinutes: "0" }, "The window must be 1 to 1440 whole minutes."],
-    [{ windowMinutes: "1441" }, "The window must be 1 to 1440 whole minutes."],
-    [{ windowMinutes: "2.5" }, "The window must be 1 to 1440 whole minutes."],
+    [{ name: "" }, "nameRequired"],
+    [{ metric: "cpu" }, "choicesRequired"],
+    [{ threshold: "" }, "threshold"],
+    [{ threshold: "-1" }, "threshold"],
+    [{ threshold: "abc" }, "threshold"],
+    [{ windowMinutes: "0" }, "window"],
+    [{ windowMinutes: "1441" }, "window"],
+    [{ windowMinutes: "2.5" }, "window"],
   ])("rejects %o", (overrides, error) => {
     expect(validateAlertForm(values(overrides))).toEqual({
       payload: null,

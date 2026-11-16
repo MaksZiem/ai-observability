@@ -2,6 +2,7 @@ import type { IncidentEvidence } from '../incidents/incident-evidence.service.js
 import type { TimelineEntry } from '../incidents/incident-timeline.js';
 import type { Incident } from '../incidents/entities/incident.entity.js';
 import type { SimilarIncident } from '../incidents/similar-incidents.service.js';
+import type { AnalysisLanguage } from './dto/request-analysis.dto.js';
 
 const MAX_TEXT_LENGTH = 500;
 const MAX_TIMELINE_ENTRIES = 50;
@@ -19,7 +20,13 @@ export interface AnalysisInput {
   timeline: TimelineEntry[];
   evidence: IncidentEvidence;
   similar: SimilarIncident[];
+  language?: AnalysisLanguage;
 }
+
+const LANGUAGE_INSTRUCTION: Record<AnalysisLanguage, string> = {
+  pl: 'Write every text field of the result in Polish. Keep identifiers, versions, service names and error types unchanged.',
+  en: 'Write every text field of the result in English.',
+};
 
 const SYSTEM_INSTRUCTION = [
   'You are an SRE assistant analysing a production incident.',
@@ -130,5 +137,11 @@ export function buildEvidenceBlock({
 }
 
 export function buildAnalysisPrompt(input: AnalysisInput): AnalysisPrompt {
-  return { system: SYSTEM_INSTRUCTION, user: buildEvidenceBlock(input) };
+  return {
+    system: [
+      SYSTEM_INSTRUCTION,
+      LANGUAGE_INSTRUCTION[input.language ?? 'en'],
+    ].join('\n'),
+    user: buildEvidenceBlock(input),
+  };
 }

@@ -1,9 +1,11 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import {
   EMPTY_ALERT_VALUES,
+  MAX_WINDOW_MINUTES,
   readAlertForm,
   validateAlertForm,
   type AlertFormValues,
@@ -25,10 +27,17 @@ export async function createAlertRule(
   _prevState: CreateAlertState,
   formData: FormData,
 ): Promise<CreateAlertState> {
+  const t = await getTranslations();
   const values = readAlertForm(formData);
   const { payload, error } = validateAlertForm(values);
 
-  if (!payload) return { error, values, createdName: null };
+  if (!payload) {
+    return {
+      error: t(`alerts.form.errors.${error}`, { max: MAX_WINDOW_MINUTES }),
+      values,
+      createdName: null,
+    };
+  }
 
   try {
     await apiFetch<AlertRule>(alertsPath(projectId), {
@@ -39,8 +48,8 @@ export async function createAlertRule(
     return {
       error:
         apiError instanceof ApiError && apiError.status === 400
-          ? apiError.message
-          : "Could not create the alert. Try again.",
+          ? t("errors.validation")
+          : t("alerts.form.errors.failed"),
       values,
       createdName: null,
     };

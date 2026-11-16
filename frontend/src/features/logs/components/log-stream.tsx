@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { loadMoreLogs } from "@/features/logs/actions";
 import { LogRow } from "@/features/logs/components/log-row";
@@ -19,6 +20,7 @@ function prependNew(fresh: Log[], current: Log[]) {
 }
 
 export function LogStream({ projectId, filter, initialPage }: LogStreamProps) {
+  const t = useTranslations();
   const [logs, setLogs] = useState(initialPage.items);
   const [cursor, setCursor] = useState(initialPage.nextCursor);
   const [page, setPage] = useState(initialPage);
@@ -48,7 +50,7 @@ export function LogStream({ projectId, filter, initialPage }: LogStreamProps) {
 
       {cursor && (
         <Button onClick={loadMore} disabled={pending} className="self-center">
-          {pending ? "Loading…" : "Load older logs"}
+          {pending ? t("common.loading") : t("logs.loadMore")}
         </Button>
       )}
     </div>

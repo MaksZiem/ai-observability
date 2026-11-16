@@ -36,6 +36,7 @@ describe('buildAnalysisPrompt', () => {
           type: TimelineEntryType.DEPLOYMENT,
           title: 'Deployment v1.42.3',
           detail: 'payment-service',
+          params: { version: 'v1.42.3' },
           refId: 'd1',
         },
       ],
@@ -106,6 +107,7 @@ describe('buildAnalysisPrompt', () => {
           } as Incident,
           score: 0.8,
           reasons: ['Same error: DatabaseConnectionTimeout'],
+          matches: [{ kind: 'error', value: 'DatabaseConnectionTimeout' }],
         },
       ],
     });

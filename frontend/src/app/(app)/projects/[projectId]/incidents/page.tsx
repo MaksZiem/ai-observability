@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Siren } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
@@ -10,9 +11,10 @@ import { parseIncidentStatus } from "@/features/incidents/labels";
 import { listIncidents } from "@/features/incidents/queries";
 import { getProject } from "@/features/projects/queries";
 
-export const metadata: Metadata = {
-  title: "Incidents",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("incidents");
+  return { title: t("title") };
+}
 
 export default async function IncidentsPage({
   params,
@@ -21,6 +23,7 @@ export default async function IncidentsPage({
   const { projectId } = await params;
   const status = parseIncidentStatus((await searchParams).status);
 
+  const t = await getTranslations("incidents");
   await getProject(projectId);
   const incidents = await listIncidents(projectId, status ?? undefined);
 
@@ -29,15 +32,15 @@ export default async function IncidentsPage({
       href={`/projects/${projectId}/incidents/new`}
       className={buttonClasses("primary")}
     >
-      New incident
+      {t("new")}
     </Link>
   );
 
   return (
     <div>
       <PageHeader
-        title="Incidents"
-        description="Every incident in this project, newest first."
+        title={t("title")}
+        description={t("lead")}
         actions={newIncident}
       />
 
@@ -47,10 +50,8 @@ export default async function IncidentsPage({
         {incidents.length === 0 ? (
           <EmptyState
             icon={Siren}
-            title={
-              status ? "No incidents with this status" : "No incidents yet"
-            }
-            description="Open an incident when something is wrong in production. Its timeline is built from deployments, anomalies and errors."
+            title={status ? t("emptyStatus") : t("emptyAll")}
+            description={t("emptyHint")}
           />
         ) : (
           <IncidentTable projectId={projectId} incidents={incidents} />

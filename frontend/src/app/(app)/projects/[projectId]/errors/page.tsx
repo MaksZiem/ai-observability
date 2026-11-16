@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bug } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { ErrorGroupTable } from "@/features/errors/components/error-group-table";
@@ -8,9 +9,10 @@ import { parseErrorStatus } from "@/features/errors/labels";
 import { listErrorGroups } from "@/features/errors/queries";
 import { getProject } from "@/features/projects/queries";
 
-export const metadata: Metadata = {
-  title: "Errors",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("errorGroups");
+  return { title: t("title") };
+}
 
 export default async function ErrorsPage({
   params,
@@ -19,6 +21,7 @@ export default async function ErrorsPage({
   const { projectId } = await params;
   const status = parseErrorStatus((await searchParams).status);
 
+  const t = await getTranslations("errorGroups");
   await getProject(projectId);
   const groups = await listErrorGroups(projectId, {
     status: status ?? undefined,
@@ -27,8 +30,8 @@ export default async function ErrorsPage({
   return (
     <div>
       <PageHeader
-        title="Errors"
-        description="Similar errors grouped by type, message and service."
+        title={t("title")}
+        description={t("lead")}
       />
 
       <div className="flex flex-col gap-4 p-6">
@@ -37,8 +40,8 @@ export default async function ErrorsPage({
         {groups.length === 0 ? (
           <EmptyState
             icon={Bug}
-            title={status ? "No errors with this status" : "No errors yet"}
-            description="Errors appear once your services send them to /api/ingest/errors."
+            title={status ? t("emptyStatus") : t("emptyAll")}
+            description={t("emptyHint")}
           />
         ) : (
           <ErrorGroupTable projectId={projectId} groups={groups} />

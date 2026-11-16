@@ -3,7 +3,13 @@ import type { AlertComparator, AlertMetric } from "@/features/alerts/types";
 import { INCIDENT_SEVERITIES } from "@/features/incidents/labels";
 import type { IncidentSeverity } from "@/features/incidents/types";
 
-const MAX_WINDOW_MINUTES = 1440;
+export const MAX_WINDOW_MINUTES = 1440;
+
+export type AlertFormError =
+  | "nameRequired"
+  | "choicesRequired"
+  | "threshold"
+  | "window";
 
 export type AlertFormValues = {
   name: string;
@@ -59,7 +65,9 @@ export function readAlertForm(formData: FormData): AlertFormValues {
 
 export function validateAlertForm(
   values: AlertFormValues,
-): { payload: AlertPayload; error: null } | { payload: null; error: string } {
+):
+  | { payload: AlertPayload; error: null }
+  | { payload: null; error: AlertFormError } {
   const metric = METRIC_KEYS.find((key) => key === values.metric);
   const comparator = COMPARATOR_KEYS.find((key) => key === values.comparator);
   const severity = INCIDENT_SEVERITIES.find(
@@ -68,28 +76,19 @@ export function validateAlertForm(
   const threshold = Number(values.threshold);
   const windowMinutes = Number(values.windowMinutes);
 
-  if (!values.name) return { payload: null, error: "Name the alert." };
+  if (!values.name) return { payload: null, error: "nameRequired" };
   if (!metric || !comparator || !severity) {
-    return {
-      payload: null,
-      error: "Choose a metric, condition and severity.",
-    };
+    return { payload: null, error: "choicesRequired" };
   }
   if (values.threshold === "" || !Number.isFinite(threshold) || threshold < 0) {
-    return {
-      payload: null,
-      error: "The threshold must be a number of 0 or more.",
-    };
+    return { payload: null, error: "threshold" };
   }
   if (
     !Number.isInteger(windowMinutes) ||
     windowMinutes < 1 ||
     windowMinutes > MAX_WINDOW_MINUTES
   ) {
-    return {
-      payload: null,
-      error: `The window must be 1 to ${MAX_WINDOW_MINUTES} whole minutes.`,
-    };
+    return { payload: null, error: "window" };
   }
 
   return {

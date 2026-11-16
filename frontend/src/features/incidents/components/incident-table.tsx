@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
-import { formatDayTime } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import {
   IncidentSeverityBadge,
   IncidentStatusBadge,
@@ -18,17 +19,20 @@ type IncidentTableProps = {
 };
 
 export function IncidentTable({ projectId, incidents }: IncidentTableProps) {
+  const t = useTranslations("incidents.columns");
+  const format = useFormat();
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[720px] text-[13px]">
         <div
           className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
-          <span>#</span>
-          <span>Title</span>
-          <span>Severity</span>
-          <span>Status</span>
-          <span className="text-right">Started</span>
+          <span>{t("number")}</span>
+          <span>{t("title")}</span>
+          <span>{t("severity")}</span>
+          <span>{t("status")}</span>
+          <span className="text-right">{t("started")}</span>
         </div>
 
         <ul>
@@ -49,7 +53,7 @@ export function IncidentTable({ projectId, incidents }: IncidentTableProps) {
                   <IncidentStatusBadge status={incident.status} />
                 </span>
                 <span className="text-right font-mono text-fg-muted tabular-nums">
-                  {formatDayTime(incident.startedAt)}
+                  {format.dayTime(incident.startedAt)}
                 </span>
               </Link>
             </li>

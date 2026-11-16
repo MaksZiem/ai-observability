@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpStatus,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
@@ -26,6 +27,7 @@ import {
 import { IncidentNote } from './entities/incident-note.entity.js';
 import { Incident } from './entities/incident.entity.js';
 import { applyStatus } from './incident-status.js';
+import { errorBody } from '../common/error-body.js';
 
 @Injectable()
 export class IncidentsService {
@@ -183,7 +185,13 @@ export class IncidentsService {
     });
 
     if (existing) {
-      throw new ConflictException('Already linked to this incident');
+      throw new ConflictException(
+        errorBody(
+          HttpStatus.CONFLICT,
+          'INCIDENT_LINK_EXISTS',
+          'Already linked to this incident',
+        ),
+      );
     }
 
     return this.linksRepository.save(
@@ -222,7 +230,13 @@ export class IncidentsService {
     { kind, targetId }: CreateIncidentLinkDto,
   ): Promise<void> {
     if (kind !== IncidentLinkKind.TRACE && !isUUID(targetId)) {
-      throw new BadRequestException('targetId must be a UUID');
+      throw new BadRequestException(
+        errorBody(
+          HttpStatus.BAD_REQUEST,
+          'INCIDENT_TARGET_INVALID',
+          'targetId must be a UUID',
+        ),
+      );
     }
 
     switch (kind) {

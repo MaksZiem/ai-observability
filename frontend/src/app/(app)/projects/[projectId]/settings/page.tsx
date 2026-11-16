@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { PageHeader } from "@/components/ui/page-header";
 import { ApiKeySettings } from "@/features/projects/components/api-key-settings";
 import { DeleteProjectForm } from "@/features/projects/components/delete-project-form";
@@ -7,9 +9,10 @@ import { ProjectSettingsForm } from "@/features/projects/components/project-sett
 import { getProject } from "@/features/projects/queries";
 import { ChangePasswordForm } from "./change-password-form";
 
-export const metadata: Metadata = {
-  title: "Settings",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("projects.settings");
+  return { title: t("title") };
+}
 
 type SettingsSectionProps = {
   title: string;
@@ -43,23 +46,26 @@ export default async function SettingsPage({
   params,
 }: PageProps<"/projects/[projectId]/settings">) {
   const { projectId } = await params;
-  const project = await getProject(projectId);
+  const [project, t] = await Promise.all([
+    getProject(projectId),
+    getTranslations("projects.settings"),
+  ]);
 
   return (
     <div>
-      <PageHeader title="Settings" description={project.name} />
+      <PageHeader title={t("title")} description={project.name} />
 
       <div className="flex max-w-[720px] flex-col gap-6 p-6">
         <SettingsSection
-          title="Project"
-          description="The name and environment shown across the dashboard."
+          title={t("project")}
+          description={t("projectLead")}
         >
           <ProjectSettingsForm project={project} />
         </SettingsSection>
 
         <SettingsSection
-          title="API key"
-          description="Telemetry is accepted only with this key in the x-api-key header."
+          title={t("apiKey")}
+          description={t("apiKeyLead")}
         >
           <ApiKeySettings
             projectId={project.id}
@@ -68,15 +74,19 @@ export default async function SettingsPage({
         </SettingsSection>
 
         <SettingsSection
-          title="Account"
-          description="Change the password you use to sign in."
+          title={t("account")}
+          description={t("accountLead")}
         >
+          <div className="flex items-center justify-between gap-3 text-[13px]">
+            <span className="text-fg-muted">{t("language")}</span>
+            <LocaleSwitcher />
+          </div>
           <ChangePasswordForm />
         </SettingsSection>
 
         <SettingsSection
-          title="Danger zone"
-          description="Actions here cannot be undone."
+          title={t("danger")}
+          description={t("dangerLead")}
           tone="danger"
         >
           <DeleteProjectForm project={project} />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { buttonClasses } from "@/components/ui/button";
 import { CopyButton } from "@/components/ui/copy-button";
 
@@ -8,14 +9,13 @@ type ApiKeyRevealProps = {
 };
 
 export function ApiKeyReveal({ projectId, apiKey }: ApiKeyRevealProps) {
+  const t = useTranslations("projects.created");
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h2 className="text-base font-semibold">Project created</h2>
-        <p className="text-[13px] text-fg-muted">
-          Copy the API key now. It is shown only once; if you lose it, rotate it
-          in project settings.
-        </p>
+        <h2 className="text-base font-semibold">{t("title")}</h2>
+        <p className="text-[13px] text-fg-muted">{t("lead")}</p>
       </div>
 
       <div className="flex items-center gap-2">
@@ -26,15 +26,16 @@ export function ApiKeyReveal({ projectId, apiKey }: ApiKeyRevealProps) {
       </div>
 
       <p className="text-[13px] text-fg-muted">
-        Send it in the <code className="font-mono text-fg">x-api-key</code>{" "}
-        header to <code className="font-mono text-fg">/api/ingest/*</code>.
+        {t.rich("usage", {
+          code: (chunks) => <code className="font-mono text-fg">{chunks}</code>,
+        })}
       </p>
 
       <Link
         href={`/projects/${projectId}`}
         className={`${buttonClasses("primary")} self-start`}
       >
-        Continue to project
+        {t("continue")}
       </Link>
     </div>
   );

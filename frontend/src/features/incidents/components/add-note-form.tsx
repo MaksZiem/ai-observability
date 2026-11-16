@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 import { addIncidentNote, type NoteState } from "@/features/incidents/actions";
@@ -13,6 +14,8 @@ type AddNoteFormProps = {
 };
 
 export function AddNoteForm({ projectId, incidentId }: AddNoteFormProps) {
+  const t = useTranslations("incidents.note");
+  const tCommon = useTranslations("common");
   const [state, formAction] = useActionState(
     addIncidentNote.bind(null, projectId, incidentId),
     INITIAL_STATE,
@@ -21,14 +24,14 @@ export function AddNoteForm({ projectId, incidentId }: AddNoteFormProps) {
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <label className="sr-only" htmlFor="incident-note">
-        Note
+        {t("label")}
       </label>
       <Textarea
         id="incident-note"
         name="body"
         rows={3}
         maxLength={10000}
-        placeholder="What did you check or change?"
+        placeholder={t("placeholder")}
         defaultValue={state.body}
         required
       />
@@ -36,7 +39,7 @@ export function AddNoteForm({ projectId, incidentId }: AddNoteFormProps) {
         <p role="alert" className="text-xs text-danger">
           {state.error}
         </p>
-        <SubmitButton pendingLabel="Saving…">Add note</SubmitButton>
+        <SubmitButton pendingLabel={tCommon("saving")}>{t("add")}</SubmitButton>
       </div>
     </form>
   );

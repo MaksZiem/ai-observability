@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -10,7 +11,7 @@ import {
   type CreateProjectState,
 } from "@/features/projects/actions";
 import { ApiKeyReveal } from "@/features/projects/components/api-key-reveal";
-import { ENVIRONMENT_LABELS, ENVIRONMENTS } from "@/features/projects/labels";
+import { ENVIRONMENTS } from "@/features/projects/labels";
 
 const INITIAL_STATE: CreateProjectState = {
   error: null,
@@ -20,6 +21,7 @@ const INITIAL_STATE: CreateProjectState = {
 };
 
 export function CreateProjectForm() {
+  const t = useTranslations("projects");
   const [state, formAction] = useActionState(createProject, INITIAL_STATE);
 
   if (state.created) {
@@ -33,14 +35,14 @@ export function CreateProjectForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <FormField label="Name" hint="For example: My E-commerce API.">
+      <FormField label={t("form.name")} hint={t("form.nameHint")}>
         <Input name="name" maxLength={100} defaultValue={state.name} required />
       </FormField>
-      <FormField label="Environment">
+      <FormField label={t("form.environment")}>
         <Select name="environment" defaultValue={state.environment}>
           {ENVIRONMENTS.map((environment) => (
             <option key={environment} value={environment}>
-              {ENVIRONMENT_LABELS[environment]}
+              {t(`environments.${environment}`)}
             </option>
           ))}
         </Select>
@@ -54,10 +56,10 @@ export function CreateProjectForm() {
 
       <SubmitButton
         variant="primary"
-        pendingLabel="Creating project…"
+        pendingLabel={t("form.creating")}
         className="self-start"
       >
-        Create project
+        {t("form.create")}
       </SubmitButton>
     </form>
   );

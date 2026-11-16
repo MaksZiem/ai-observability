@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -14,12 +15,8 @@ import {
   COMPARATOR_KEYS,
   COMPARATORS,
   METRIC_KEYS,
-  METRICS,
 } from "@/features/alerts/labels";
-import {
-  INCIDENT_SEVERITIES,
-  INCIDENT_SEVERITY,
-} from "@/features/incidents/labels";
+import { INCIDENT_SEVERITIES } from "@/features/incidents/labels";
 
 const INITIAL_STATE: CreateAlertState = {
   error: null,
@@ -32,6 +29,7 @@ type CreateAlertFormProps = {
 };
 
 export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
+  const t = useTranslations();
   const [state, formAction] = useActionState(
     createAlertRule.bind(null, projectId),
     INITIAL_STATE,
@@ -40,10 +38,10 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <FormField label="Name">
+      <FormField label={t("alerts.form.name")}>
         <Input
           name="name"
-          placeholder="Payment errors"
+          placeholder={t("alerts.form.namePlaceholder")}
           maxLength={100}
           defaultValue={values.name}
           required
@@ -51,16 +49,16 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
       </FormField>
 
       <div className="grid grid-cols-[1fr_72px] gap-2">
-        <FormField label="Metric">
+        <FormField label={t("alerts.form.metric")}>
           <Select name="metric" defaultValue={values.metric}>
             {METRIC_KEYS.map((metric) => (
               <option key={metric} value={metric}>
-                {METRICS[metric].label} ({METRICS[metric].unit})
+                {t(`alerts.metrics.${metric}`)} ({t(`alerts.units.${metric}`)})
               </option>
             ))}
           </Select>
         </FormField>
-        <FormField label="Condition">
+        <FormField label={t("alerts.form.condition")}>
           <Select name="comparator" defaultValue={values.comparator}>
             {COMPARATOR_KEYS.map((comparator) => (
               <option key={comparator} value={comparator}>
@@ -73,8 +71,8 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
 
       <div className="grid grid-cols-2 gap-2">
         <FormField
-          label="Threshold"
-          hint="In the metric's unit, e.g. 5 for 5%."
+          label={t("alerts.form.threshold")}
+          hint={t("alerts.form.thresholdHint")}
         >
           <Input
             name="threshold"
@@ -86,7 +84,7 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
             required
           />
         </FormField>
-        <FormField label="Window (minutes)">
+        <FormField label={t("alerts.form.window")}>
           <Input
             name="windowMinutes"
             type="number"
@@ -100,7 +98,7 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
         </FormField>
       </div>
 
-      <FormField label="Service" hint="Leave empty to watch all entry traffic.">
+      <FormField label={t("alerts.form.service")} hint={t("alerts.form.serviceHint")}>
         <Input
           name="service"
           placeholder="payment-service"
@@ -111,7 +109,7 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
       </FormField>
 
       <fieldset className="flex flex-col gap-3 border-t border-border pt-4">
-        <legend className="sr-only">When the alert fires</legend>
+        <legend className="sr-only">{t("alerts.form.whenFires")}</legend>
         <label className="flex items-center gap-2 text-[13px] font-medium">
           <input
             type="checkbox"
@@ -119,23 +117,23 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
             defaultChecked={values.createIncident}
             className="size-4 accent-accent"
           />
-          Create an incident
+          {t("alerts.form.createIncident")}
         </label>
-        <FormField label="Incident severity">
+        <FormField label={t("alerts.form.severity")}>
           <Select
             name="incidentSeverity"
             defaultValue={values.incidentSeverity}
           >
             {INCIDENT_SEVERITIES.map((severity) => (
               <option key={severity} value={severity}>
-                {INCIDENT_SEVERITY[severity].label}
+                {t(`incidents.severity.${severity}`)}
               </option>
             ))}
           </Select>
         </FormField>
         <FormField
-          label="Webhook URL"
-          hint="Optional. Receives a JSON POST when the alert fires and resolves."
+          label={t("alerts.form.webhook")}
+          hint={t("alerts.form.webhookHint")}
         >
           <Input
             name="webhookUrl"
@@ -155,16 +153,16 @@ export function CreateAlertForm({ projectId }: CreateAlertFormProps) {
       )}
       {state.createdName && (
         <p role="status" className="text-xs text-success">
-          Created “{state.createdName}”.
+          {t("alerts.form.created", { name: state.createdName })}
         </p>
       )}
 
       <SubmitButton
         variant="primary"
-        pendingLabel="Creating…"
+        pendingLabel={t("alerts.form.pending")}
         className="self-start"
       >
-        Create alert
+        {t("alerts.form.submit")}
       </SubmitButton>
     </form>
   );

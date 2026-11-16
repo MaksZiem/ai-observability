@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import { setAccessToken } from "@/lib/session";
 import type { AuthResponse } from "@/features/auth/types";
@@ -15,6 +16,7 @@ export async function register(
   _prevState: RegisterState,
   formData: FormData,
 ): Promise<RegisterState> {
+  const t = await getTranslations();
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -22,13 +24,13 @@ export async function register(
   const entered = { name, email };
 
   if (!name || !email || !password) {
-    return { ...entered, error: "Fill in every field." };
+    return { ...entered, error: t("auth.errors.fillAll") };
   }
   if (name.length > 100) {
-    return { ...entered, error: "Name must be at most 100 characters." };
+    return { ...entered, error: t("auth.errors.nameTooLong") };
   }
   if (password.length < 8 || password.length > 128) {
-    return { ...entered, error: "Password must be 8 to 128 characters." };
+    return { ...entered, error: t("auth.errors.passwordLength") };
   }
 
   try {
@@ -40,21 +42,15 @@ export async function register(
     await setAccessToken(accessToken);
   } catch (error) {
     if (error instanceof ApiError && error.status === 409) {
-      return {
-        ...entered,
-        error: "An account with this email already exists.",
-      };
+      return { ...entered, error: t("auth.errors.emailTaken") };
     }
     if (error instanceof ApiError && error.status === 400) {
-      return { ...entered, error: error.message };
+      return { ...entered, error: t("errors.validation") };
     }
     if (error instanceof ApiError && error.status === 429) {
-      return {
-        ...entered,
-        error: "Too many attempts. Wait a minute and try again.",
-      };
+      return { ...entered, error: t("auth.errors.tooManyAttempts") };
     }
-    return { ...entered, error: "Could not reach the server. Try again." };
+    return { ...entered, error: t("errors.unreachable") };
   }
 
   redirect("/");

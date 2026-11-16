@@ -1,8 +1,6 @@
 import Link from "next/link";
-import {
-  INCIDENT_STATUS,
-  INCIDENT_STATUSES,
-} from "@/features/incidents/labels";
+import { useTranslations } from "next-intl";
+import { INCIDENT_STATUSES } from "@/features/incidents/labels";
 import type { IncidentStatus } from "@/features/incidents/types";
 
 type IncidentStatusFilterProps = {
@@ -14,11 +12,12 @@ export function IncidentStatusFilter({
   projectId,
   active,
 }: IncidentStatusFilterProps) {
+  const t = useTranslations("incidents");
   const basePath = `/projects/${projectId}/incidents`;
   const filters: (IncidentStatus | null)[] = [null, ...INCIDENT_STATUSES];
 
   return (
-    <nav aria-label="Filter by status" className="flex flex-wrap gap-1">
+    <nav aria-label={t("filter.label")} className="flex flex-wrap gap-1">
       {filters.map((status) => {
         const isActive = status === active;
 
@@ -33,7 +32,7 @@ export function IncidentStatusFilter({
                 : "text-fg-muted hover:bg-surface-hover hover:text-fg"
             }`}
           >
-            {status ? INCIDENT_STATUS[status].label : "All"}
+            {status ? t(`status.${status}`) : t("filter.all")}
           </Link>
         );
       })}

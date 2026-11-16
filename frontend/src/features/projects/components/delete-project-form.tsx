@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { ConfirmForm } from "@/components/ui/confirm-form";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { deleteProject } from "@/features/projects/actions";
@@ -8,17 +9,19 @@ type DeleteProjectFormProps = {
 };
 
 export function DeleteProjectForm({ project }: DeleteProjectFormProps) {
+  const t = useTranslations("projects.delete");
+
   return (
     <ConfirmForm
       action={deleteProject.bind(null, project.id)}
-      message={`Delete “${project.name}” and all of its telemetry, incidents and alerts? This cannot be undone.`}
+      message={t("confirm", { name: project.name })}
       className="flex flex-wrap items-center justify-between gap-3"
     >
       <p className="text-[13px] text-fg-muted">
-        Deletes the project with all logs, traces, errors, incidents and alerts.
+        {t("lead")}
       </p>
-      <SubmitButton variant="danger" pendingLabel="Deleting…">
-        Delete project
+      <SubmitButton variant="danger" pendingLabel={t("pending")}>
+        {t("submit")}
       </SubmitButton>
     </ConfirmForm>
   );

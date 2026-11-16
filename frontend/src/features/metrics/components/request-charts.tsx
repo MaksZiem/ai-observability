@@ -1,6 +1,7 @@
 "use client";
 
-import { formatCount, formatLatency, formatPercent } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import { ChartCard } from "@/features/metrics/components/chart-card";
 import {
   TimeSeriesChart,
@@ -15,6 +16,8 @@ type RequestChartsProps = {
 };
 
 export function RequestCharts({ overview, deployments }: RequestChartsProps) {
+  const t = useTranslations("metrics.charts");
+  const format = useFormat();
   const { from, to, series, summary } = overview;
 
   const markers: ChartMarker[] = deployments.map((deployment) => ({
@@ -26,24 +29,24 @@ export function RequestCharts({ overview, deployments }: RequestChartsProps) {
 
   return (
     <div className="grid gap-6 xl:grid-cols-3">
-      <ChartCard title="Request volume" value={formatCount(summary.requests)}>
+      <ChartCard title={t("volume")} value={format.count(summary.requests)}>
         <TimeSeriesChart
           {...chartProps}
-          label="Requests per interval"
+          label={t("volumeLabel")}
           color="accent"
-          formatValue={formatCount}
+          formatValue={format.count}
           points={series.map((point) => ({
             at: point.bucket,
             value: point.requests,
           }))}
         />
       </ChartCard>
-      <ChartCard title="Error rate" value={formatPercent(summary.errorRate)}>
+      <ChartCard title={t("errorRate")} value={format.percent(summary.errorRate)}>
         <TimeSeriesChart
           {...chartProps}
-          label="Error rate per interval"
+          label={t("errorRateLabel")}
           color="danger"
-          formatValue={formatPercent}
+          formatValue={format.percent}
           points={series.map((point) => ({
             at: point.bucket,
             value: point.requests > 0 ? point.errorRate : null,
@@ -51,14 +54,14 @@ export function RequestCharts({ overview, deployments }: RequestChartsProps) {
         />
       </ChartCard>
       <ChartCard
-        title="P95 latency"
-        value={formatLatency(summary.p95LatencyMs)}
+        title={t("p95")}
+        value={format.latency(summary.p95LatencyMs)}
       >
         <TimeSeriesChart
           {...chartProps}
-          label="P95 latency per interval"
+          label={t("p95Label")}
           color="accent"
-          formatValue={formatLatency}
+          formatValue={format.latency}
           points={series.map((point) => ({
             at: point.bucket,
             value: point.p95LatencyMs,

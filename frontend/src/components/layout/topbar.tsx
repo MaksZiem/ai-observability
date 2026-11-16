@@ -1,6 +1,8 @@
 "use client";
 
 import { LogOut, Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { logout } from "@/features/auth/actions";
 import type { User } from "@/features/auth/types";
 import { ProjectSwitcher } from "@/features/projects/components/project-switcher";
@@ -28,12 +30,14 @@ export function Topbar({
   menuOpen,
   onOpenMenu,
 }: TopbarProps) {
+  const t = useTranslations("nav");
+
   return (
     <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-4">
       <button
         type="button"
         onClick={onOpenMenu}
-        aria-label="Open menu"
+        aria-label={t("openMenu")}
         aria-expanded={menuOpen}
         aria-controls="app-sidebar"
         className={`${ICON_BUTTON} md:hidden`}
@@ -45,12 +49,13 @@ export function Topbar({
       {projectId && <LiveIndicator status={status} />}
 
       <div className="ml-auto flex min-w-0 items-center gap-2">
+        <LocaleSwitcher className="hidden sm:inline-flex" />
         <div className="hidden min-w-0 text-right sm:block">
           <p className="truncate text-[13px] font-medium">{user.name}</p>
           <p className="truncate text-xs text-fg-muted">{user.email}</p>
         </div>
         <form action={logout}>
-          <button type="submit" aria-label="Sign out" className={ICON_BUTTON}>
+          <button type="submit" aria-label={t("signOut")} className={ICON_BUTTON}>
             <LogOut className="size-4" strokeWidth={1.75} aria-hidden />
           </button>
         </form>

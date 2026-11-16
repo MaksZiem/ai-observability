@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { formatAxisTime, formatDayTime } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 
 const HEIGHT = 160;
 const PADDING = { top: 18, right: 8, bottom: 22, left: 48 };
@@ -80,6 +81,8 @@ export function TimeSeriesChart({
   color,
   formatValue,
 }: TimeSeriesChartProps) {
+  const t = useTranslations("metrics.charts");
+  const format = useFormat();
   const [containerRef, width] = useWidth<HTMLDivElement>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -208,7 +211,7 @@ export function TimeSeriesChart({
               }
               className="fill-fg-muted font-mono text-[11px]"
             >
-              {formatAxisTime(tick, spansDays)}
+              {format.axisTime(tick, spansDays)}
             </text>
           ))}
 
@@ -275,10 +278,10 @@ export function TimeSeriesChart({
           }}
         >
           <p className="font-mono text-[13px] font-medium tabular-nums text-fg">
-            {active.value === null ? "No data" : formatValue(active.value)}
+            {active.value === null ? t("noData") : formatValue(active.value)}
           </p>
           <p className="font-mono text-[11px] text-fg-muted">
-            {formatDayTime(active.at)}
+            {format.dayTime(active.at)}
           </p>
         </div>
       )}
@@ -288,16 +291,16 @@ export function TimeSeriesChart({
           <caption>{label}</caption>
           <thead>
             <tr>
-              <th scope="col">Time</th>
-              <th scope="col">Value</th>
+              <th scope="col">{t("time")}</th>
+              <th scope="col">{t("value")}</th>
             </tr>
           </thead>
           <tbody>
             {points.map((point) => (
               <tr key={point.at}>
-                <td>{formatDayTime(point.at)}</td>
+                <td>{format.dayTime(point.at)}</td>
                 <td>
-                  {point.value === null ? "No data" : formatValue(point.value)}
+                  {point.value === null ? t("noData") : formatValue(point.value)}
                 </td>
               </tr>
             ))}

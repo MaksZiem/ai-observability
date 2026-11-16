@@ -6,22 +6,21 @@ import type {
 } from "@/features/incidents/types";
 
 type BadgeStyle = {
-  label: string;
   tone: StatusTone;
   indicator: StatusIndicator;
 };
 
 export const INCIDENT_STATUS: Record<IncidentStatus, BadgeStyle> = {
-  open: { label: "Open", tone: "danger", indicator: "dot" },
-  investigating: { label: "Investigating", tone: "warning", indicator: "dot" },
-  resolved: { label: "Resolved", tone: "success", indicator: "check" },
+  open: { tone: "danger", indicator: "dot" },
+  investigating: { tone: "warning", indicator: "dot" },
+  resolved: { tone: "success", indicator: "check" },
 };
 
 export const INCIDENT_SEVERITY: Record<IncidentSeverity, BadgeStyle> = {
-  low: { label: "Low", tone: "neutral", indicator: "hollow" },
-  medium: { label: "Medium", tone: "warning", indicator: "dot" },
-  high: { label: "High", tone: "danger", indicator: "dot" },
-  critical: { label: "Critical", tone: "critical", indicator: "dot" },
+  low: { tone: "neutral", indicator: "hollow" },
+  medium: { tone: "warning", indicator: "dot" },
+  high: { tone: "danger", indicator: "dot" },
+  critical: { tone: "critical", indicator: "dot" },
 };
 
 export const INCIDENT_STATUSES = Object.keys(
@@ -32,14 +31,12 @@ export const INCIDENT_SEVERITIES = Object.keys(
   INCIDENT_SEVERITY,
 ) as IncidentSeverity[];
 
-export const LINK_KIND_LABELS: Record<IncidentLinkKind, string> = {
-  error_group: "Error group",
-  trace: "Trace",
-  deployment: "Deployment",
-  log: "Log",
-};
-
-export const LINK_KINDS = Object.keys(LINK_KIND_LABELS) as IncidentLinkKind[];
+export const LINK_KINDS: IncidentLinkKind[] = [
+  "error_group",
+  "trace",
+  "deployment",
+  "log",
+];
 
 export function parseIncidentStatus(value: string | string[] | undefined) {
   return INCIDENT_STATUSES.find((status) => status === value) ?? null;

@@ -1,9 +1,10 @@
+import { useTranslations } from "next-intl";
 import type { StreamStatus } from "@/features/realtime/types";
 
-const STATUS_STYLE: Record<StreamStatus, { label: string; dot: string }> = {
-  connecting: { label: "Connecting…", dot: "border border-fg-muted" },
-  live: { label: "Live", dot: "bg-success" },
-  offline: { label: "Reconnecting…", dot: "bg-warning" },
+const STATUS_DOT: Record<StreamStatus, string> = {
+  connecting: "border border-fg-muted",
+  live: "bg-success",
+  offline: "bg-warning",
 };
 
 type LiveIndicatorProps = {
@@ -11,13 +12,15 @@ type LiveIndicatorProps = {
 };
 
 export function LiveIndicator({ status }: LiveIndicatorProps) {
-  const { label, dot } = STATUS_STYLE[status];
+  const t = useTranslations("live");
+  const dot = STATUS_DOT[status];
+  const label = t(status);
 
   return (
     <p
       role="status"
       className="flex items-center gap-1.5 text-xs text-fg-muted"
-      title="Pages refresh automatically when new telemetry arrives."
+      title={t("hint")}
     >
       <span className={`size-1.5 rounded-full ${dot}`} aria-hidden />
       {label}

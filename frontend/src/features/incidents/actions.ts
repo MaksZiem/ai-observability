@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import {
   INCIDENT_SEVERITIES,
@@ -23,15 +24,19 @@ function apiPath(projectId: string, incidentId: string) {
   return `/projects/${projectId}/incidents/${incidentId}`;
 }
 
-function errorMessage(error: unknown, fallback: string) {
+async function errorMessage(error: unknown, fallback: string) {
+  const t = await getTranslations();
   if (
     error instanceof ApiError &&
-    (error.status === 400 || error.status === 409)
+    (error.code === "INCIDENT_LINK_EXISTS" || error.code === "INCIDENT_TARGET_INVALID")
   ) {
-    return error.message;
+    return t(`incidents.link.errors.${error.code}`);
+  }
+  if (error instanceof ApiError && error.status === 400) {
+    return t("errors.validation");
   }
   if (error instanceof ApiError && error.status === 404) {
-    return "Not found in this project.";
+    return t("incidents.link.errors.notFound");
   }
   return fallback;
 }
@@ -48,6 +53,7 @@ export async function createIncident(
   _prevState: CreateIncidentState,
   formData: FormData,
 ): Promise<CreateIncidentState> {
+  const t = await getTranslations("incidents.form.errors");
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const severity =
@@ -56,20 +62,14 @@ export async function createIncident(
 
   const entered = { title, description, severity: severity ?? "high" };
 
-  if (!title) return { ...entered, error: "Enter a title." };
+  if (!title) return { ...entered, error: t("titleRequired") };
   if (title.length > TITLE_MAX) {
-    return {
-      ...entered,
-      error: `Title must be at most ${TITLE_MAX} characters.`,
-    };
+    return { ...entered, error: t("titleTooLong", { max: TITLE_MAX }) };
   }
   if (description.length > DESCRIPTION_MAX) {
-    return {
-      ...entered,
-      error: `Description must be at most ${DESCRIPTION_MAX} characters.`,
-    };
+    return { ...entered, error: t("descriptionTooLong", { max: DESCRIPTION_MAX }) };
   }
-  if (!severity) return { ...entered, error: "Choose a severity." };
+  if (!severity) return { ...entered, error: t("severityRequired") };
 
   let incident: Incident;
   try {
@@ -80,7 +80,7 @@ export async function createIncident(
   } catch (error) {
     return {
       ...entered,
-      error: errorMessage(error, "Could not create the incident. Try again."),
+      error: await errorMessage(error, t("createFailed")),
     };
   }
 
@@ -119,11 +119,12 @@ export async function addIncidentNote(
   _prevState: NoteState,
   formData: FormData,
 ): Promise<NoteState> {
+  const t = await getTranslations("incidents.note.errors");
   const body = String(formData.get("body") ?? "").trim();
 
-  if (!body) return { error: "Write a note first.", body };
+  if (!body) return { error: t("empty"), body };
   if (body.length > NOTE_MAX) {
-    return { error: `Note must be at most ${NOTE_MAX} characters.`, body };
+    return { error: t("tooLong", { max: NOTE_MAX }), body };
   }
 
   try {
@@ -133,7 +134,7 @@ export async function addIncidentNote(
     });
   } catch (error) {
     return {
-      error: errorMessage(error, "Could not save the note. Try again."),
+      error: await errorMessage(error, t("failed")),
       body,
     };
   }
@@ -147,13 +148,14 @@ export async function linkEvidence(
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  const t = await getTranslations("incidents.link.errors");
   const incidentId = String(formData.get("incidentId") ?? "");
   const targetId = String(formData.get("targetId") ?? "").trim();
   const kind = LINK_KINDS.find((value) => value === formData.get("kind"));
 
-  if (!incidentId) return { error: "Choose an incident.", saved: false };
-  if (!kind) return { error: "Choose what to link.", saved: false };
-  if (!targetId) return { error: "Enter the ID to link.", saved: false };
+  if (!incidentId) return { error: t("incidentRequired"), saved: false };
+  if (!kind) return { error: t("kindRequired"), saved: false };
+  if (!targetId) return { error: t("idRequired"), saved: false };
 
   try {
     await apiFetch(`${apiPath(projectId, incidentId)}/links`, {
@@ -162,7 +164,7 @@ export async function linkEvidence(
     });
   } catch (error) {
     return {
-      error: errorMessage(error, "Could not link the evidence. Try again."),
+      error: await errorMessage(error, t("failed")),
       saved: false,
     };
   }

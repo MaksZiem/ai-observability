@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
-import { formatCount, formatLatency, formatPercent } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import { errorRateTone, latencyTone } from "@/features/metrics/health";
 import { ServiceStatusBadge } from "@/features/services/components/service-status-badge";
 import {
@@ -37,6 +38,8 @@ export function ServiceTable({
   range,
   services,
 }: ServiceTableProps) {
+  const t = useTranslations("services.columns");
+  const format = useFormat();
   const sorted = [...services].sort(byStatusThenName);
 
   return (
@@ -45,11 +48,11 @@ export function ServiceTable({
         <div
           className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
-          <span>Service</span>
-          <span>Status</span>
-          <span className="text-right">Requests</span>
-          <span className="text-right">Error rate</span>
-          <span className="text-right">P95 latency</span>
+          <span>{t("service")}</span>
+          <span>{t("status")}</span>
+          <span className="text-right">{t("requests")}</span>
+          <span className="text-right">{t("errorRate")}</span>
+          <span className="text-right">{t("p95")}</span>
         </div>
 
         <ul>
@@ -66,17 +69,17 @@ export function ServiceTable({
                   <ServiceStatusBadge status={service.status} />
                 </span>
                 <span className="text-right font-mono tabular-nums">
-                  {formatCount(service.requests)}
+                  {format.count(service.requests)}
                 </span>
                 <span
                   className={`text-right font-mono tabular-nums ${VALUE_TONE_CLASSES[errorRateTone(service)]}`}
                 >
-                  {formatPercent(service.errorRate)}
+                  {format.percent(service.errorRate)}
                 </span>
                 <span
                   className={`text-right font-mono tabular-nums ${VALUE_TONE_CLASSES[latencyTone(service)]}`}
                 >
-                  {formatLatency(service.p95LatencyMs)}
+                  {format.latency(service.p95LatencyMs)}
                 </span>
               </Link>
             </li>

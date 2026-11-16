@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { JsonBlock } from "@/components/ui/json-block";
-import { formatClock, formatDayTime } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import { LogLevel } from "@/features/logs/components/log-level";
 import type { Log, LogLevel as Level } from "@/features/logs/types";
 import { servicePath } from "@/features/services/paths";
@@ -20,6 +21,8 @@ type LogRowProps = {
 };
 
 export function LogRow({ projectId, log }: LogRowProps) {
+  const t = useTranslations("logs.row");
+  const format = useFormat();
   const barColor = BAR_CLASSES[log.level];
   const bar = barColor
     ? `relative before:absolute before:inset-y-0 before:left-0 before:w-0.5 ${barColor}`
@@ -32,11 +35,11 @@ export function LogRow({ projectId, log }: LogRowProps) {
       >
         <time
           dateTime={log.timestamp}
-          title={formatDayTime(log.timestamp)}
+          title={format.dayTime(log.timestamp)}
           className="text-xs text-fg-muted tabular-nums"
           suppressHydrationWarning
         >
-          {formatClock(log.timestamp)}
+          {format.clock(log.timestamp)}
         </time>
         <LogLevel level={log.level} />
         <span className="truncate text-xs text-fg-muted">{log.service}</span>
@@ -47,7 +50,7 @@ export function LogRow({ projectId, log }: LogRowProps) {
 
       <div className="flex flex-col gap-3 px-4 pb-4 pt-2 text-[13px]">
         <dl className="grid grid-cols-[88px_1fr] gap-x-3 gap-y-1.5 sm:grid-cols-[88px_1fr_88px_1fr]">
-          <dt className="text-fg-muted">Service</dt>
+          <dt className="text-fg-muted">{t("service")}</dt>
           <dd className="min-w-0 truncate font-mono">
             <Link
               href={servicePath(projectId, log.service)}
@@ -56,19 +59,19 @@ export function LogRow({ projectId, log }: LogRowProps) {
               {log.service}
             </Link>
           </dd>
-          <dt className="text-fg-muted">Timestamp</dt>
+          <dt className="text-fg-muted">{t("timestamp")}</dt>
           <dd className="font-mono tabular-nums" suppressHydrationWarning>
-            {formatDayTime(log.timestamp)}
+            {format.dayTime(log.timestamp)}
           </dd>
           {log.endpoint && (
             <>
-              <dt className="text-fg-muted">Endpoint</dt>
+              <dt className="text-fg-muted">{t("endpoint")}</dt>
               <dd className="min-w-0 truncate font-mono">{log.endpoint}</dd>
             </>
           )}
           {log.traceId && (
             <>
-              <dt className="text-fg-muted">Trace</dt>
+              <dt className="text-fg-muted">{t("trace")}</dt>
               <dd className="min-w-0 truncate font-mono">
                 <Link
                   href={tracePath(projectId, log.traceId)}
@@ -81,13 +84,13 @@ export function LogRow({ projectId, log }: LogRowProps) {
           )}
           {log.spanId && (
             <>
-              <dt className="text-fg-muted">Span</dt>
+              <dt className="text-fg-muted">{t("span")}</dt>
               <dd className="min-w-0 truncate font-mono">{log.spanId}</dd>
             </>
           )}
           {log.requestId && (
             <>
-              <dt className="text-fg-muted">Request</dt>
+              <dt className="text-fg-muted">{t("request")}</dt>
               <dd className="min-w-0 truncate font-mono">{log.requestId}</dd>
             </>
           )}

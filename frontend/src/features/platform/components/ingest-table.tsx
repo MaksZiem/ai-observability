@@ -1,7 +1,6 @@
-import { formatCount } from "@/lib/format";
-import { TELEMETRY_LABELS } from "@/features/platform/labels";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import type {
-  IngestCounters,
   PlatformStats,
   TelemetryType,
 } from "@/features/platform/types";
@@ -10,18 +9,17 @@ const COLUMNS =
   "grid grid-cols-[minmax(110px,1fr)_repeat(6,88px)] items-center gap-3 px-4";
 
 type Column = {
-  key: keyof IngestCounters;
-  label: string;
+  key: "requests" | "items" | "stored" | "rejected" | "failed" | "deadLettered";
   problem?: "warning" | "danger";
 };
 
 const NUMBER_COLUMNS: Column[] = [
-  { key: "requests", label: "Requests" },
-  { key: "items", label: "Accepted" },
-  { key: "stored", label: "Stored" },
-  { key: "rejected", label: "Rejected", problem: "warning" },
-  { key: "failed", label: "Failed", problem: "danger" },
-  { key: "deadLettered", label: "Dead-lettered", problem: "danger" },
+  { key: "requests" },
+  { key: "items" },
+  { key: "stored" },
+  { key: "rejected", problem: "warning" },
+  { key: "failed", problem: "danger" },
+  { key: "deadLettered", problem: "danger" },
 ];
 
 const PROBLEM_CLASSES = {
@@ -39,6 +37,8 @@ function valueClass(column: Column, value: number) {
 }
 
 export function IngestTable({ ingest }: IngestTableProps) {
+  const t = useTranslations("platform");
+  const format = useFormat();
   const types = Object.keys(ingest) as TelemetryType[];
 
   return (
@@ -47,10 +47,10 @@ export function IngestTable({ ingest }: IngestTableProps) {
         <div
           className={`${COLUMNS} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
-          <span>Telemetry</span>
+          <span>{t("columns.telemetry")}</span>
           {NUMBER_COLUMNS.map((column) => (
             <span key={column.key} className="text-right">
-              {column.label}
+              {t(`columns.${column.key}`)}
             </span>
           ))}
         </div>
@@ -63,13 +63,13 @@ export function IngestTable({ ingest }: IngestTableProps) {
                 key={type}
                 className={`${COLUMNS} border-b border-border py-2.5 last:border-b-0`}
               >
-                <span>{TELEMETRY_LABELS[type]}</span>
+                <span>{t(`telemetry.${type}`)}</span>
                 {NUMBER_COLUMNS.map((column) => (
                   <span
                     key={column.key}
                     className={`text-right font-mono tabular-nums ${valueClass(column, counters[column.key])}`}
                   >
-                    {formatCount(counters[column.key])}
+                    {format.count(counters[column.key])}
                   </span>
                 ))}
               </li>

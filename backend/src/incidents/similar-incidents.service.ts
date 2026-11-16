@@ -13,6 +13,7 @@ import { IncidentsService } from './incidents.service.js';
 import {
   compareIncidents,
   IncidentFeatures,
+  SimilarityMatch,
   titleWords,
 } from './similar-incidents.js';
 
@@ -24,6 +25,7 @@ export interface SimilarIncident {
   incident: Incident;
   score: number;
   reasons: string[];
+  matches: SimilarityMatch[];
 }
 
 @Injectable()

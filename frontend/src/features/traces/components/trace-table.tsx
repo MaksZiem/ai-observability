@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
-import { formatDayTime, formatLatency } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import { SpanStatusBadge } from "@/features/traces/components/span-status-badge";
 import { SPAN_STATUS } from "@/features/traces/labels";
 import { tracePath } from "@/features/traces/paths";
@@ -15,6 +16,8 @@ type TraceTableProps = {
 };
 
 export function TraceTable({ projectId, traces }: TraceTableProps) {
+  const t = useTranslations("traces.columns");
+  const format = useFormat();
   const slowest = Math.max(...traces.map((trace) => trace.durationMs), 1);
 
   return (
@@ -23,11 +26,11 @@ export function TraceTable({ projectId, traces }: TraceTableProps) {
         <div
           className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
-          <span>Started</span>
-          <span>Operation</span>
-          <span>Service</span>
-          <span>Status</span>
-          <span className="text-right">Duration</span>
+          <span>{t("started")}</span>
+          <span>{t("operation")}</span>
+          <span>{t("service")}</span>
+          <span>{t("status")}</span>
+          <span className="text-right">{t("duration")}</span>
         </div>
 
         <ul>
@@ -38,7 +41,7 @@ export function TraceTable({ projectId, traces }: TraceTableProps) {
                 className={`${COLUMNS} ${statusRail(SPAN_STATUS[trace.status].tone)} py-2.5 transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent`}
               >
                 <span className="font-mono text-fg-muted tabular-nums">
-                  {formatDayTime(trace.startTime)}
+                  {format.dayTime(trace.startTime)}
                 </span>
                 <span className="truncate font-mono">{trace.name}</span>
                 <span className="truncate font-mono text-fg-muted">
@@ -56,7 +59,7 @@ export function TraceTable({ projectId, traces }: TraceTableProps) {
                     aria-hidden
                   />
                   <span className="w-16 shrink-0 text-right font-mono tabular-nums">
-                    {formatLatency(trace.durationMs)}
+                    {format.latency(trace.durationMs)}
                   </span>
                 </span>
               </Link>

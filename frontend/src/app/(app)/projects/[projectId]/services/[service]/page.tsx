@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Activity } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
@@ -34,6 +35,10 @@ export default async function ServicePage({
   const service = decodeParam(serviceParam);
   const range = parseTimeRange((await searchParams).range);
 
+  const [t, tMetrics] = await Promise.all([
+    getTranslations("services"),
+    getTranslations("metrics"),
+  ]);
   await getProject(projectId);
   const overview = await getOverview(projectId, range, service);
   const [deploymentsInRange, recentDeployments] = await Promise.all([
@@ -52,7 +57,7 @@ export default async function ServicePage({
       <PageHeader
         back={{
           href: `/projects/${projectId}/services?range=${range}`,
-          label: "Services",
+          label: t("title"),
         }}
         title={<span className="font-mono">{service}</span>}
         actions={
@@ -64,7 +69,7 @@ export default async function ServicePage({
               href={logsHref(projectId, { service })}
               className={buttonClasses("secondary")}
             >
-              View logs
+              {t("detail.viewLogs")}
             </Link>
             <TimeRangePicker value={range} />
           </>
@@ -83,16 +88,16 @@ export default async function ServicePage({
         ) : (
           <EmptyState
             icon={Activity}
-            title="No requests in this time range"
-            description="This service has not reported server spans recently. Pick a longer time range."
+            title={tMetrics("noRequests")}
+            description={t("detail.noTraffic")}
           />
         )}
 
         <section className="rounded-xl border border-border bg-surface p-[18px]">
-          <h2 className="mb-2 text-base font-semibold">Recent deployments</h2>
+          <h2 className="mb-2 text-base font-semibold">{t("detail.recentDeployments")}</h2>
           {recentDeployments.length === 0 ? (
             <p className="text-[13px] text-fg-muted">
-              No deployments registered for this service.
+              {t("detail.noDeployments")}
             </p>
           ) : (
             <DeploymentList deployments={recentDeployments} />

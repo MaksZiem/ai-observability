@@ -10,6 +10,7 @@ import { RealtimeService } from '../realtime/realtime.service.js';
 import { SimilarIncidentsService } from '../incidents/similar-incidents.service.js';
 import { AnalysisModel } from './analysis-model.js';
 import { buildAnalysisPrompt } from './analysis-prompt.js';
+import type { AnalysisLanguage } from './dto/request-analysis.dto.js';
 import {
   AnalysisStatus,
   IncidentAnalysis,
@@ -34,6 +35,7 @@ export class AnalysisService {
     projectId: string,
     incidentId: string,
     userId: string,
+    language: AnalysisLanguage = 'en',
   ): Promise<IncidentAnalysis> {
     const incident = await this.incidentsService.findOne(projectId, incidentId);
 
@@ -44,8 +46,9 @@ export class AnalysisService {
       }),
     );
 
-    void this.run(projectId, incident, analysis.id).catch((error: unknown) =>
-      this.logger.error(`Could not save analysis ${analysis.id}`, error),
+    void this.run(projectId, incident, analysis.id, language).catch(
+      (error: unknown) =>
+        this.logger.error(`Could not save analysis ${analysis.id}`, error),
     );
 
     return analysis;
@@ -85,6 +88,7 @@ export class AnalysisService {
     projectId: string,
     incident: Incident,
     analysisId: string,
+    language: AnalysisLanguage,
   ): Promise<void> {
     let status = AnalysisStatus.COMPLETED;
 
@@ -96,7 +100,13 @@ export class AnalysisService {
       ]);
 
       const output = await this.analysisModel.analyze(
-        buildAnalysisPrompt({ incident, timeline, evidence, similar }),
+        buildAnalysisPrompt({
+          incident,
+          timeline,
+          evidence,
+          similar,
+          language,
+        }),
       );
 
       await this.analysesRepository.update(analysisId, {

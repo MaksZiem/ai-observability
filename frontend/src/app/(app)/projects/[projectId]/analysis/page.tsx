@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FileSearch } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
-import { formatDayTime } from "@/lib/format";
+import { getFormat } from "@/lib/format-server";
 import { AnalysisStatusBadge } from "@/features/analysis/components/analysis-status-badge";
 import { listAnalyses } from "@/features/analysis/queries";
 import {
@@ -21,15 +22,21 @@ const RECENT_INCIDENTS = 20;
 const COLUMNS =
   "grid grid-cols-[64px_minmax(220px,1fr)_110px_130px_minmax(200px,auto)] items-center gap-4 px-4";
 
-export const metadata: Metadata = {
-  title: "AI Analysis",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("analysis");
+  return { title: t("title") };
+}
 
 export default async function AnalysisPage({
   params,
 }: PageProps<"/projects/[projectId]/analysis">) {
   const { projectId } = await params;
 
+  const [t, tIncidents, format] = await Promise.all([
+    getTranslations("analysis"),
+    getTranslations("incidents"),
+    getFormat(),
+  ]);
   await getProject(projectId);
   const incidents = (await listIncidents(projectId)).slice(0, RECENT_INCIDENTS);
   const latestAnalyses = await Promise.all(
@@ -42,22 +49,22 @@ export default async function AnalysisPage({
   return (
     <div>
       <PageHeader
-        title="AI Analysis"
-        description="Structured analyses of recent incidents: observed facts, hypotheses and next steps."
+        title={t("title")}
+        description={t("lead")}
       />
 
       <div className="p-6">
         {incidents.length === 0 ? (
           <EmptyState
             icon={FileSearch}
-            title="No incidents to analyze"
-            description="Create an incident and link its evidence; the analysis runs on top of it."
+            title={t("empty")}
+            description={t("emptyHint")}
             action={
               <Link
                 href={`/projects/${projectId}/incidents/new`}
                 className={buttonClasses("primary")}
               >
-                New incident
+                {tIncidents("new")}
               </Link>
             }
           />
@@ -67,11 +74,11 @@ export default async function AnalysisPage({
               <div
                 className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
               >
-                <span>#</span>
-                <span>Incident</span>
-                <span>Severity</span>
-                <span>Status</span>
-                <span>Latest analysis</span>
+                <span>{t("columns.number")}</span>
+                <span>{t("columns.incident")}</span>
+                <span>{t("columns.severity")}</span>
+                <span>{t("columns.status")}</span>
+                <span>{t("columns.latest")}</span>
               </div>
               <ul>
                 {incidents.map((incident, index) => {
@@ -106,11 +113,11 @@ export default async function AnalysisPage({
                           <span className="flex items-center gap-2">
                             <AnalysisStatusBadge status={analysis.status} />
                             <span className="font-mono text-xs text-fg-muted tabular-nums">
-                              {formatDayTime(analysis.createdAt)}
+                              {format.dayTime(analysis.createdAt)}
                             </span>
                           </span>
                         ) : (
-                          <span className="text-fg-muted">Not analyzed</span>
+                          <span className="text-fg-muted">{t("notAnalyzed")}</span>
                         )}
                       </Link>
                     </li>

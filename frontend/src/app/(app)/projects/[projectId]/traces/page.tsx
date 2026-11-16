@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Waypoints } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { TimeRangePicker } from "@/features/metrics/components/time-range-picker";
@@ -10,9 +11,10 @@ import { TraceTable } from "@/features/traces/components/trace-table";
 import { parseSpanStatus } from "@/features/traces/labels";
 import { listTraces } from "@/features/traces/queries";
 
-export const metadata: Metadata = {
-  title: "Traces",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("traces");
+  return { title: t("title") };
+}
 
 export default async function TracesPage({
   params,
@@ -23,6 +25,7 @@ export default async function TracesPage({
   const range = parseTimeRange(query.range);
   const status = parseSpanStatus(query.status);
 
+  const t = await getTranslations("traces");
   await getProject(projectId);
   const traces = await listTraces(projectId, {
     from: rangeStart(range),
@@ -32,8 +35,8 @@ export default async function TracesPage({
   return (
     <div>
       <PageHeader
-        title="Traces"
-        description="The latest requests, from the entry span down to every downstream call."
+        title={t("title")}
+        description={t("lead")}
         actions={<TimeRangePicker value={range} />}
       />
 
@@ -47,8 +50,8 @@ export default async function TracesPage({
         {traces.length === 0 ? (
           <EmptyState
             icon={Waypoints}
-            title="No traces in this time range"
-            description="Traces appear once your services send spans to /api/ingest/spans. Try a longer time range."
+            title={t("empty")}
+            description={t("emptyHint")}
           />
         ) : (
           <TraceTable projectId={projectId} traces={traces} />

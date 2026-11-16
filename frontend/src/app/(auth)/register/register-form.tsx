@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -9,11 +10,12 @@ import { register, type RegisterState } from "./actions";
 const INITIAL_STATE: RegisterState = { error: null, name: "", email: "" };
 
 export function RegisterForm() {
+  const t = useTranslations("auth");
   const [state, formAction] = useActionState(register, INITIAL_STATE);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <FormField label="Name">
+      <FormField label={t("fields.name")}>
         <Input
           name="name"
           autoComplete="name"
@@ -22,7 +24,7 @@ export function RegisterForm() {
           required
         />
       </FormField>
-      <FormField label="Email">
+      <FormField label={t("fields.email")}>
         <Input
           type="email"
           name="email"
@@ -32,7 +34,7 @@ export function RegisterForm() {
           required
         />
       </FormField>
-      <FormField label="Password" hint="At least 8 characters.">
+      <FormField label={t("fields.password")} hint={t("fields.passwordHint")}>
         <Input
           type="password"
           name="password"
@@ -49,8 +51,8 @@ export function RegisterForm() {
         </p>
       )}
 
-      <SubmitButton variant="primary" pendingLabel="Creating account…">
-        Create account
+      <SubmitButton variant="primary" pendingLabel={t("signUp.pending")}>
+        {t("signUp.submit")}
       </SubmitButton>
     </form>
   );

@@ -1,21 +1,11 @@
 "use client";
 
 import { useOptimistic, useState } from "react";
+import { useTranslations } from "next-intl";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 import { askAssistant } from "@/features/analysis/actions";
-import type { ChatMessage, ChatRole } from "@/features/analysis/types";
-
-const ROLE_LABELS: Record<ChatRole, string> = {
-  user: "You",
-  assistant: "Assistant",
-};
-
-const SUGGESTIONS = [
-  "Why did latency increase?",
-  "What changed before the errors started?",
-  "Which service is most likely involved?",
-];
+import type { ChatMessage } from "@/features/analysis/types";
 
 type IncidentChatProps = {
   projectId: string;
@@ -28,6 +18,12 @@ export function IncidentChat({
   incidentId,
   messages,
 }: IncidentChatProps) {
+  const t = useTranslations("analysis.chat");
+  const suggestions = [
+    t("suggestions.latency"),
+    t("suggestions.changes"),
+    t("suggestions.service"),
+  ];
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [visible, addQuestion] = useOptimistic(
@@ -62,7 +58,7 @@ export function IncidentChat({
     <div className="flex flex-col gap-3">
       {visible.length === 0 ? (
         <ul className="flex flex-col gap-1 text-[13px] text-fg-muted">
-          {SUGGESTIONS.map((suggestion) => (
+          {suggestions.map((suggestion) => (
             <li key={suggestion}>“{suggestion}”</li>
           ))}
         </ul>
@@ -78,7 +74,7 @@ export function IncidentChat({
                   message.role === "assistant" ? "text-accent" : "text-fg-muted"
                 }`}
               >
-                {ROLE_LABELS[message.role]}
+                {message.role === "assistant" ? t("assistant") : t("you")}
               </span>
               <p className="whitespace-pre-wrap leading-relaxed">
                 {message.content}
@@ -87,7 +83,7 @@ export function IncidentChat({
           ))}
           {waiting && (
             <li className="py-2.5 text-xs text-fg-muted" aria-live="polite">
-              Waiting for the assistant…
+              {t("waiting")}
             </li>
           )}
         </ol>
@@ -95,14 +91,14 @@ export function IncidentChat({
 
       <form action={send} className="flex flex-col gap-2">
         <label className="sr-only" htmlFor="incident-question">
-          Question
+          {t("question")}
         </label>
         <Textarea
           id="incident-question"
           name="message"
           rows={2}
           maxLength={2000}
-          placeholder="Ask about this incident"
+          placeholder={t("placeholder")}
           defaultValue={draft}
           required
         />
@@ -110,7 +106,7 @@ export function IncidentChat({
           <p role="alert" className="text-xs text-danger">
             {error}
           </p>
-          <SubmitButton pendingLabel="Asking…">Ask</SubmitButton>
+          <SubmitButton pendingLabel={t("asking")}>{t("ask")}</SubmitButton>
         </div>
       </form>
     </div>

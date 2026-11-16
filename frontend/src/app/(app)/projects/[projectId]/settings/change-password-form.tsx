@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -9,11 +10,13 @@ import { changePassword, type ChangePasswordState } from "./actions";
 const INITIAL_STATE: ChangePasswordState = { error: null, success: false };
 
 export function ChangePasswordForm() {
+  const t = useTranslations("projects.password");
+  const tCommon = useTranslations("common");
   const [state, formAction] = useActionState(changePassword, INITIAL_STATE);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <FormField label="Current password">
+      <FormField label={t("current")}>
         <Input
           type="password"
           name="currentPassword"
@@ -24,7 +27,7 @@ export function ChangePasswordForm() {
       </FormField>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField label="New password" hint="At least 8 characters.">
+        <FormField label={t("new")} hint={t("newHint")}>
           <Input
             type="password"
             name="newPassword"
@@ -34,7 +37,7 @@ export function ChangePasswordForm() {
             required
           />
         </FormField>
-        <FormField label="Confirm new password">
+        <FormField label={t("confirm")}>
           <Input
             type="password"
             name="confirmPassword"
@@ -53,16 +56,16 @@ export function ChangePasswordForm() {
       )}
       {state.success && (
         <p role="status" className="text-xs text-success">
-          Password changed.
+          {t("changed")}
         </p>
       )}
 
       <SubmitButton
         variant="primary"
-        pendingLabel="Saving…"
+        pendingLabel={tCommon("saving")}
         className="self-start"
       >
-        Change password
+        {t("submit")}
       </SubmitButton>
     </form>
   );

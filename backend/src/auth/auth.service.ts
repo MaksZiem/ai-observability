@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
@@ -12,6 +13,7 @@ import { ChangePasswordDto } from './dto/change-password.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
 import type { JwtPayload } from './jwt-payload.js';
+import { errorBody } from '../common/error-body.js';
 
 const STREAM_TOKEN_TTL_SECONDS = 60;
 
@@ -73,7 +75,13 @@ export class AuthService {
     }
 
     if (!(await argon2.verify(user.passwordHash, dto.currentPassword))) {
-      throw new BadRequestException('Current password is incorrect');
+      throw new BadRequestException(
+        errorBody(
+          HttpStatus.BAD_REQUEST,
+          'CURRENT_PASSWORD_INCORRECT',
+          'Current password is incorrect',
+        ),
+      );
     }
 
     await this.usersService.updatePasswordHash(

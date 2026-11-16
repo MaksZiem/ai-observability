@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -11,6 +12,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 import type { JwtPayload } from '../auth/jwt-payload.js';
 import { ProjectsService } from '../projects/projects.service.js';
 import { AnalysisService } from './analysis.service.js';
+import { RequestAnalysisDto } from './dto/request-analysis.dto.js';
 
 @Controller('projects/:projectId/incidents/:incidentId/analyses')
 export class AnalysisController {
@@ -25,9 +27,15 @@ export class AnalysisController {
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('incidentId', ParseUUIDPipe) incidentId: string,
     @CurrentUser() user: JwtPayload,
+    @Body() dto: RequestAnalysisDto,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
-    return this.analysisService.request(projectId, incidentId, user.sub);
+    return this.analysisService.request(
+      projectId,
+      incidentId,
+      user.sub,
+      dto.language ?? 'en',
+    );
   }
 
   @Get()

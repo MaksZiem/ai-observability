@@ -9,9 +9,15 @@ export interface IncidentFeatures {
   titleWords: Set<string>;
 }
 
+export interface SimilarityMatch {
+  kind: 'error' | 'service' | 'title';
+  value: string | null;
+}
+
 export interface Similarity {
   score: number;
   reasons: string[];
+  matches: SimilarityMatch[];
 }
 
 export function titleWords(title: string): Set<string> {
@@ -41,17 +47,27 @@ export function compareIncidents(
     SERVICE_WEIGHT * jaccard(a.services, b.services) +
     TITLE_WEIGHT * jaccard(a.titleWords, b.titleWords);
 
-  const reasons = [
-    ...intersection(a.errorTypes, b.errorTypes).map(
-      (type) => `Same error: ${type}`,
-    ),
-    ...intersection(a.services, b.services).map(
-      (service) => `Same service: ${service}`,
-    ),
+  const matches: SimilarityMatch[] = [
+    ...intersection(a.errorTypes, b.errorTypes).map((type) => ({
+      kind: 'error' as const,
+      value: type,
+    })),
+    ...intersection(a.services, b.services).map((service) => ({
+      kind: 'service' as const,
+      value: service,
+    })),
     ...(intersection(a.titleWords, b.titleWords).length > 0
-      ? ['Similar title']
+      ? [{ kind: 'title' as const, value: null }]
       : []),
   ];
 
-  return { score: Math.round(score * 100) / 100, reasons };
+  const reasons = matches.map((match) =>
+    match.kind === 'error'
+      ? `Same error: ${match.value}`
+      : match.kind === 'service'
+        ? `Same service: ${match.value}`
+        : 'Similar title',
+  );
+
+  return { score: Math.round(score * 100) / 100, reasons, matches };
 }

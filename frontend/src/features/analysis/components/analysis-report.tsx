@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CONFIDENCE_LABELS } from "@/features/analysis/labels";
+import { useTranslations } from "next-intl";
 import type { AnalysisResult } from "@/features/analysis/types";
 
 type SectionProps = {
@@ -21,13 +21,15 @@ type AnalysisReportProps = {
 };
 
 export function AnalysisReport({ result }: AnalysisReportProps) {
+  const t = useTranslations("analysis");
+
   return (
     <div className="flex flex-col gap-5 text-[13px]">
-      <Section title="Summary">
+      <Section title={t("report.summary")}>
         <p className="text-sm leading-relaxed">{result.summary}</p>
       </Section>
 
-      <Section title="Observed facts">
+      <Section title={t("report.facts")}>
         <ul className="flex flex-col gap-2">
           {result.observedFacts.map((fact, index) => (
             <li key={index} className="flex flex-col gap-0.5">
@@ -41,12 +43,12 @@ export function AnalysisReport({ result }: AnalysisReportProps) {
       </Section>
 
       {result.relatedDeployments.length > 0 && (
-        <Section title="Related deployments">
+        <Section title={t("report.deployments")}>
           <p className="font-mono">{result.relatedDeployments.join(", ")}</p>
         </Section>
       )}
 
-      <Section title="Potential causes">
+      <Section title={t("report.causes")}>
         <ol className="flex flex-col gap-3">
           {result.hypotheses.map((hypothesis, index) => (
             <li
@@ -57,10 +59,10 @@ export function AnalysisReport({ result }: AnalysisReportProps) {
                 <span className="font-mono text-fg-muted">{index + 1}.</span>
                 <span className="font-medium">{hypothesis.cause}</span>
                 <span className="rounded bg-warning/10 px-1.5 text-[11px] text-warning">
-                  Hypothesis
+                  {t("report.hypothesis")}
                 </span>
                 <span className="text-xs text-fg-muted">
-                  {CONFIDENCE_LABELS[hypothesis.confidence]}
+                  {t(`confidence.${hypothesis.confidence}`)}
                 </span>
               </div>
               <p className="text-fg-muted">{hypothesis.reasoning}</p>
@@ -69,7 +71,7 @@ export function AnalysisReport({ result }: AnalysisReportProps) {
         </ol>
       </Section>
 
-      <Section title="Suggested investigation">
+      <Section title={t("report.investigation")}>
         <ol className="flex list-decimal flex-col gap-1 pl-5 marker:font-mono marker:text-fg-muted">
           {result.suggestedInvestigation.map((step, index) => (
             <li key={index}>{step}</li>

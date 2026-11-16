@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import { setAccessToken } from "@/lib/session";
 import type { AuthResponse } from "@/features/auth/types";
@@ -14,11 +15,12 @@ export async function login(
   _prevState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
+  const t = await getTranslations();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
   if (!email || !password) {
-    return { error: "Enter your email and password.", email };
+    return { error: t("auth.errors.credentialsRequired"), email };
   }
 
   try {
@@ -30,15 +32,12 @@ export async function login(
     await setAccessToken(accessToken);
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) {
-      return { error: "Invalid email or password.", email };
+      return { error: t("auth.errors.invalidCredentials"), email };
     }
     if (error instanceof ApiError && error.status === 429) {
-      return {
-        error: "Too many attempts. Wait a minute and try again.",
-        email,
-      };
+      return { error: t("auth.errors.tooManyAttempts"), email };
     }
-    return { error: "Could not reach the server. Try again.", email };
+    return { error: t("errors.unreachable"), email };
   }
 
   redirect("/");

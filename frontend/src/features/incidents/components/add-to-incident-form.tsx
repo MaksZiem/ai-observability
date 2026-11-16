@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Select } from "@/components/ui/select";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { linkEvidence, type FormState } from "@/features/incidents/actions";
@@ -22,6 +23,7 @@ export function AddToIncidentForm({
   targetId,
   incidents,
 }: AddToIncidentFormProps) {
+  const t = useTranslations("incidents.link");
   const [state, formAction] = useActionState(
     linkEvidence.bind(null, projectId),
     INITIAL_STATE,
@@ -30,12 +32,12 @@ export function AddToIncidentForm({
   if (incidents.length === 0) {
     return (
       <p className="text-[13px] text-fg-muted">
-        No active incidents.{" "}
+        {t("noActive")}{" "}
         <Link
           href={`/projects/${projectId}/incidents/new`}
           className="text-accent hover:underline"
         >
-          Create one
+          {t("create")}
         </Link>
       </p>
     );
@@ -48,7 +50,7 @@ export function AddToIncidentForm({
       <div className="flex flex-wrap gap-2">
         <Select
           name="incidentId"
-          aria-label="Incident"
+          aria-label={t("incident")}
           className="min-w-0 flex-1"
         >
           {incidents.map((incident) => (
@@ -57,7 +59,7 @@ export function AddToIncidentForm({
             </option>
           ))}
         </Select>
-        <SubmitButton pendingLabel="Adding…">Add to incident</SubmitButton>
+        <SubmitButton pendingLabel={t("adding")}>{t("add")}</SubmitButton>
       </div>
       {state.error && (
         <p role="alert" className="text-xs text-danger">
@@ -66,7 +68,7 @@ export function AddToIncidentForm({
       )}
       {state.saved && (
         <p role="status" className="text-xs text-success">
-          Linked as evidence.
+          {t("linked")}
         </p>
       )}
     </form>

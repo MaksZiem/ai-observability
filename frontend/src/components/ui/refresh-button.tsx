@@ -3,9 +3,11 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 export function RefreshButton() {
+  const t = useTranslations("common");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
@@ -19,7 +21,7 @@ export function RefreshButton() {
         strokeWidth={1.75}
         aria-hidden
       />
-      Refresh
+      {t("refresh")}
     </Button>
   );
 }

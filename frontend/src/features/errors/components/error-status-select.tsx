@@ -1,9 +1,10 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Select } from "@/components/ui/select";
 import { updateErrorStatus } from "@/features/errors/actions";
-import { ERROR_STATUS, ERROR_STATUSES } from "@/features/errors/labels";
+import { ERROR_STATUSES } from "@/features/errors/labels";
 import type { ErrorStatus } from "@/features/errors/types";
 
 type ErrorStatusSelectProps = {
@@ -17,6 +18,7 @@ export function ErrorStatusSelect({
   errorId,
   status,
 }: ErrorStatusSelectProps) {
+  const t = useTranslations("errorGroups");
   const [pending, startTransition] = useTransition();
   const [selected, setSelected] = useOptimistic(status);
 
@@ -29,14 +31,14 @@ export function ErrorStatusSelect({
 
   return (
     <Select
-      aria-label="Error status"
+      aria-label={t("statusLabel")}
       value={selected}
       disabled={pending}
       onChange={(event) => change(event.target.value as ErrorStatus)}
     >
       {ERROR_STATUSES.map((option) => (
         <option key={option} value={option}>
-          {ERROR_STATUS[option].label}
+          {t(`status.${option}`)}
         </option>
       ))}
     </Select>

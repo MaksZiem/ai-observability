@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { formatLatency } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import type { Log } from "@/features/logs/types";
 import { SpanDetails } from "@/features/traces/components/span-details";
 import type { TraceDetail } from "@/features/traces/types";
@@ -19,6 +20,8 @@ type TraceViewProps = {
 };
 
 export function TraceView({ projectId, trace, logs }: TraceViewProps) {
+  const t = useTranslations("traces.view");
+  const format = useFormat();
   const rows = buildWaterfall(trace.spans, trace.startTime);
   const bottleneck = findBottleneck(rows);
   const [selectedId, setSelectedId] = useState(bottleneck?.span.spanId);
@@ -28,14 +31,14 @@ export function TraceView({ projectId, trace, logs }: TraceViewProps) {
   return (
     <div className="flex flex-col lg:flex-row">
       <section
-        aria-label="Spans"
+        aria-label={t("spans")}
         className="min-w-0 flex-1 overflow-x-auto p-6"
       >
         <div className="min-w-[640px]">
           <div
             className={`${ROW_COLUMNS} border-b border-border pb-2 text-xs text-fg-muted`}
           >
-            <span className="font-medium">Span</span>
+            <span className="font-medium">{t("span")}</span>
             <div className="relative h-4 font-mono text-[11px]">
               {AXIS_STEPS.map((step) => (
                 <span
@@ -43,11 +46,11 @@ export function TraceView({ projectId, trace, logs }: TraceViewProps) {
                   className="absolute -translate-x-1/2 first:translate-x-0 last:-translate-x-full"
                   style={{ left: `${step * 100}%` }}
                 >
-                  {formatLatency(trace.durationMs * step)}
+                  {format.latency(trace.durationMs * step)}
                 </span>
               ))}
             </div>
-            <span className="text-right font-medium">Duration</span>
+            <span className="text-right font-medium">{t("duration")}</span>
           </div>
 
           <ul>
@@ -89,7 +92,7 @@ export function TraceView({ projectId, trace, logs }: TraceViewProps) {
                       />
                     </span>
                     <span className="text-right font-mono text-xs tabular-nums">
-                      {formatLatency(span.durationMs)}
+                      {format.latency(span.durationMs)}
                     </span>
                   </button>
                 </li>
@@ -100,7 +103,7 @@ export function TraceView({ projectId, trace, logs }: TraceViewProps) {
       </section>
 
       <aside
-        aria-label="Span details"
+        aria-label={t("details")}
         className="shrink-0 border-t border-border p-6 lg:w-[400px] lg:border-l lg:border-t-0"
       >
         {selected ? (
@@ -112,7 +115,7 @@ export function TraceView({ projectId, trace, logs }: TraceViewProps) {
           />
         ) : (
           <p className="text-[13px] text-fg-muted">
-            Select a span to see its details.
+            {t("select")}
           </p>
         )}
       </aside>

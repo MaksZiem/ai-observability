@@ -13,6 +13,24 @@ export class ApiError extends Error {
     this.status = status;
     this.body = body;
   }
+
+  get code(): string | null {
+    const value = this.field("code");
+    return typeof value === "string" ? value : null;
+  }
+
+  get params(): Record<string, string | number> {
+    const value = this.field("params");
+    return typeof value === "object" && value !== null
+      ? (value as Record<string, string | number>)
+      : {};
+  }
+
+  private field(name: string): unknown {
+    return typeof this.body === "object" && this.body !== null
+      ? (this.body as Record<string, unknown>)[name]
+      : undefined;
+  }
 }
 
 function messageOf(body: unknown, fallback: string) {

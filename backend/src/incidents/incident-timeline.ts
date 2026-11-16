@@ -21,11 +21,14 @@ export enum TimelineEntryType {
   INCIDENT_RESOLVED = 'incident_resolved',
 }
 
+export type TimelineParams = Record<string, string | number>;
+
 export interface TimelineEntry {
   at: Date;
   type: TimelineEntryType;
   title: string;
   detail: string | null;
+  params: TimelineParams;
   refId: string | null;
 }
 
@@ -70,6 +73,7 @@ function anomalyEntry(anomaly: Anomaly): TimelineEntry {
       type: TimelineEntryType.LATENCY_SPIKE,
       title: `P95 latency increased to ${Math.round(anomaly.value)}ms`,
       detail: `Baseline ${Math.round(anomaly.baseline)}ms`,
+      params: { value: anomaly.value, baseline: anomaly.baseline },
       refId: null,
     };
   }
@@ -79,6 +83,7 @@ function anomalyEntry(anomaly: Anomaly): TimelineEntry {
     type: TimelineEntryType.ERROR_RATE_SPIKE,
     title: `Error rate increased to ${formatPercent(anomaly.value)}`,
     detail: `Baseline ${formatPercent(anomaly.baseline)}`,
+    params: { value: anomaly.value, baseline: anomaly.baseline },
     refId: null,
   };
 }
@@ -96,6 +101,7 @@ export function buildTimeline({
       type: TimelineEntryType.DEPLOYMENT,
       title: `Deployment ${deployment.version}`,
       detail: deployment.service,
+      params: { version: deployment.version },
       refId: deployment.id,
     })),
     ...anomalies.map(anomalyEntry),
@@ -104,6 +110,7 @@ export function buildTimeline({
       type: TimelineEntryType.ERROR_FIRST_SEEN,
       title: `First ${group.type}`,
       detail: group.service,
+      params: { errorType: group.type },
       refId: group.id,
     })),
     {
@@ -111,6 +118,7 @@ export function buildTimeline({
       type: TimelineEntryType.INCIDENT_CREATED,
       title: `Incident #${incident.number} created`,
       detail: incident.title,
+      params: { number: incident.number },
       refId: incident.id,
     },
     ...notes.map((note) => ({
@@ -118,6 +126,7 @@ export function buildTimeline({
       type: TimelineEntryType.NOTE,
       title: `Note by ${note.author.name}`,
       detail: note.body,
+      params: { author: note.author.name },
       refId: note.id,
     })),
   ];
@@ -128,6 +137,7 @@ export function buildTimeline({
       type: TimelineEntryType.INCIDENT_RESOLVED,
       title: `Incident #${incident.number} resolved`,
       detail: null,
+      params: { number: incident.number },
       refId: incident.id,
     });
   }

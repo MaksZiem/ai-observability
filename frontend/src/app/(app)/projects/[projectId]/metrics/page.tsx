@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ChartLine } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { listDeployments } from "@/features/deployments/queries";
@@ -11,9 +12,10 @@ import { getOverview, listServiceHealth } from "@/features/metrics/queries";
 import { parseTimeRange } from "@/features/metrics/time-range";
 import { getProject } from "@/features/projects/queries";
 
-export const metadata: Metadata = {
-  title: "Metrics",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metrics");
+  return { title: t("title") };
+}
 
 function readService(value: string | string[] | undefined) {
   const service = (Array.isArray(value) ? value[0] : value)?.trim();
@@ -29,6 +31,7 @@ export default async function MetricsPage({
   const range = parseTimeRange(query.range);
   const service = readService(query.service);
 
+  const t = await getTranslations("metrics");
   await getProject(projectId);
   const [overview, services] = await Promise.all([
     getOverview(projectId, range, service),
@@ -46,8 +49,8 @@ export default async function MetricsPage({
   return (
     <div>
       <PageHeader
-        title="Metrics"
-        description="Request volume, error rate and latency over time."
+        title={t("title")}
+        description={t("lead")}
         actions={
           <>
             <ServiceSelect services={serviceNames} value={service} />
@@ -60,8 +63,8 @@ export default async function MetricsPage({
         {overview.summary.requests === 0 ? (
           <EmptyState
             icon={ChartLine}
-            title="No requests in this time range"
-            description="Pick a longer time range or another service."
+            title={t("noRequests")}
+            description={t("noRequestsMetrics")}
           />
         ) : (
           <>

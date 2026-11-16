@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { StatusBadge } from "@/components/ui/status-badge";
 import {
   INCIDENT_SEVERITY,
@@ -13,7 +14,8 @@ type IncidentStatusBadgeProps = {
 };
 
 export function IncidentStatusBadge({ status }: IncidentStatusBadgeProps) {
-  return <StatusBadge {...INCIDENT_STATUS[status]} />;
+  const t = useTranslations("incidents.status");
+  return <StatusBadge {...INCIDENT_STATUS[status]} label={t(status)} />;
 }
 
 type IncidentSeverityBadgeProps = {
@@ -23,5 +25,6 @@ type IncidentSeverityBadgeProps = {
 export function IncidentSeverityBadge({
   severity,
 }: IncidentSeverityBadgeProps) {
-  return <StatusBadge {...INCIDENT_SEVERITY[severity]} />;
+  const t = useTranslations("incidents.severity");
+  return <StatusBadge {...INCIDENT_SEVERITY[severity]} label={t(severity)} />;
 }

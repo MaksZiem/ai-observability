@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/ui/copy-button";
 import { rotateApiKey } from "@/features/projects/actions";
@@ -14,13 +15,12 @@ export function ApiKeySettings({
   projectId,
   apiKeyPrefix,
 }: ApiKeySettingsProps) {
+  const t = useTranslations("projects.apiKey");
   const [newKey, setNewKey] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   function rotate() {
-    const confirmed = window.confirm(
-      "Rotate the API key? The current key stops working immediately and every SDK must be updated.",
-    );
+    const confirmed = window.confirm(t("rotateConfirm"));
     if (!confirmed) return;
 
     startTransition(async () => {
@@ -32,7 +32,7 @@ export function ApiKeySettings({
     return (
       <div className="flex flex-col gap-3">
         <p className="text-[13px] text-fg-muted">
-          New key created. Copy it now; it is shown only once.
+          {t("newKey")}
         </p>
         <div className="flex items-center gap-2">
           <code className="min-w-0 flex-1 truncate rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-[13px]">
@@ -47,11 +47,13 @@ export function ApiKeySettings({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <p className="text-[13px] text-fg-muted">
-        Current key starts with{" "}
-        <code className="font-mono text-fg">{apiKeyPrefix}…</code>
+        {t.rich("current", {
+          prefix: apiKeyPrefix,
+          code: (chunks) => <code className="font-mono text-fg">{chunks}</code>,
+        })}
       </p>
       <Button variant="danger" disabled={pending} onClick={rotate}>
-        {pending ? "Rotating…" : "Rotate key"}
+        {pending ? t("rotating") : t("rotate")}
       </Button>
     </div>
   );

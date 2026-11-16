@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { RAIL_SPACER, statusRail } from "@/components/ui/status-rail";
-import { formatCount, formatDayTime } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import { ErrorStatusBadge } from "@/features/errors/components/error-status-badge";
 import { ERROR_STATUS } from "@/features/errors/labels";
 import type { ErrorGroup } from "@/features/errors/types";
@@ -14,17 +15,20 @@ type ErrorGroupTableProps = {
 };
 
 export function ErrorGroupTable({ projectId, groups }: ErrorGroupTableProps) {
+  const t = useTranslations("errorGroups.columns");
+  const format = useFormat();
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[760px] text-[13px]">
         <div
           className={`${COLUMNS} ${RAIL_SPACER} border-b border-border py-2 text-xs font-medium text-fg-muted`}
         >
-          <span>Error</span>
-          <span>Service</span>
-          <span>Status</span>
-          <span className="text-right">Occurrences</span>
-          <span className="text-right">Last seen</span>
+          <span>{t("error")}</span>
+          <span>{t("service")}</span>
+          <span>{t("status")}</span>
+          <span className="text-right">{t("occurrences")}</span>
+          <span className="text-right">{t("lastSeen")}</span>
         </div>
 
         <ul>
@@ -52,10 +56,10 @@ export function ErrorGroupTable({ projectId, groups }: ErrorGroupTableProps) {
                   <ErrorStatusBadge status={group.status} />
                 </span>
                 <span className="text-right font-mono tabular-nums">
-                  {formatCount(group.occurrences)}
+                  {format.count(group.occurrences)}
                 </span>
                 <span className="text-right font-mono text-fg-muted tabular-nums">
-                  {formatDayTime(group.lastSeen)}
+                  {format.dayTime(group.lastSeen)}
                 </span>
               </Link>
             </li>

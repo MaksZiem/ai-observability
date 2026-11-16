@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 const RESET_AFTER_MS = 2000;
@@ -11,6 +12,7 @@ type CopyButtonProps = {
 };
 
 export function CopyButton({ value }: CopyButtonProps) {
+  const t = useTranslations("common");
   const [copied, setCopied] = useState(false);
 
   async function copy() {
@@ -22,9 +24,9 @@ export function CopyButton({ value }: CopyButtonProps) {
   const Icon = copied ? Check : Copy;
 
   return (
-    <Button onClick={copy} aria-label="Copy to clipboard">
+    <Button onClick={copy} aria-label={t("copyToClipboard")}>
       <Icon className="size-4" strokeWidth={1.75} aria-hidden />
-      {copied ? "Copied" : "Copy"}
+      {copied ? t("copied") : t("copy")}
     </Button>
   );
 }

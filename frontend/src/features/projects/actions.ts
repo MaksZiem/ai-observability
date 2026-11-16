@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import { ENVIRONMENTS } from "@/features/projects/labels";
 import type {
@@ -25,6 +26,7 @@ export async function createProject(
   _prevState: CreateProjectState,
   formData: FormData,
 ): Promise<CreateProjectState> {
+  const t = await getTranslations();
   const name = String(formData.get("name") ?? "").trim();
   const environment = readEnvironment(formData.get("environment"));
 
@@ -35,13 +37,13 @@ export async function createProject(
   };
 
   if (!name) {
-    return { ...entered, error: "Enter a project name." };
+    return { ...entered, error: t("projects.form.errors.nameRequired") };
   }
   if (name.length > 100) {
-    return { ...entered, error: "Name must be at most 100 characters." };
+    return { ...entered, error: t("projects.form.errors.nameTooLong") };
   }
   if (!environment) {
-    return { ...entered, error: "Choose an environment." };
+    return { ...entered, error: t("projects.form.errors.environmentRequired") };
   }
 
   try {
@@ -57,9 +59,9 @@ export async function createProject(
     };
   } catch (error) {
     if (error instanceof ApiError && error.status === 400) {
-      return { ...entered, error: error.message };
+      return { ...entered, error: t("errors.validation") };
     }
-    return { ...entered, error: "Could not create the project. Try again." };
+    return { ...entered, error: t("projects.form.errors.createFailed") };
   }
 }
 
@@ -73,14 +75,17 @@ export async function updateProject(
   _prevState: UpdateProjectState,
   formData: FormData,
 ): Promise<UpdateProjectState> {
+  const t = await getTranslations();
   const name = String(formData.get("name") ?? "").trim();
   const environment = readEnvironment(formData.get("environment"));
 
-  if (!name) return { error: "Enter a project name.", saved: false };
+  if (!name) return { error: t("projects.form.errors.nameRequired"), saved: false };
   if (name.length > 100) {
-    return { error: "Name must be at most 100 characters.", saved: false };
+    return { error: t("projects.form.errors.nameTooLong"), saved: false };
   }
-  if (!environment) return { error: "Choose an environment.", saved: false };
+  if (!environment) {
+    return { error: t("projects.form.errors.environmentRequired"), saved: false };
+  }
 
   try {
     await apiFetch<Project>(`/projects/${projectId}`, {
@@ -89,9 +94,9 @@ export async function updateProject(
     });
   } catch (error) {
     if (error instanceof ApiError && error.status === 400) {
-      return { error: error.message, saved: false };
+      return { error: t("errors.validation"), saved: false };
     }
-    return { error: "Could not save the project. Try again.", saved: false };
+    return { error: t("projects.form.errors.saveFailed"), saved: false };
   }
 
   refresh();

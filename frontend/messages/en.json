@@ -1,0 +1,687 @@
+{
+  "alerts": {
+    "title": "Alerts",
+    "lead": "Rules are checked every minute. A firing rule can open an incident or call a webhook.",
+    "empty": "No alert rules yet",
+    "emptyHint": "Create one to be told when error rate, latency or traffic crosses a threshold.",
+    "new": "New alert",
+    "metrics": {
+      "error_rate": "Error rate",
+      "p95_latency": "P95 latency",
+      "request_count": "Request count"
+    },
+    "units": {
+      "error_rate": "%",
+      "p95_latency": "ms",
+      "request_count": "requests"
+    },
+    "states": {
+      "paused": "Paused",
+      "firing": "Firing",
+      "ok": "OK"
+    },
+    "condition": "{metric} {comparator} {threshold} over {minutes} min",
+    "actions": {
+      "createsIncident": "creates a {severity} incident",
+      "calls": "calls {host}",
+      "then": "Then {actions}.",
+      "and": " and ",
+      "none": "No action."
+    },
+    "list": {
+      "lastValue": "Last value",
+      "evaluated": "Evaluated",
+      "lastFired": "Last fired",
+      "never": "never",
+      "evaluate": "Evaluate now",
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete",
+      "deleteConfirm": "Delete the alert “{name}”?"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Payment errors",
+      "metric": "Metric",
+      "condition": "Condition",
+      "threshold": "Threshold",
+      "thresholdHint": "In the metric's unit, e.g. 5 for 5%.",
+      "window": "Window (minutes)",
+      "service": "Service",
+      "serviceHint": "Leave empty to watch all entry traffic.",
+      "whenFires": "When the alert fires",
+      "createIncident": "Create an incident",
+      "severity": "Incident severity",
+      "webhook": "Webhook URL",
+      "webhookHint": "Optional. Receives a JSON POST when the alert fires and resolves.",
+      "created": "Created “{name}”.",
+      "submit": "Create alert",
+      "pending": "Creating…",
+      "errors": {
+        "nameRequired": "Name the alert.",
+        "choicesRequired": "Choose a metric, condition and severity.",
+        "threshold": "The threshold must be a number of 0 or more.",
+        "window": "The window must be 1 to {max} whole minutes.",
+        "failed": "Could not create the alert. Try again."
+      }
+    }
+  },
+  "analysis": {
+    "title": "AI Analysis",
+    "lead": "Structured analyses of recent incidents: observed facts, hypotheses and next steps.",
+    "empty": "No incidents to analyze",
+    "emptyHint": "Create an incident and link its evidence; the analysis runs on top of it.",
+    "columns": {
+      "number": "#",
+      "incident": "Incident",
+      "severity": "Severity",
+      "status": "Status",
+      "latest": "Latest analysis"
+    },
+    "notAnalyzed": "Not analyzed",
+    "status": {
+      "pending": "Analyzing",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "confidence": {
+      "low": "Low confidence",
+      "medium": "Medium confidence",
+      "high": "High confidence"
+    },
+    "report": {
+      "summary": "Summary",
+      "facts": "Observed facts",
+      "deployments": "Related deployments",
+      "causes": "Potential causes",
+      "hypothesis": "Hypothesis",
+      "investigation": "Suggested investigation"
+    },
+    "panel": {
+      "title": "AI analysis",
+      "runAgain": "Run again",
+      "analyze": "Analyze incident",
+      "requesting": "Requesting…",
+      "intro": "The analysis reads this incident's timeline and linked evidence, then separates observed facts from hypotheses. Link evidence first for a better result.",
+      "pending": "Analyzing the evidence. This page updates when the result is ready.",
+      "failed": "The analysis failed.",
+      "tokens": "{count} tokens",
+      "history": "Analysis history ({count})"
+    },
+    "chat": {
+      "you": "You",
+      "assistant": "Assistant",
+      "suggestions": {
+        "latency": "Why did latency increase?",
+        "changes": "What changed before the errors started?",
+        "service": "Which service is most likely involved?"
+      },
+      "waiting": "Waiting for the assistant…",
+      "question": "Question",
+      "placeholder": "Ask about this incident",
+      "ask": "Ask",
+      "asking": "Asking…",
+      "errors": {
+        "empty": "Ask a question first.",
+        "tooLong": "Questions are limited to {max} characters.",
+        "AI_UNAVAILABLE": "The AI assistant is unavailable, try again later.",
+        "rateLimited": "Too many questions at once. Wait a moment.",
+        "failed": "The assistant could not answer. Try again."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in",
+      "lead": "Monitor your services and investigate incidents.",
+      "submit": "Sign in",
+      "pending": "Signing in…",
+      "noAccount": "No account yet?",
+      "toSignUp": "Create one"
+    },
+    "signUp": {
+      "title": "Create account",
+      "lead": "Create a project and start sending telemetry.",
+      "submit": "Create account",
+      "pending": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "toSignIn": "Sign in"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters."
+    },
+    "errors": {
+      "credentialsRequired": "Enter your email and password.",
+      "fillAll": "Fill in every field.",
+      "nameTooLong": "Name must be at most 100 characters.",
+      "passwordLength": "Password must be 8 to 128 characters.",
+      "invalidCredentials": "Invalid email or password.",
+      "emailTaken": "An account with this email already exists.",
+      "tooManyAttempts": "Too many attempts. Wait a minute and try again."
+    }
+  },
+  "common": {
+    "language": "Language",
+    "languages": {
+      "pl": "Polski",
+      "en": "English"
+    },
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "retry": "Try again",
+    "save": "Save",
+    "saving": "Saving…",
+    "refresh": "Refresh",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyToClipboard": "Copy to clipboard",
+    "backToOverview": "Back to overview"
+  },
+  "deployments": {
+    "title": "Deployments",
+    "lead": "Releases appear as markers on every metrics chart.",
+    "empty": "No deployments in this time range",
+    "emptyHint": "Register one with the form, or send it from your CI pipeline.",
+    "allServices": "all services",
+    "register": "Register deployment",
+    "registering": "Registering…",
+    "registered": "Registered <code>{version}</code>.",
+    "fromCi": "From CI",
+    "fromCiLead": "Call the ingest API with your project API key after each release.",
+    "fields": {
+      "version": "Version",
+      "service": "Service",
+      "serviceHint": "Leave empty if it affects every service.",
+      "commitSha": "Commit SHA",
+      "description": "Description"
+    },
+    "errors": {
+      "versionRequired": "Enter the deployed version.",
+      "tooLong": "{field} must be at most {max} characters.",
+      "failed": "Could not register the deployment. Try again."
+    }
+  },
+  "errorGroups": {
+    "title": "Errors",
+    "lead": "Similar errors grouped by type, message and service.",
+    "emptyAll": "No errors yet",
+    "emptyStatus": "No errors with this status",
+    "emptyHint": "Errors appear once your services send them to /api/ingest/errors.",
+    "status": {
+      "open": "Open",
+      "investigating": "Investigating",
+      "resolved": "Resolved"
+    },
+    "statusLabel": "Error status",
+    "filter": {
+      "label": "Filter by status",
+      "all": "All"
+    },
+    "columns": {
+      "error": "Error",
+      "service": "Service",
+      "status": "Status",
+      "occurrences": "Occurrences",
+      "lastSeen": "Last seen"
+    },
+    "detail": {
+      "service": "Service",
+      "endpoint": "Endpoint",
+      "occurrences": "Occurrences",
+      "firstSeen": "First seen",
+      "lastSeen": "Last seen",
+      "addToIncident": "Add to incident",
+      "recentEvents": "Recent events",
+      "noEvents": "No events recorded."
+    },
+    "event": {
+      "service": "Service",
+      "endpoint": "Endpoint",
+      "trace": "Trace",
+      "request": "Request",
+      "stackTrace": "Stack trace",
+      "attributes": "Attributes"
+    }
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "description": "This page could not be loaded. The backend may be unavailable.",
+    "errorId": "Error ID: {id}",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "This page does not exist, or it belongs to another account.",
+    "unreachable": "Could not reach the server. Try again.",
+    "validation": "Check the data and try again.",
+    "unknown": "Something went wrong. Try again in a moment."
+  },
+  "incidents": {
+    "title": "Incidents",
+    "lead": "Every incident in this project, newest first.",
+    "new": "New incident",
+    "newLead": "The incident starts now. Link evidence after it is created.",
+    "emptyAll": "No incidents yet",
+    "emptyStatus": "No incidents with this status",
+    "emptyHint": "Open an incident when something is wrong in production. Its timeline is built from deployments, anomalies and errors.",
+    "status": {
+      "open": "Open",
+      "investigating": "Investigating",
+      "resolved": "Resolved"
+    },
+    "severity": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "linkKinds": {
+      "error_group": "Error group",
+      "trace": "Trace",
+      "deployment": "Deployment",
+      "log": "Log"
+    },
+    "statusLabel": "Incident status",
+    "filter": {
+      "label": "Filter by status",
+      "all": "All"
+    },
+    "columns": {
+      "number": "#",
+      "title": "Title",
+      "severity": "Severity",
+      "status": "Status",
+      "started": "Started"
+    },
+    "form": {
+      "title": "Title",
+      "titleHint": "What users notice, e.g. Payment API degraded.",
+      "severity": "Severity",
+      "description": "Description",
+      "descriptionHint": "Optional. What is known so far.",
+      "create": "Create incident",
+      "creating": "Creating incident…",
+      "errors": {
+        "titleRequired": "Enter a title.",
+        "titleTooLong": "Title must be at most {max} characters.",
+        "descriptionTooLong": "Description must be at most {max} characters.",
+        "severityRequired": "Choose a severity.",
+        "createFailed": "Could not create the incident. Try again."
+      }
+    },
+    "detail": {
+      "timeline": "Timeline",
+      "evidence": "Evidence",
+      "details": "Details",
+      "started": "Started",
+      "resolved": "Resolved",
+      "duration": "Duration",
+      "soFar": "{duration} so far",
+      "assistant": "Ask the assistant",
+      "similar": "Similar incidents"
+    },
+    "note": {
+      "label": "Note",
+      "placeholder": "What did you check or change?",
+      "add": "Add note",
+      "errors": {
+        "empty": "Write a note first.",
+        "tooLong": "Note must be at most {max} characters.",
+        "failed": "Could not save the note. Try again."
+      }
+    },
+    "link": {
+      "noActive": "No active incidents.",
+      "create": "Create one",
+      "incident": "Incident",
+      "add": "Add to incident",
+      "adding": "Adding…",
+      "linked": "Linked as evidence.",
+      "type": "Evidence type",
+      "id": "ID",
+      "placeholder": "Trace ID or error, deployment, log UUID",
+      "submit": "Link",
+      "pending": "Linking…",
+      "remove": "Remove from incident",
+      "errors": {
+        "incidentRequired": "Choose an incident.",
+        "kindRequired": "Choose what to link.",
+        "idRequired": "Enter the ID to link.",
+        "notFound": "Not found in this project.",
+        "failed": "Could not link the evidence. Try again.",
+        "INCIDENT_LINK_EXISTS": "Already linked to this incident.",
+        "INCIDENT_TARGET_INVALID": "The ID must be a valid UUID."
+      }
+    },
+    "evidence": {
+      "occurrences": "{service} · {count} occurrences",
+      "trace": "Trace · {duration} · {spans}",
+      "deployment": "Deployment · {service} · {date}",
+      "log": "Log · {service} · {date}",
+      "empty": "Nothing linked yet. Add errors, traces, deployments or logs that explain this incident; AI analysis uses them as evidence."
+    },
+    "timeline": {
+      "deployment": "Deployment {version}",
+      "latency_spike": "P95 latency increased to {value}",
+      "error_rate_spike": "Error rate increased to {value}",
+      "error_first_seen": "First {errorType}",
+      "incident_created": "Incident #{number} created",
+      "note": "Note by {author}",
+      "incident_resolved": "Incident #{number} resolved",
+      "baseline": "Baseline {value}"
+    },
+    "similar": {
+      "empty": "No similar incidents in this project yet.",
+      "error": "Same error: {value}",
+      "service": "Same service: {value}",
+      "title": "Similar title"
+    }
+  },
+  "live": {
+    "connecting": "Connecting…",
+    "live": "Live",
+    "offline": "Reconnecting…",
+    "hint": "Pages refresh automatically when new telemetry arrives."
+  },
+  "logs": {
+    "title": "Logs",
+    "lead": "Newest first. Click a line to see its metadata.",
+    "empty": "No logs match these filters",
+    "emptyHint": "Widen the time range or clear some filters. Logs arrive through /api/ingest/logs.",
+    "filters": {
+      "service": "Service",
+      "endpoint": "Endpoint",
+      "traceId": "Trace ID",
+      "requestId": "Request ID",
+      "level": "Level",
+      "clear": "Clear",
+      "apply": "Apply filters"
+    },
+    "row": {
+      "service": "Service",
+      "timestamp": "Timestamp",
+      "endpoint": "Endpoint",
+      "trace": "Trace",
+      "span": "Span",
+      "request": "Request"
+    },
+    "loadMore": "Load older logs"
+  },
+  "meta": {
+    "title": "Observability",
+    "description": "Monitor production systems and investigate incidents."
+  },
+  "metrics": {
+    "overview": "Overview",
+    "title": "Metrics",
+    "lead": "Request volume, error rate and latency over time.",
+    "noRequests": "No requests in this time range",
+    "noRequestsOverview": "Send spans to /api/ingest/spans with your project API key, or pick a longer time range.",
+    "noRequestsMetrics": "Pick a longer time range or another service.",
+    "ranges": {
+      "label": "Time range",
+      "15m": "Last 15 minutes",
+      "1h": "Last hour",
+      "24h": "Last 24 hours",
+      "7d": "Last 7 days"
+    },
+    "service": {
+      "label": "Service",
+      "all": "All services"
+    },
+    "stats": {
+      "requests": "Requests",
+      "errorRate": "Error rate",
+      "p95": "P95 latency",
+      "errors": "Errors",
+      "degraded": "Degraded",
+      "critical": "Critical",
+      "slow": "Slow"
+    },
+    "charts": {
+      "volume": "Request volume",
+      "volumeLabel": "Requests per interval",
+      "errorRate": "Error rate",
+      "errorRateLabel": "Error rate per interval",
+      "p95": "P95 latency",
+      "p95Label": "P95 latency per interval",
+      "noData": "No data",
+      "time": "Time",
+      "value": "Value"
+    }
+  },
+  "nav": {
+    "label": "Main",
+    "home": "Observability home",
+    "openMenu": "Open menu",
+    "signOut": "Sign out",
+    "withOpen": "{label}, {count} open",
+    "platform": "Platform health",
+    "platformShort": "Platform",
+    "items": {
+      "overview": "Overview",
+      "services": "Services",
+      "metrics": "Metrics",
+      "errors": "Errors",
+      "logs": "Logs",
+      "traces": "Traces",
+      "incidents": "Incidents",
+      "deployments": "Deployments",
+      "analysis": "AI Analysis",
+      "alerts": "Alerts",
+      "settings": "Settings"
+    },
+    "short": {
+      "deployments": "Deploys",
+      "analysis": "AI"
+    }
+  },
+  "platform": {
+    "title": "Platform health",
+    "lead": "How the observability platform itself is doing. Counters reset on restart; up for {uptime}.",
+    "stats": {
+      "ingestP95": "Ingest P95",
+      "queueLag": "Queue lag P95",
+      "telemetryLag": "Telemetry lag P95",
+      "deadLettered": "Dead-lettered jobs"
+    },
+    "ingestion": "Ingestion",
+    "ingestionHint": "Accepted telemetry is queued and stored by a worker. Rejected requests failed validation or authentication; failed requests could not be queued. Jobs that keep failing are retried with backoff, then dead-lettered so nothing is dropped silently.",
+    "queue": "Ingest queue",
+    "dependencies": "Dependencies",
+    "background": "Background work",
+    "alertRuns": "{runs} alert runs · {failed} failed evaluations · last {last}",
+    "never": "never",
+    "telemetry": {
+      "logs": "Logs",
+      "spans": "Spans",
+      "errors": "Errors",
+      "deployments": "Deployments"
+    },
+    "outcomes": {
+      "analyses": "AI analyses",
+      "chat": "Assistant answers",
+      "webhooks": "Alert webhooks"
+    },
+    "outcome": "{ok} ok",
+    "outcomeFailed": "{failed} failed",
+    "checks": {
+      "database": "Database",
+      "alertScheduler": "Alert scheduler",
+      "ingestQueue": "Ingest queue (Redis)"
+    },
+    "up": "Up",
+    "down": "Down",
+    "healthDown": "The health endpoint did not respond. The API may be down.",
+    "columns": {
+      "telemetry": "Telemetry",
+      "requests": "Requests",
+      "items": "Accepted",
+      "stored": "Stored",
+      "rejected": "Rejected",
+      "failed": "Failed",
+      "deadLettered": "Dead-lettered"
+    },
+    "queueRows": {
+      "unavailable": "Queue depth is unavailable. Redis may be unreachable.",
+      "waiting": "Waiting",
+      "processing": "Processing",
+      "delayed": "Waiting to retry",
+      "deadLettered": "Dead-lettered",
+      "retries": "Retries since start",
+      "lag": "Queue lag P50 / P95"
+    }
+  },
+  "projects": {
+    "new": "New project",
+    "newLead": "A project groups the services of one application in one environment.",
+    "environments": {
+      "development": "Development",
+      "staging": "Staging",
+      "production": "Production"
+    },
+    "switcher": {
+      "label": "Project",
+      "select": "Select project",
+      "new": "New project"
+    },
+    "form": {
+      "name": "Name",
+      "nameHint": "For example: My E-commerce API.",
+      "environment": "Environment",
+      "create": "Create project",
+      "creating": "Creating project…",
+      "save": "Save",
+      "saved": "Project saved.",
+      "errors": {
+        "nameRequired": "Enter a project name.",
+        "nameTooLong": "Name must be at most 100 characters.",
+        "environmentRequired": "Choose an environment.",
+        "createFailed": "Could not create the project. Try again.",
+        "saveFailed": "Could not save the project. Try again."
+      }
+    },
+    "created": {
+      "title": "Project created",
+      "lead": "Copy the API key now. It is shown only once; if you lose it, rotate it in project settings.",
+      "usage": "Send it in the <code>x-api-key</code> header to <code>/api/ingest/*</code>.",
+      "continue": "Continue to project"
+    },
+    "apiKey": {
+      "rotateConfirm": "Rotate the API key? The current key stops working immediately and every SDK must be updated.",
+      "newKey": "New key created. Copy it now; it is shown only once.",
+      "current": "Current key starts with <code>{prefix}…</code>",
+      "rotate": "Rotate key",
+      "rotating": "Rotating…"
+    },
+    "delete": {
+      "confirm": "Delete “{name}” and all of its telemetry, incidents and alerts? This cannot be undone.",
+      "lead": "Deletes the project with all logs, traces, errors, incidents and alerts.",
+      "submit": "Delete project",
+      "pending": "Deleting…"
+    },
+    "settings": {
+      "title": "Settings",
+      "project": "Project",
+      "projectLead": "The name and environment shown across the dashboard.",
+      "apiKey": "API key",
+      "apiKeyLead": "Telemetry is accepted only with this key in the x-api-key header.",
+      "account": "Account",
+      "accountLead": "Change the password you use to sign in.",
+      "language": "Interface language",
+      "danger": "Danger zone",
+      "dangerLead": "Actions here cannot be undone."
+    },
+    "password": {
+      "current": "Current password",
+      "new": "New password",
+      "newHint": "At least 8 characters.",
+      "confirm": "Confirm new password",
+      "submit": "Change password",
+      "changed": "Password changed.",
+      "errors": {
+        "fillAll": "Fill in every field.",
+        "length": "The new password must be 8 to 128 characters.",
+        "mismatch": "The new passwords do not match.",
+        "sameAsCurrent": "Choose a password different from the current one.",
+        "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect."
+      }
+    }
+  },
+  "services": {
+    "title": "Services",
+    "lead": "Health of every service that handled requests in this time range.",
+    "empty": "No services in this time range",
+    "emptyHint": "Services appear once they send server spans to /api/ingest/spans. Try a longer time range.",
+    "status": {
+      "healthy": "Healthy",
+      "degraded": "Degraded",
+      "critical": "Critical"
+    },
+    "columns": {
+      "service": "Service",
+      "status": "Status",
+      "requests": "Requests",
+      "errorRate": "Error rate",
+      "p95": "P95 latency"
+    },
+    "detail": {
+      "viewLogs": "View logs",
+      "noTraffic": "This service has not reported server spans recently. Pick a longer time range.",
+      "recentDeployments": "Recent deployments",
+      "noDeployments": "No deployments registered for this service."
+    }
+  },
+  "traces": {
+    "title": "Traces",
+    "trace": "Trace",
+    "lead": "The latest requests, from the entry span down to every downstream call.",
+    "empty": "No traces in this time range",
+    "emptyHint": "Traces appear once your services send spans to /api/ingest/spans. Try a longer time range.",
+    "status": {
+      "ok": "OK",
+      "error": "Error"
+    },
+    "kinds": {
+      "server": "Server",
+      "client": "Client",
+      "internal": "Internal"
+    },
+    "filter": {
+      "label": "Filter by status",
+      "all": "All",
+      "error": "Errors",
+      "ok": "OK"
+    },
+    "columns": {
+      "started": "Started",
+      "operation": "Operation",
+      "service": "Service",
+      "status": "Status",
+      "duration": "Duration"
+    },
+    "detail": {
+      "spans": "{count, plural, one {# span} other {# spans}}",
+      "viewLogs": "View logs",
+      "traceId": "Trace {id}"
+    },
+    "view": {
+      "spans": "Spans",
+      "span": "Span",
+      "duration": "Duration",
+      "details": "Span details",
+      "select": "Select a span to see its details."
+    },
+    "span": {
+      "duration": "Duration",
+      "selfTime": "Self time",
+      "startsAt": "Starts at",
+      "kind": "Kind",
+      "spanId": "Span ID",
+      "parent": "Parent",
+      "attributes": "Attributes",
+      "logs": "Logs in this span",
+      "noLogs": "No logs were recorded for this span."
+    }
+  }
+}

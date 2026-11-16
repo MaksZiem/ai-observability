@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Rocket } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { CreateDeploymentForm } from "@/features/deployments/components/create-deployment-form";
@@ -16,9 +17,10 @@ const CI_SNIPPET = `curl -X POST "$OBSERVABILITY_API_URL/ingest/deployments" \\
   -H "Content-Type: application/json" \\
   -d '{"version":"v1.42.3","service":"payment-service","commitSha":"'"$GIT_SHA"'"}'`;
 
-export const metadata: Metadata = {
-  title: "Deployments",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("deployments");
+  return { title: t("title") };
+}
 
 export default async function DeploymentsPage({
   params,
@@ -27,6 +29,7 @@ export default async function DeploymentsPage({
   const { projectId } = await params;
   const range = parseTimeRange((await searchParams).range);
 
+  const t = await getTranslations("deployments");
   await getProject(projectId);
   const deployments = await listDeployments(projectId, {
     from: rangeStart(range),
@@ -36,8 +39,8 @@ export default async function DeploymentsPage({
   return (
     <div>
       <PageHeader
-        title="Deployments"
-        description="Releases appear as markers on every metrics chart."
+        title={t("title")}
+        description={t("lead")}
         actions={<TimeRangePicker value={range} />}
       />
 
@@ -45,8 +48,8 @@ export default async function DeploymentsPage({
         {deployments.length === 0 ? (
           <EmptyState
             icon={Rocket}
-            title="No deployments in this time range"
-            description="Register one with the form, or send it from your CI pipeline."
+            title={t("empty")}
+            description={t("emptyHint")}
           />
         ) : (
           <section className="rounded-xl border border-border bg-surface px-[18px] py-2">
@@ -56,17 +59,13 @@ export default async function DeploymentsPage({
 
         <div className="flex flex-col gap-6">
           <section className="rounded-xl border border-border bg-surface p-[18px]">
-            <h2 className="mb-4 text-base font-semibold">
-              Register deployment
-            </h2>
+            <h2 className="mb-4 text-base font-semibold">{t("register")}</h2>
             <CreateDeploymentForm projectId={projectId} />
           </section>
 
           <section className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-[18px]">
-            <h2 className="text-base font-semibold">From CI</h2>
-            <p className="text-[13px] text-fg-muted">
-              Call the ingest API with your project API key after each release.
-            </p>
+            <h2 className="text-base font-semibold">{t("fromCi")}</h2>
+            <p className="text-[13px] text-fg-muted">{t("fromCiLead")}</p>
             <pre className="overflow-auto rounded-lg border border-border bg-surface-2 p-3 font-mono text-xs leading-relaxed">
               {CI_SNIPPET}
             </pre>

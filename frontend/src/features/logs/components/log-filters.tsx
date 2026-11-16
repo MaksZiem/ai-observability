@@ -1,5 +1,6 @@
 import Form from "next/form";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LOG_LEVEL_CLASSES, LOG_LEVELS } from "@/features/logs/labels";
@@ -13,13 +14,14 @@ type LogFiltersProps = {
 };
 
 const TEXT_FIELDS = [
-  { name: "service", label: "Service", placeholder: "payment-service" },
-  { name: "endpoint", label: "Endpoint", placeholder: "POST /payments" },
-  { name: "traceId", label: "Trace ID", placeholder: "abc123" },
-  { name: "requestId", label: "Request ID", placeholder: "req_…" },
+  { name: "service", placeholder: "payment-service" },
+  { name: "endpoint", placeholder: "POST /payments" },
+  { name: "traceId", placeholder: "abc123" },
+  { name: "requestId", placeholder: "req_…" },
 ] as const;
 
 export function LogFilters({ projectId, range, filters }: LogFiltersProps) {
+  const t = useTranslations("logs.filters");
   const path = `/projects/${projectId}/logs`;
   const hasFilters = Object.values(filters).some(
     (value) => value !== undefined,
@@ -34,9 +36,9 @@ export function LogFilters({ projectId, range, filters }: LogFiltersProps) {
       <input type="hidden" name="range" value={range} />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {TEXT_FIELDS.map(({ name, label, placeholder }) => (
+        {TEXT_FIELDS.map(({ name, placeholder }) => (
           <label key={name} className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-fg-muted">{label}</span>
+            <span className="text-xs font-medium text-fg-muted">{t(name)}</span>
             <Input
               name={name}
               placeholder={placeholder}
@@ -49,7 +51,7 @@ export function LogFilters({ projectId, range, filters }: LogFiltersProps) {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <fieldset className="flex flex-wrap items-center gap-1">
-          <legend className="sr-only">Level</legend>
+          <legend className="sr-only">{t("level")}</legend>
           {LOG_LEVELS.map((level) => (
             <label key={level}>
               <input
@@ -74,11 +76,11 @@ export function LogFilters({ projectId, range, filters }: LogFiltersProps) {
               href={`${path}?range=${range}`}
               className="text-[13px] text-fg-muted hover:text-fg"
             >
-              Clear
+              {t("clear")}
             </Link>
           )}
           <Button type="submit" variant="primary">
-            Apply filters
+            {t("apply")}
           </Button>
         </div>
       </div>

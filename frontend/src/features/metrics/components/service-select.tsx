@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Select } from "@/components/ui/select";
 
 type ServiceSelectProps = {
@@ -10,6 +11,7 @@ type ServiceSelectProps = {
 };
 
 export function ServiceSelect({ services, value }: ServiceSelectProps) {
+  const t = useTranslations("metrics.service");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,13 +29,13 @@ export function ServiceSelect({ services, value }: ServiceSelectProps) {
 
   return (
     <Select
-      aria-label="Service"
+      aria-label={t("label")}
       value={value ?? ""}
       disabled={pending}
       onChange={(event) => select(event.target.value)}
       className="font-mono"
     >
-      <option value="">All services</option>
+      <option value="">{t("all")}</option>
       {services.map((service) => (
         <option key={service} value={service}>
           {service}

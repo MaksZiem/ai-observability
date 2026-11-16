@@ -1,4 +1,4 @@
-import { ENVIRONMENT_LABELS } from "@/features/projects/labels";
+import { useTranslations } from "next-intl";
 import type { ProjectEnvironment } from "@/features/projects/types";
 
 type EnvironmentBadgeProps = {
@@ -6,9 +6,11 @@ type EnvironmentBadgeProps = {
 };
 
 export function EnvironmentBadge({ environment }: EnvironmentBadgeProps) {
+  const t = useTranslations("projects.environments");
+
   return (
     <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-xs font-medium text-fg-muted">
-      {ENVIRONMENT_LABELS[environment]}
+      {t(environment)}
     </span>
   );
 }

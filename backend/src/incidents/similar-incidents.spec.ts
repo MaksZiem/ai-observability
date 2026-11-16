@@ -40,6 +40,11 @@ describe('compareIncidents', () => {
         'Same service: payment-service',
         'Similar title',
       ],
+      matches: [
+        { kind: 'error', value: 'DatabaseConnectionTimeout' },
+        { kind: 'service', value: 'payment-service' },
+        { kind: 'title', value: null },
+      ],
     });
   });
 
@@ -63,6 +68,6 @@ describe('compareIncidents', () => {
   it('scores unrelated incidents as 0', () => {
     expect(
       compareIncidents(current, features(['QueueFull'], ['worker'], 'Disk')),
-    ).toEqual({ score: 0, reasons: [] });
+    ).toEqual({ score: 0, reasons: [], matches: [] });
   });
 });

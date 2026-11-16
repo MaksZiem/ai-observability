@@ -1,4 +1,5 @@
-import { formatCount, formatLatency } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import type { PlatformStats } from "@/features/platform/types";
 
 type QueueStatusProps = {
@@ -6,12 +7,14 @@ type QueueStatusProps = {
 };
 
 export function QueueStatus({ stats }: QueueStatusProps) {
+  const t = useTranslations("platform.queueRows");
+  const format = useFormat();
   const { queue, queueLagMs, ingest } = stats;
 
   if (!queue) {
     return (
       <p role="alert" className="text-[13px] text-danger">
-        Queue depth is unavailable. Redis may be unreachable.
+        {t("unavailable")}
       </p>
     );
   }
@@ -22,22 +25,22 @@ export function QueueStatus({ stats }: QueueStatusProps) {
   );
 
   const rows = [
-    { label: "Waiting", value: formatCount(queue.waiting) },
-    { label: "Processing", value: formatCount(queue.active) },
+    { label: t("waiting"), value: format.count(queue.waiting) },
+    { label: t("processing"), value: format.count(queue.active) },
     {
-      label: "Waiting to retry",
-      value: formatCount(queue.delayed),
+      label: t("delayed"),
+      value: format.count(queue.delayed),
       tone: queue.delayed > 0 ? "text-warning" : "",
     },
     {
-      label: "Dead-lettered",
-      value: formatCount(queue.deadLettered),
+      label: t("deadLettered"),
+      value: format.count(queue.deadLettered),
       tone: queue.deadLettered > 0 ? "text-danger" : "",
     },
-    { label: "Retries since start", value: formatCount(retried) },
+    { label: t("retries"), value: format.count(retried) },
     {
-      label: "Queue lag P50 / P95",
-      value: `${formatLatency(queueLagMs.p50)} / ${formatLatency(queueLagMs.p95)}`,
+      label: t("lag"),
+      value: `${format.latency(queueLagMs.p50)} / ${format.latency(queueLagMs.p95)}`,
     },
   ];
 

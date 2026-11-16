@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ERROR_STATUS, ERROR_STATUSES } from "@/features/errors/labels";
+import { useTranslations } from "next-intl";
+import { ERROR_STATUSES } from "@/features/errors/labels";
 import type { ErrorStatus } from "@/features/errors/types";
 
 type ErrorStatusFilterProps = {
@@ -11,11 +12,12 @@ export function ErrorStatusFilter({
   projectId,
   active,
 }: ErrorStatusFilterProps) {
+  const t = useTranslations("errorGroups");
   const basePath = `/projects/${projectId}/errors`;
   const filters: (ErrorStatus | null)[] = [null, ...ERROR_STATUSES];
 
   return (
-    <nav aria-label="Filter by status" className="flex flex-wrap gap-1">
+    <nav aria-label={t("filter.label")} className="flex flex-wrap gap-1">
       {filters.map((status) => {
         const isActive = status === active;
 
@@ -30,7 +32,7 @@ export function ErrorStatusFilter({
                 : "text-fg-muted hover:bg-surface-hover hover:text-fg"
             }`}
           >
-            {status ? ERROR_STATUS[status].label : "All"}
+            {status ? t(`status.${status}`) : t("filter.all")}
           </Link>
         );
       })}

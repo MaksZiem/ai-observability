@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Activity } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { listDeployments } from "@/features/deployments/queries";
@@ -11,9 +12,10 @@ import { parseTimeRange } from "@/features/metrics/time-range";
 import { EnvironmentBadge } from "@/features/projects/components/environment-badge";
 import { getProject } from "@/features/projects/queries";
 
-export const metadata: Metadata = {
-  title: "Overview",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metrics");
+  return { title: t("overview") };
+}
 
 export default async function OverviewPage({
   params,
@@ -22,6 +24,7 @@ export default async function OverviewPage({
   const { projectId } = await params;
   const range = parseTimeRange((await searchParams).range);
 
+  const t = await getTranslations("metrics");
   const project = await getProject(projectId);
   const overview = await getOverview(projectId, range);
   const deployments = await listDeployments(projectId, {
@@ -32,7 +35,7 @@ export default async function OverviewPage({
   return (
     <div>
       <PageHeader
-        title="Overview"
+        title={t("overview")}
         description={project.name}
         actions={
           <>
@@ -46,8 +49,8 @@ export default async function OverviewPage({
         {overview.summary.requests === 0 ? (
           <EmptyState
             icon={Activity}
-            title="No requests in this time range"
-            description="Send spans to /api/ingest/spans with your project API key, or pick a longer time range."
+            title={t("noRequests")}
+            description={t("noRequestsOverview")}
           />
         ) : (
           <>

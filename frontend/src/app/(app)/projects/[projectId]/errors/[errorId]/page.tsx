@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/ui/page-header";
-import { formatCount, formatDayTime } from "@/lib/format";
+import { getFormat } from "@/lib/format-server";
 import { ErrorEventList } from "@/features/errors/components/error-event-list";
 import { ErrorStatusBadge } from "@/features/errors/components/error-status-badge";
 import { ErrorStatusSelect } from "@/features/errors/components/error-status-select";
@@ -41,6 +42,7 @@ export default async function ErrorPage({
 }: PageProps<"/projects/[projectId]/errors/[errorId]">) {
   const { projectId, errorId } = await params;
 
+  const [t, format] = await Promise.all([getTranslations("errorGroups"), getFormat()]);
   await getProject(projectId);
   const [group, events, openIncidents, investigatingIncidents] =
     await Promise.all([
@@ -54,7 +56,7 @@ export default async function ErrorPage({
   return (
     <div>
       <PageHeader
-        back={{ href: `/projects/${projectId}/errors`, label: "Errors" }}
+        back={{ href: `/projects/${projectId}/errors`, label: t("title") }}
         title={<span className="font-mono">{group.type}</span>}
         description={group.message}
         actions={
@@ -71,7 +73,7 @@ export default async function ErrorPage({
 
       <div className="flex flex-col gap-6 p-6">
         <dl className="grid grid-cols-2 gap-4 rounded-xl border border-border bg-surface p-[18px] lg:grid-cols-5">
-          <Detail label="Service">
+          <Detail label={t("detail.service")}>
             <Link
               href={servicePath(projectId, group.service)}
               className="text-accent hover:underline"
@@ -79,14 +81,14 @@ export default async function ErrorPage({
               {group.service}
             </Link>
           </Detail>
-          <Detail label="Endpoint">{group.endpoint ?? "—"}</Detail>
-          <Detail label="Occurrences">{formatCount(group.occurrences)}</Detail>
-          <Detail label="First seen">{formatDayTime(group.firstSeen)}</Detail>
-          <Detail label="Last seen">{formatDayTime(group.lastSeen)}</Detail>
+          <Detail label={t("detail.endpoint")}>{group.endpoint ?? "—"}</Detail>
+          <Detail label={t("detail.occurrences")}>{format.count(group.occurrences)}</Detail>
+          <Detail label={t("detail.firstSeen")}>{format.dayTime(group.firstSeen)}</Detail>
+          <Detail label={t("detail.lastSeen")}>{format.dayTime(group.lastSeen)}</Detail>
         </dl>
 
         <section className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-[18px]">
-          <h2 className="text-base font-semibold">Add to incident</h2>
+          <h2 className="text-base font-semibold">{t("detail.addToIncident")}</h2>
           <AddToIncidentForm
             projectId={projectId}
             kind="error_group"
@@ -96,9 +98,9 @@ export default async function ErrorPage({
         </section>
 
         <section className="rounded-xl border border-border bg-surface p-[18px]">
-          <h2 className="mb-4 text-base font-semibold">Recent events</h2>
+          <h2 className="mb-4 text-base font-semibold">{t("detail.recentEvents")}</h2>
           {events.length === 0 ? (
-            <p className="text-[13px] text-fg-muted">No events recorded.</p>
+            <p className="text-[13px] text-fg-muted">{t("detail.noEvents")}</p>
           ) : (
             <ErrorEventList projectId={projectId} events={events} />
           )}

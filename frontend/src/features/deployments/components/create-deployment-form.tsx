@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -20,6 +21,7 @@ type CreateDeploymentFormProps = {
 };
 
 export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
+  const t = useTranslations("deployments");
   const [state, formAction] = useActionState(
     createDeployment.bind(null, projectId),
     INITIAL_STATE,
@@ -28,7 +30,7 @@ export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <FormField label="Version">
+      <FormField label={t("fields.version")}>
         <Input
           name="version"
           placeholder="v1.42.3"
@@ -39,8 +41,8 @@ export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
         />
       </FormField>
       <FormField
-        label="Service"
-        hint="Leave empty if it affects every service."
+        label={t("fields.service")}
+        hint={t("fields.serviceHint")}
       >
         <Input
           name="service"
@@ -50,7 +52,7 @@ export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
           className="font-mono"
         />
       </FormField>
-      <FormField label="Commit SHA">
+      <FormField label={t("fields.commitSha")}>
         <Input
           name="commitSha"
           maxLength={64}
@@ -58,7 +60,7 @@ export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
           className="font-mono"
         />
       </FormField>
-      <FormField label="Description">
+      <FormField label={t("fields.description")}>
         <Input
           name="description"
           maxLength={2000}
@@ -73,16 +75,19 @@ export function CreateDeploymentForm({ projectId }: CreateDeploymentFormProps) {
       )}
       {state.createdVersion && (
         <p role="status" className="text-xs text-success">
-          Registered <span className="font-mono">{state.createdVersion}</span>.
+          {t.rich("registered", {
+            version: state.createdVersion,
+            code: (chunks) => <span className="font-mono">{chunks}</span>,
+          })}
         </p>
       )}
 
       <SubmitButton
         variant="primary"
-        pendingLabel="Registering…"
+        pendingLabel={t("registering")}
         className="self-start"
       >
-        Register deployment
+        {t("register")}
       </SubmitButton>
     </form>
   );

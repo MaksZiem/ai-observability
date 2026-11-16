@@ -1,4 +1,5 @@
-import { formatDayTime } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import type { Deployment } from "@/features/deployments/types";
 
 const SHORT_SHA_LENGTH = 7;
@@ -8,6 +9,9 @@ type DeploymentListProps = {
 };
 
 export function DeploymentList({ deployments }: DeploymentListProps) {
+  const t = useTranslations("deployments");
+  const format = useFormat();
+
   return (
     <ul className="text-[13px]">
       {deployments.map((deployment) => (
@@ -18,7 +22,7 @@ export function DeploymentList({ deployments }: DeploymentListProps) {
           <span className="font-mono font-medium">{deployment.version}</span>
           <span className="min-w-0 truncate text-fg-muted">
             <span className="font-mono">
-              {deployment.service ?? "all services"}
+              {deployment.service ?? t("allServices")}
             </span>
             {deployment.commitSha && (
               <span className="font-mono">
@@ -29,7 +33,7 @@ export function DeploymentList({ deployments }: DeploymentListProps) {
             {deployment.description && <span> · {deployment.description}</span>}
           </span>
           <span className="font-mono text-fg-muted tabular-nums">
-            {formatDayTime(deployment.deployedAt)}
+            {format.dayTime(deployment.deployedAt)}
           </span>
         </li>
       ))}

@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { JsonBlock } from "@/components/ui/json-block";
-import { formatLatency } from "@/lib/format";
+import { useFormat } from "@/lib/format";
 import { LogLevel } from "@/features/logs/components/log-level";
 import type { Log } from "@/features/logs/types";
 import { servicePath } from "@/features/services/paths";
 import { SpanStatusBadge } from "@/features/traces/components/span-status-badge";
-import { SPAN_KIND_LABELS } from "@/features/traces/labels";
 import type { WaterfallRow } from "@/features/traces/waterfall";
 
 type SpanDetailsProps = {
@@ -30,16 +30,15 @@ function Detail({ label, children }: DetailProps) {
   );
 }
 
-function offsetLabel(ms: number) {
-  return `+${formatLatency(ms)}`;
-}
-
 export function SpanDetails({
   projectId,
   row,
   logs,
   traceStart,
 }: SpanDetailsProps) {
+  const t = useTranslations("traces");
+  const format = useFormat();
+  const offsetLabel = (ms: number) => `+${format.latency(ms)}`;
   const { span } = row;
   const start = new Date(traceStart).getTime();
 
@@ -61,26 +60,26 @@ export function SpanDetails({
       </div>
 
       <dl className="grid grid-cols-[88px_1fr] gap-x-3 gap-y-2 text-[13px]">
-        <Detail label="Duration">{formatLatency(span.durationMs)}</Detail>
-        <Detail label="Self time">{formatLatency(row.selfMs)}</Detail>
-        <Detail label="Starts at">{offsetLabel(row.offsetMs)}</Detail>
-        <Detail label="Kind">{SPAN_KIND_LABELS[span.kind]}</Detail>
-        <Detail label="Span ID">{span.spanId}</Detail>
-        <Detail label="Parent">{span.parentSpanId ?? "—"}</Detail>
+        <Detail label={t("span.duration")}>{format.latency(span.durationMs)}</Detail>
+        <Detail label={t("span.selfTime")}>{format.latency(row.selfMs)}</Detail>
+        <Detail label={t("span.startsAt")}>{offsetLabel(row.offsetMs)}</Detail>
+        <Detail label={t("span.kind")}>{t(`kinds.${span.kind}`)}</Detail>
+        <Detail label={t("span.spanId")}>{span.spanId}</Detail>
+        <Detail label={t("span.parent")}>{span.parentSpanId ?? "—"}</Detail>
       </dl>
 
       {Object.keys(span.attributes).length > 0 && (
         <section className="flex flex-col gap-2">
-          <h3 className="text-xs font-medium text-fg-muted">Attributes</h3>
+          <h3 className="text-xs font-medium text-fg-muted">{t("span.attributes")}</h3>
           <JsonBlock value={span.attributes} />
         </section>
       )}
 
       <section className="flex flex-col gap-2">
-        <h3 className="text-xs font-medium text-fg-muted">Logs in this span</h3>
+        <h3 className="text-xs font-medium text-fg-muted">{t("span.logs")}</h3>
         {logs.length === 0 ? (
           <p className="text-[13px] text-fg-muted">
-            No logs were recorded for this span.
+            {t("span.noLogs")}
           </p>
         ) : (
           <ul className="flex flex-col gap-2">

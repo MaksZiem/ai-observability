@@ -1,6 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { ApiError, apiFetch } from "@/lib/api";
 import type { Deployment } from "@/features/deployments/types";
 
@@ -24,11 +25,11 @@ const EMPTY_VALUES: DeploymentValues = {
   description: "",
 };
 
-const FIELDS: Record<keyof DeploymentValues, { label: string; max: number }> = {
-  version: { label: "Version", max: 100 },
-  service: { label: "Service", max: 100 },
-  commitSha: { label: "Commit SHA", max: 64 },
-  description: { label: "Description", max: 2000 },
+const MAX_LENGTH: Record<keyof DeploymentValues, number> = {
+  version: 100,
+  service: 100,
+  commitSha: 64,
+  description: 2000,
 };
 
 function readValues(formData: FormData): DeploymentValues {
@@ -43,16 +44,19 @@ function readValues(formData: FormData): DeploymentValues {
   };
 }
 
-function validate(values: DeploymentValues) {
-  if (!values.version) return "Enter the deployed version.";
+async function validate(values: DeploymentValues) {
+  const t = await getTranslations("deployments");
+  if (!values.version) return t("errors.versionRequired");
 
-  const tooLong = (Object.keys(FIELDS) as (keyof DeploymentValues)[]).find(
-    (key) => values[key].length > FIELDS[key].max,
+  const tooLong = (Object.keys(MAX_LENGTH) as (keyof DeploymentValues)[]).find(
+    (key) => values[key].length > MAX_LENGTH[key],
   );
   if (!tooLong) return null;
 
-  const { label, max } = FIELDS[tooLong];
-  return `${label} must be at most ${max} characters.`;
+  return t("errors.tooLong", {
+    field: t(`fields.${tooLong}`),
+    max: MAX_LENGTH[tooLong],
+  });
 }
 
 export async function createDeployment(
@@ -60,8 +64,9 @@ export async function createDeployment(
   _prevState: CreateDeploymentState,
   formData: FormData,
 ): Promise<CreateDeploymentState> {
+  const t = await getTranslations();
   const values = readValues(formData);
-  const error = validate(values);
+  const error = await validate(values);
 
   if (error) return { error, values, createdVersion: null };
 
@@ -86,10 +91,10 @@ export async function createDeployment(
     };
   } catch (error) {
     if (error instanceof ApiError && error.status === 400) {
-      return { error: error.message, values, createdVersion: null };
+      return { error: t("errors.validation"), values, createdVersion: null };
     }
     return {
-      error: "Could not register the deployment. Try again.",
+      error: t("deployments.errors.failed"),
       values,
       createdVersion: null,
     };

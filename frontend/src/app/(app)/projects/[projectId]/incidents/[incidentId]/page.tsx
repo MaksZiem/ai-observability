@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/ui/page-header";
-import { formatDayTime, formatDuration } from "@/lib/format";
+import { getFormat } from "@/lib/format-server";
 import { IncidentAnalysisPanel } from "@/features/analysis/components/incident-analysis-panel";
 import { IncidentChat } from "@/features/analysis/components/incident-chat";
 import { listAnalyses, listChatMessages } from "@/features/analysis/queries";
@@ -57,6 +58,7 @@ export default async function IncidentPage({
   const { projectId, incidentId } = await params;
   const selectedAnalysisId = readParam((await searchParams).analysis);
 
+  const [t, format] = await Promise.all([getTranslations("incidents"), getFormat()]);
   await getProject(projectId);
   const incident = await getIncident(projectId, incidentId);
   const [timeline, evidence, links, similar, analyses, messages] =
@@ -75,7 +77,7 @@ export default async function IncidentPage({
   return (
     <div>
       <PageHeader
-        back={{ href: `/projects/${projectId}/incidents`, label: "Incidents" }}
+        back={{ href: `/projects/${projectId}/incidents`, label: t("title") }}
         title={
           <>
             <span className="font-mono text-fg-muted">#{incident.number}</span>{" "}
@@ -105,14 +107,14 @@ export default async function IncidentPage({
             selectedId={selectedAnalysisId}
           />
 
-          <Panel title="Timeline">
+          <Panel title={t("detail.timeline")}>
             <IncidentTimeline projectId={projectId} entries={timeline} />
             <div className="border-t border-border pt-4">
               <AddNoteForm projectId={projectId} incidentId={incident.id} />
             </div>
           </Panel>
 
-          <Panel title="Evidence">
+          <Panel title={t("detail.evidence")}>
             <IncidentEvidence
               projectId={projectId}
               incidentId={incident.id}
@@ -129,25 +131,26 @@ export default async function IncidentPage({
         </div>
 
         <div className="flex flex-col gap-6">
-          <Panel title="Details">
+          <Panel title={t("detail.details")}>
             <dl className="grid grid-cols-[88px_1fr] gap-x-3 gap-y-2 text-[13px]">
-              <dt className="text-fg-muted">Started</dt>
+              <dt className="text-fg-muted">{t("detail.started")}</dt>
               <dd className="font-mono tabular-nums">
-                {formatDayTime(incident.startedAt)}
+                {format.dayTime(incident.startedAt)}
               </dd>
-              <dt className="text-fg-muted">Resolved</dt>
+              <dt className="text-fg-muted">{t("detail.resolved")}</dt>
               <dd className="font-mono tabular-nums">
-                {incident.resolvedAt ? formatDayTime(incident.resolvedAt) : "—"}
+                {incident.resolvedAt ? format.dayTime(incident.resolvedAt) : "—"}
               </dd>
-              <dt className="text-fg-muted">Duration</dt>
+              <dt className="text-fg-muted">{t("detail.duration")}</dt>
               <dd className="font-mono tabular-nums">
-                {formatDuration(duration)}
-                {!incident.resolvedAt && " so far"}
+                {incident.resolvedAt
+                  ? format.duration(duration)
+                  : t("detail.soFar", { duration: format.duration(duration) })}
               </dd>
             </dl>
           </Panel>
 
-          <Panel title="Ask the assistant">
+          <Panel title={t("detail.assistant")}>
             <IncidentChat
               projectId={projectId}
               incidentId={incident.id}
@@ -155,7 +158,7 @@ export default async function IncidentPage({
             />
           </Panel>
 
-          <Panel title="Similar incidents">
+          <Panel title={t("detail.similar")}>
             <SimilarIncidents projectId={projectId} similar={similar} />
           </Panel>
         </div>

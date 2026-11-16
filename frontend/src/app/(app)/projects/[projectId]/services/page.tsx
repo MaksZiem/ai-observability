@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Boxes } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { TimeRangePicker } from "@/features/metrics/components/time-range-picker";
@@ -8,9 +9,10 @@ import { parseTimeRange } from "@/features/metrics/time-range";
 import { getProject } from "@/features/projects/queries";
 import { ServiceTable } from "@/features/services/components/service-table";
 
-export const metadata: Metadata = {
-  title: "Services",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("services");
+  return { title: t("title") };
+}
 
 export default async function ServicesPage({
   params,
@@ -19,14 +21,15 @@ export default async function ServicesPage({
   const { projectId } = await params;
   const range = parseTimeRange((await searchParams).range);
 
+  const t = await getTranslations("services");
   await getProject(projectId);
   const services = await listServiceHealth(projectId, range);
 
   return (
     <div>
       <PageHeader
-        title="Services"
-        description="Health of every service that handled requests in this time range."
+        title={t("title")}
+        description={t("lead")}
         actions={<TimeRangePicker value={range} />}
       />
 
@@ -34,8 +37,8 @@ export default async function ServicesPage({
         {services.length === 0 ? (
           <EmptyState
             icon={Boxes}
-            title="No services in this time range"
-            description="Services appear once they send server spans to /api/ingest/spans. Try a longer time range."
+            title={t("empty")}
+            description={t("emptyHint")}
           />
         ) : (
           <ServiceTable

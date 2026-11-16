@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   deleteAlertRule,
@@ -21,6 +22,7 @@ export function AlertRuleActions({
   name,
   enabled,
 }: AlertRuleActionsProps) {
+  const t = useTranslations("alerts.list");
   const [pending, startTransition] = useTransition();
 
   function run(action: () => Promise<void>) {
@@ -33,7 +35,7 @@ export function AlertRuleActions({
         disabled={pending || !enabled}
         onClick={() => run(() => evaluateAlertRule(projectId, ruleId))}
       >
-        Evaluate now
+        {t("evaluate")}
       </Button>
       <Button
         disabled={pending}
@@ -41,18 +43,18 @@ export function AlertRuleActions({
           run(() => setAlertRuleEnabled(projectId, ruleId, !enabled))
         }
       >
-        {enabled ? "Pause" : "Resume"}
+        {enabled ? t("pause") : t("resume")}
       </Button>
       <Button
         variant="danger"
         disabled={pending}
         onClick={() => {
-          if (window.confirm(`Delete the alert “${name}”?`)) {
+          if (window.confirm(t("deleteConfirm", { name }))) {
             run(() => deleteAlertRule(projectId, ruleId));
           }
         }}
       >
-        Delete
+        {t("delete")}
       </Button>
     </div>
   );

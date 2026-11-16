@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -10,10 +11,7 @@ import {
   createIncident,
   type CreateIncidentState,
 } from "@/features/incidents/actions";
-import {
-  INCIDENT_SEVERITIES,
-  INCIDENT_SEVERITY,
-} from "@/features/incidents/labels";
+import { INCIDENT_SEVERITIES } from "@/features/incidents/labels";
 
 const INITIAL_STATE: CreateIncidentState = {
   error: null,
@@ -27,6 +25,7 @@ type CreateIncidentFormProps = {
 };
 
 export function CreateIncidentForm({ projectId }: CreateIncidentFormProps) {
+  const t = useTranslations("incidents");
   const [state, formAction] = useActionState(
     createIncident.bind(null, projectId),
     INITIAL_STATE,
@@ -35,8 +34,8 @@ export function CreateIncidentForm({ projectId }: CreateIncidentFormProps) {
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <FormField
-        label="Title"
-        hint="What users notice, e.g. Payment API degraded."
+        label={t("form.title")}
+        hint={t("form.titleHint")}
       >
         <Input
           name="title"
@@ -45,16 +44,16 @@ export function CreateIncidentForm({ projectId }: CreateIncidentFormProps) {
           required
         />
       </FormField>
-      <FormField label="Severity">
+      <FormField label={t("form.severity")}>
         <Select name="severity" defaultValue={state.severity}>
           {INCIDENT_SEVERITIES.map((severity) => (
             <option key={severity} value={severity}>
-              {INCIDENT_SEVERITY[severity].label}
+              {t(`severity.${severity}`)}
             </option>
           ))}
         </Select>
       </FormField>
-      <FormField label="Description" hint="Optional. What is known so far.">
+      <FormField label={t("form.description")} hint={t("form.descriptionHint")}>
         <Textarea
           name="description"
           rows={5}
@@ -71,10 +70,10 @@ export function CreateIncidentForm({ projectId }: CreateIncidentFormProps) {
 
       <SubmitButton
         variant="primary"
-        pendingLabel="Creating incident…"
+        pendingLabel={t("form.creating")}
         className="self-start"
       >
-        Create incident
+        {t("form.create")}
       </SubmitButton>
     </form>
   );

@@ -56,6 +56,7 @@ export type TimelineEntry = {
   type: TimelineEntryType;
   title: string;
   detail: string | null;
+  params: Record<string, string | number>;
   refId: string | null;
 };
 
@@ -66,8 +67,14 @@ export type IncidentEvidence = {
   logs: Log[];
 };
 
+export type SimilarityMatch = {
+  kind: "error" | "service" | "title";
+  value: string | null;
+};
+
 export type SimilarIncident = {
   incident: Incident;
   score: number;
   reasons: string[];
+  matches: SimilarityMatch[];
 };

@@ -2,7 +2,8 @@
 
 import { useOptimistic, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { TIME_RANGE_LABELS, TIME_RANGES } from "@/features/metrics/time-range";
+import { useTranslations } from "next-intl";
+import { TIME_RANGES } from "@/features/metrics/time-range";
 import type { TimeRange } from "@/features/metrics/types";
 
 type TimeRangePickerProps = {
@@ -10,6 +11,7 @@ type TimeRangePickerProps = {
 };
 
 export function TimeRangePicker({ value }: TimeRangePickerProps) {
+  const t = useTranslations("metrics.ranges");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,7 +31,7 @@ export function TimeRangePicker({ value }: TimeRangePickerProps) {
   return (
     <div
       role="group"
-      aria-label="Time range"
+      aria-label={t("label")}
       aria-busy={pending}
       className="flex rounded-md border border-border bg-surface p-0.5"
     >
@@ -39,7 +41,7 @@ export function TimeRangePicker({ value }: TimeRangePickerProps) {
           type="button"
           onClick={() => select(range)}
           aria-pressed={range === selected}
-          title={TIME_RANGE_LABELS[range]}
+          title={t(range)}
           className={`h-7 rounded px-2.5 font-mono text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-accent ${
             range === selected
               ? "bg-surface-2 text-fg"

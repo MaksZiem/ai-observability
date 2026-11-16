@@ -1,5 +1,5 @@
-import { formatCount, formatPercent } from "@/lib/format";
-import { OUTCOME_LABELS } from "@/features/platform/labels";
+import { useTranslations } from "next-intl";
+import { useFormat } from "@/lib/format";
 import type { OutcomeKind, PlatformStats } from "@/features/platform/types";
 
 type OutcomeListProps = {
@@ -7,6 +7,8 @@ type OutcomeListProps = {
 };
 
 export function OutcomeList({ outcomes }: OutcomeListProps) {
+  const t = useTranslations("platform");
+  const format = useFormat();
   const kinds = Object.keys(outcomes) as OutcomeKind[];
 
   return (
@@ -20,17 +22,17 @@ export function OutcomeList({ outcomes }: OutcomeListProps) {
             key={kind}
             className="flex items-baseline justify-between gap-3 border-b border-border py-2.5 first:pt-0 last:border-b-0 last:pb-0"
           >
-            <dt>{OUTCOME_LABELS[kind]}</dt>
+            <dt>{t(`outcomes.${kind}`)}</dt>
             <dd className="font-mono tabular-nums">
-              {formatCount(succeeded)} ok
+              {t("outcome", { ok: format.count(succeeded) })}
               <span className={failed > 0 ? "text-danger" : "text-fg-muted"}>
                 {" · "}
-                {formatCount(failed)} failed
+                {t("outcomeFailed", { failed: format.count(failed) })}
               </span>
               {total > 0 && (
                 <span className="text-fg-muted">
                   {" · "}
-                  {formatPercent(failed / total)}
+                  {format.percent(failed / total)}
                 </span>
               )}
             </dd>

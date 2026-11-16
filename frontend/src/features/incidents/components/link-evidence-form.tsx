@@ -1,11 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { linkEvidence, type FormState } from "@/features/incidents/actions";
-import { LINK_KIND_LABELS, LINK_KINDS } from "@/features/incidents/labels";
+import { LINK_KINDS } from "@/features/incidents/labels";
 
 const INITIAL_STATE: FormState = { error: null, saved: false };
 
@@ -18,6 +19,7 @@ export function LinkEvidenceForm({
   projectId,
   incidentId,
 }: LinkEvidenceFormProps) {
+  const t = useTranslations("incidents");
   const [state, formAction] = useActionState(
     linkEvidence.bind(null, projectId),
     INITIAL_STATE,
@@ -27,22 +29,22 @@ export function LinkEvidenceForm({
     <form action={formAction} className="flex flex-col gap-2">
       <input type="hidden" name="incidentId" value={incidentId} />
       <div className="flex flex-wrap gap-2">
-        <Select name="kind" aria-label="Evidence type" defaultValue="trace">
+        <Select name="kind" aria-label={t("link.type")} defaultValue="trace">
           {LINK_KINDS.map((kind) => (
             <option key={kind} value={kind}>
-              {LINK_KIND_LABELS[kind]}
+              {t(`linkKinds.${kind}`)}
             </option>
           ))}
         </Select>
         <Input
           name="targetId"
-          aria-label="ID"
-          placeholder="Trace ID or error, deployment, log UUID"
+          aria-label={t("link.id")}
+          placeholder={t("link.placeholder")}
           maxLength={64}
           className="min-w-0 flex-1 font-mono"
           required
         />
-        <SubmitButton pendingLabel="Linking…">Link</SubmitButton>
+        <SubmitButton pendingLabel={t("link.pending")}>{t("link.submit")}</SubmitButton>
       </div>
       {state.error && (
         <p role="alert" className="text-xs text-danger">
