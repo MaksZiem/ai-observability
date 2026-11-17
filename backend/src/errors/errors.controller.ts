@@ -7,14 +7,43 @@ import {
   Patch,
   Query,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 import type { JwtPayload } from '../auth/jwt-payload.js';
+import {
+  BadRequestErrorDto,
+  NotFoundErrorDto,
+  UnauthorizedErrorDto,
+} from '../common/swagger/error-response.dto.js';
+import { BEARER_AUTH } from '../common/swagger/swagger.setup.js';
 import { ProjectsService } from '../projects/projects.service.js';
 import { ListErrorEventsQueryDto } from './dto/list-error-events-query.dto.js';
 import { ListErrorGroupsQueryDto } from './dto/list-error-groups-query.dto.js';
 import { UpdateErrorGroupDto } from './dto/update-error-group.dto.js';
+import { ErrorEvent } from './entities/error-event.entity.js';
+import { ErrorGroup } from './entities/error-group.entity.js';
 import { ErrorsService } from './errors.service.js';
 
+@ApiTags('errors')
+@ApiBearerAuth(BEARER_AUTH)
+@ApiUnauthorizedResponse({
+  description: 'Brak tokenu lub token nieprawidłowy',
+  type: UnauthorizedErrorDto,
+})
+@ApiParam({
+  name: 'projectId',
+  format: 'uuid',
+  description: 'Identyfikator projektu',
+})
 @Controller('projects/:projectId/errors')
 export class ErrorsController {
   constructor(
@@ -23,6 +52,24 @@ export class ErrorsController {
   ) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Lista grup błędów',
+    description:
+      'Podobne błędy są łączone w grupy po odcisku (usługa, typ i znormalizowany komunikat). Sortowanie od ostatnio widzianych.',
+  })
+  @ApiOkResponse({
+    description: 'Grupy błędów',
+    type: ErrorGroup,
+    isArray: true,
+  })
+  @ApiBadRequestResponse({
+    description: 'Nieprawidłowe parametry zapytania',
+    type: BadRequestErrorDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Projekt nie istnieje lub należy do innego użytkownika',
+    type: NotFoundErrorDto,
+  })
   async findAll(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Query() query: ListErrorGroupsQueryDto,
@@ -33,6 +80,17 @@ export class ErrorsController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Pobierz grupę błędów' })
+  @ApiParam({
+    name: 'id',
+    format: 'uuid',
+    description: 'Identyfikator grupy błędów',
+  })
+  @ApiOkResponse({ description: 'Grupa błędów', type: ErrorGroup })
+  @ApiNotFoundResponse({
+    description: 'Projekt lub grupa błędów nie istnieje',
+    type: NotFoundErrorDto,
+  })
   async findOne(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('id', ParseUUIDPipe) id: string,
@@ -43,6 +101,28 @@ export class ErrorsController {
   }
 
   @Get(':id/events')
+  @ApiOperation({
+    summary: 'Wystąpienia błędu',
+    description: 'Pojedyncze zdarzenia z grupy, ze stack trace i trace ID.',
+  })
+  @ApiParam({
+    name: 'id',
+    format: 'uuid',
+    description: 'Identyfikator grupy błędów',
+  })
+  @ApiOkResponse({
+    description: 'Wystąpienia, od najnowszych',
+    type: ErrorEvent,
+    isArray: true,
+  })
+  @ApiBadRequestResponse({
+    description: 'Nieprawidłowe parametry zapytania',
+    type: BadRequestErrorDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Projekt lub grupa błędów nie istnieje',
+    type: NotFoundErrorDto,
+  })
   async findEvents(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('id', ParseUUIDPipe) id: string,
@@ -54,6 +134,24 @@ export class ErrorsController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Zmień status grupy błędów',
+    description: 'Statusy: open, investigating, resolved.',
+  })
+  @ApiParam({
+    name: 'id',
+    format: 'uuid',
+    description: 'Identyfikator grupy błędów',
+  })
+  @ApiOkResponse({ description: 'Zaktualizowana grupa', type: ErrorGroup })
+  @ApiBadRequestResponse({
+    description: 'Nieprawidłowy status',
+    type: BadRequestErrorDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Projekt lub grupa błędów nie istnieje',
+    type: NotFoundErrorDto,
+  })
   async update(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('id', ParseUUIDPipe) id: string,

@@ -1,3 +1,4 @@
+import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -23,6 +24,7 @@ export class IncidentChatMessage {
   @Column()
   incidentId: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Incident, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'incidentId' })
   incident: Incident;
@@ -36,6 +38,7 @@ export class IncidentChatMessage {
   @Column({ type: 'uuid', nullable: true })
   authorId: string | null;
 
+  @ApiPropertyOptional({ type: () => User, nullable: true })
   @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
   @JoinColumn({ name: 'authorId' })
   author: User | null;

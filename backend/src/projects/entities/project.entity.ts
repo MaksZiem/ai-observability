@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   Column,
@@ -32,6 +33,7 @@ export class Project {
   })
   environment: ProjectEnvironment;
 
+  @ApiHideProperty()
   @Exclude()
   @Column({ unique: true, select: false })
   apiKeyHash: string;
@@ -39,6 +41,7 @@ export class Project {
   @Column({ type: 'varchar', length: 16 })
   apiKeyPrefix: string;
 
+  @ApiHideProperty()
   @Exclude()
   @Column({ type: 'int', default: 0 })
   lastIncidentNumber: number;
@@ -47,6 +50,7 @@ export class Project {
   @Column()
   userId: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;

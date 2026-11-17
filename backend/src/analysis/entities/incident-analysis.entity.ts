@@ -1,3 +1,4 @@
+import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +11,7 @@ import {
 import { Incident } from '../../incidents/entities/incident.entity.js';
 import { User } from '../../users/entities/user.entity.js';
 import type { AnalysisResult } from '../analysis-result.js';
+import { AnalysisResultDto } from '../dto/analysis-result.dto.js';
 
 export enum AnalysisStatus {
   PENDING = 'pending',
@@ -26,6 +28,7 @@ export class IncidentAnalysis {
   @Column()
   incidentId: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Incident, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'incidentId' })
   incident: Incident;
@@ -33,6 +36,7 @@ export class IncidentAnalysis {
   @Column()
   requestedById: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'requestedById' })
   requestedBy: User;
@@ -47,6 +51,7 @@ export class IncidentAnalysis {
   @Column({ type: 'varchar', length: 100, nullable: true })
   model: string | null;
 
+  @ApiPropertyOptional({ type: () => AnalysisResultDto, nullable: true })
   @Column({ type: 'jsonb', nullable: true })
   result: AnalysisResult | null;
 

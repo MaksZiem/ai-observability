@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -35,6 +36,7 @@ export class Incident {
   @Column()
   projectId: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Project, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'projectId' })
   project: Project;
@@ -61,6 +63,7 @@ export class Incident {
   @Column()
   createdById: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'createdById' })
   createdBy: User;

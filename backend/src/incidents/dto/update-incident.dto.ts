@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
 import { IncidentStatus } from '../entities/incident.entity.js';
 import { CreateIncidentDto } from './create-incident.dto.js';

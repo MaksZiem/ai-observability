@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module.js';
 import { configureApp } from './app.setup.js';
+import { setupSwagger } from './common/swagger/swagger.setup.js';
 import type { Env } from './config/env.js';
 
 async function bootstrap() {
@@ -12,6 +13,7 @@ async function bootstrap() {
   configureApp(app);
   app.enableCors({ origin: config.get('FRONTEND_URL', { infer: true }) });
   app.enableShutdownHooks();
+  setupSwagger(app);
 
   await app.listen(config.get('PORT', { infer: true }));
 }
