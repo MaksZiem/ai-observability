@@ -1,4 +1,4 @@
-# Frontend — AI Observability & Incident Response
+# Frontend — AI Observability
 
 Next.js 16 (App Router, Server Components, Server Actions) + Tailwind 4. Dashboard do logów, metryk, trace'ów, błędów, deploymentów, incydentów i analizy AI. Design system: [`DESIGN.md`](DESIGN.md).
 

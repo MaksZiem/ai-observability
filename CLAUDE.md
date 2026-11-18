@@ -65,7 +65,7 @@
 
 ---
 
-# AI Observability & Incident Response Platform
+# AI Observability Platform
 
 ## 1. Overview
 

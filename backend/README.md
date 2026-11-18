@@ -1,4 +1,4 @@
-# Backend — AI Observability & Incident Response
+# Backend — AI Observability
 
 NestJS + TypeORM + PostgreSQL. Zbiera logi, spany, błędy i deploymenty, liczy metryki, prowadzi incydenty i analizuje je przez Gemini.
 

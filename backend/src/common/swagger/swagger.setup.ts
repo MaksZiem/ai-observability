@@ -5,7 +5,7 @@ export const BEARER_AUTH = 'access-token';
 
 export const API_KEY_AUTH = 'api-key';
 
-const TITLE = 'AI Observability & Incident Response API';
+const TITLE = 'AI Observability API';
 
 const DESCRIPTION = `REST API platformy do zbierania telemetrii (logi, spany, błędy, wdrożenia), wykrywania problemów i prowadzenia incydentów z pomocą AI.
 
