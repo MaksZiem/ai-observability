@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/MaksZiem/ai-observability/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/MaksZiem/ai-observability/ci.yml?branch=main&style=flat-square&label=CI&logo=githubactions&logoColor=white" alt="CI"></a>
   <img src="https://img.shields.io/badge/status-active-4c9fff?style=flat-square" alt="Status: active">
   <img src="https://img.shields.io/badge/NestJS-12-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS 12">
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js 16">
@@ -152,7 +153,7 @@ The **ingest path** and the **query path** are separate: ingestion only authenti
 | **Data** | PostgreSQL (`jsonb`, composite indexes, SQL time-series aggregates) · Redis |
 | **AI** | Google Gemini in JSON mode, behind a swappable `AnalysisModel` |
 | **Security** | argon2 · JWT · SHA-256 hashed API keys · secret redaction · SSRF guard · rate limits |
-| **Quality** | Vitest unit tests + e2e against a real Postgres · oxlint · Prettier · Swagger at `/api/docs` |
+| **Quality** | Vitest unit tests + e2e against a real Postgres, both in GitHub Actions CI · oxlint · Prettier · Swagger at `/api/docs` |
 
 ## 🚀 Quick start
 
