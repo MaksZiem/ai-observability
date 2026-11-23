@@ -28,7 +28,9 @@ Każdy błąd ma spójny format JSON:
 \`\`\`
 - \`code\` to stały identyfikator błędu, na podstawie którego frontend wyświetla przetłumaczony komunikat (PL/EN), a \`params\` zawiera wartości do wstawienia w ten komunikat.
 - \`message\` jest po angielsku i służy do debugowania.
-- Błędy walidacji (400) zwracają w \`message\` tablicę komunikatów, po jednym na każde niepoprawne pole.
+- Błędy walidacji danych wejściowych mają kod \`VALIDATION_FAILED\` i zwracają w \`message\` tablicę komunikatów, po jednym na każde niepoprawne pole.
+- Identyfikator w ścieżce, który nie jest UUID, daje błąd 400 z kodem \`INVALID_ID\` (\`params.param\` to nazwa parametru).
+- Błędy bez własnego kodu dostają kod z nazwy statusu HTTP, np. \`NOT_FOUND\` albo \`UNAUTHORIZED\`.
 
 ## Limity
 Domyślnie 300 żądań na minutę na adres IP lub klucz API (429 po przekroczeniu). Ingest ma limit 1200 żądań na minutę, a rejestracja, logowanie i zmiana hasła 10 na minutę.

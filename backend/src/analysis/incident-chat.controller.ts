@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -31,6 +24,7 @@ import { ProjectsService } from '../projects/projects.service.js';
 import { SendChatMessageDto } from './dto/send-chat-message.dto.js';
 import { IncidentChatMessage } from './entities/incident-chat-message.entity.js';
 import { IncidentChatService } from './incident-chat.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('analysis')
 @ApiBearerAuth(BEARER_AUTH)
@@ -67,8 +61,8 @@ export class IncidentChatController {
     type: NotFoundErrorDto,
   })
   async findMessages(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('incidentId', ParseUUIDPipe) incidentId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('incidentId', ParseIdPipe) incidentId: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -99,8 +93,8 @@ export class IncidentChatController {
     type: ServiceUnavailableErrorDto,
   })
   async ask(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('incidentId', ParseUUIDPipe) incidentId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('incidentId', ParseIdPipe) incidentId: string,
     @Body() dto: SendChatMessageDto,
     @CurrentUser() user: JwtPayload,
   ) {

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -32,6 +24,7 @@ import { UpdateErrorGroupDto } from './dto/update-error-group.dto.js';
 import { ErrorEvent } from './entities/error-event.entity.js';
 import { ErrorGroup } from './entities/error-group.entity.js';
 import { ErrorsService } from './errors.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('errors')
 @ApiBearerAuth(BEARER_AUTH)
@@ -71,7 +64,7 @@ export class ErrorsController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: ListErrorGroupsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -92,8 +85,8 @@ export class ErrorsController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -124,8 +117,8 @@ export class ErrorsController {
     type: NotFoundErrorDto,
   })
   async findEvents(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Query() query: ListErrorEventsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -153,8 +146,8 @@ export class ErrorsController {
     type: NotFoundErrorDto,
   })
   async update(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: UpdateErrorGroupDto,
     @CurrentUser() user: JwtPayload,
   ) {

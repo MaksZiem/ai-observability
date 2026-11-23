@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/BullMQ-Redis-DC382D?style=flat-square&logo=redis&logoColor=white" alt="BullMQ + Redis">
   <img src="https://img.shields.io/badge/realtime-SSE-4c9fff?style=flat-square" alt="Server-Sent Events">
   <img src="https://img.shields.io/badge/Gemini-structured%20JSON-8E75B2?style=flat-square&logo=googlegemini&logoColor=white" alt="Gemini structured output">
-  <img src="https://img.shields.io/badge/tests-unit%20%2B%20e2e-3ccf91?style=flat-square&logo=vitest&logoColor=white" alt="Unit and e2e tests">
+  <img src="https://img.shields.io/badge/tests-unit-3ccf91?style=flat-square&logo=vitest&logoColor=white" alt="Unit tests">
 </p>
 
 <p align="center">
@@ -153,7 +153,7 @@ The **ingest path** and the **query path** are separate: ingestion only authenti
 | **Data** | PostgreSQL (`jsonb`, composite indexes, SQL time-series aggregates) · Redis |
 | **AI** | Google Gemini in JSON mode, behind a swappable `AnalysisModel` |
 | **Security** | argon2 · JWT · SHA-256 hashed API keys · secret redaction · SSRF guard · rate limits |
-| **Quality** | Vitest unit tests + e2e against a real Postgres, both in GitHub Actions CI · oxlint · Prettier · Swagger at `/api/docs` |
+| **Quality** | Vitest unit tests in GitHub Actions CI · oxlint · Prettier · Swagger at `/api/docs` |
 
 ## 🚀 Quick start
 

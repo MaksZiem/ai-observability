@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -22,6 +22,7 @@ import { ListLogsQueryDto } from './dto/list-logs-query.dto.js';
 import { LogPageDto } from './dto/log-page.dto.js';
 import { Log } from './entities/log.entity.js';
 import { LogsService } from './logs.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('logs')
 @ApiBearerAuth(BEARER_AUTH)
@@ -57,7 +58,7 @@ export class LogsController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: ListLogsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -74,8 +75,8 @@ export class LogsController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);

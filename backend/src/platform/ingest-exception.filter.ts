@@ -1,11 +1,11 @@
 import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
-import { BaseExceptionFilter } from '@nestjs/core';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter.js';
 import type { Request } from 'express';
 import { telemetryTypeOf } from './ingest-items.js';
 import { PlatformStatsService } from './platform-stats.service.js';
 
 @Catch()
-export class IngestExceptionFilter extends BaseExceptionFilter {
+export class IngestExceptionFilter extends HttpExceptionFilter {
   constructor(private readonly platformStats: PlatformStatsService) {
     super();
   }

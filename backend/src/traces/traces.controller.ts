@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -22,6 +22,7 @@ import { ListTracesQueryDto } from './dto/list-traces-query.dto.js';
 import { TraceDetailDto } from './dto/trace-detail.dto.js';
 import { Span } from './entities/span.entity.js';
 import { TracesService } from './traces.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('traces')
 @ApiBearerAuth(BEARER_AUTH)
@@ -61,7 +62,7 @@ export class TracesController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: ListTracesQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -85,7 +86,7 @@ export class TracesController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Param('traceId') traceId: string,
     @CurrentUser() user: JwtPayload,
   ) {

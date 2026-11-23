@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -31,6 +23,7 @@ import { DeploymentsService } from './deployments.service.js';
 import { CreateDeploymentDto } from './dto/create-deployment.dto.js';
 import { ListDeploymentsQueryDto } from './dto/list-deployments-query.dto.js';
 import { Deployment } from './entities/deployment.entity.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('deployments')
 @ApiBearerAuth(BEARER_AUTH)
@@ -70,7 +63,7 @@ export class DeploymentsController {
     type: BadRequestErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: ListDeploymentsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -90,7 +83,7 @@ export class DeploymentsController {
     type: BadRequestErrorDto,
   })
   async create(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Body() dto: CreateDeploymentDto,
     @CurrentUser() user: JwtPayload,
   ) {

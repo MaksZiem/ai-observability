@@ -5,7 +5,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import {
@@ -31,6 +30,7 @@ import { ProjectsService } from '../projects/projects.service.js';
 import { AnalysisService } from './analysis.service.js';
 import { RequestAnalysisDto } from './dto/request-analysis.dto.js';
 import { IncidentAnalysis } from './entities/incident-analysis.entity.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('analysis')
 @ApiBearerAuth(BEARER_AUTH)
@@ -75,8 +75,8 @@ export class AnalysisController {
     type: NotFoundErrorDto,
   })
   async request(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('incidentId', ParseUUIDPipe) incidentId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('incidentId', ParseIdPipe) incidentId: string,
     @CurrentUser() user: JwtPayload,
     @Body() dto: RequestAnalysisDto,
   ) {
@@ -101,8 +101,8 @@ export class AnalysisController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('incidentId', ParseUUIDPipe) incidentId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('incidentId', ParseIdPipe) incidentId: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -122,9 +122,9 @@ export class AnalysisController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('incidentId', ParseUUIDPipe) incidentId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('incidentId', ParseIdPipe) incidentId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);

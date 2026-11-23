@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -21,6 +21,7 @@ import { ProjectsService } from '../projects/projects.service.js';
 import { MetricsQueryDto } from './dto/metrics-query.dto.js';
 import { OverviewDto, ServiceHealthDto } from './dto/metrics-response.dto.js';
 import { MetricsService } from './metrics.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('metrics')
 @ApiBearerAuth(BEARER_AUTH)
@@ -56,7 +57,7 @@ export class MetricsController {
   })
   @ApiOkResponse({ description: 'Podsumowanie i seria', type: OverviewDto })
   async getOverview(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: MetricsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -76,7 +77,7 @@ export class MetricsController {
     isArray: true,
   })
   async getServices(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: MetricsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {

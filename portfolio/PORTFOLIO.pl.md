@@ -17,8 +17,8 @@ repo: https://github.com/MaksZiem/ai-observability
 demo: https://ai-observability.zmax-dev.pl
 apiDocs: https://api.ai-observability.zmax-dev.pl/api/docs
 quality:
-  tests: 116
-  kinds: [unit, e2e, frontend]
+  tests: 117
+  kinds: [unit, frontend]
   framework: Vitest
   ci: https://github.com/MaksZiem/ai-observability/actions/workflows/ci.yml
   covered:
@@ -26,7 +26,6 @@ quality:
     - "Redakcja sekretów, zanim cokolwiek trafi do bazy"
     - "Wykrywanie anomalii, oś czasu incydentu i podobne incydenty"
     - "Ocena alertów i ochrona webhooków przed SSRF"
-    - "E2E na prawdziwym Postgresie: izolacja projektów, ingest, cały przepływ analizy AI"
 cover: screenshots/cover.webp
 screenshots:
   - file: screenshots/overview.webp
@@ -98,7 +97,7 @@ Ta platforma:
 | Harmonogram | `@nestjs/schedule` | Pętla oceny alertów co 60 s, zabezpieczona przed nakładaniem się uruchomień |
 | AI | Gemini przez `@google/genai` | Tryb wyjścia JSON z walidacją schematem Zod. `AnalysisModel` to abstrakcja, więc model da się podmienić |
 | Bezpieczeństwo | argon2, JWT, `@nestjs/throttler` | Osobne limity zapytań dla API dashboardu i ingestu (1200 żądań/min na klucz) |
-| Testy | Vitest (unit + e2e na prawdziwym Postgresie) | Testy e2e przechodzą cały scenariusz dochodzenia |
+| Testy | Vitest | Testy jednostkowe logiki backendu i formularzy frontendu |
 
 ## Architektura
 
@@ -430,10 +429,9 @@ Zapisane zdarzenie ma `"authorization": "[REDACTED]"` i trafia do grupy `Databas
 
 ## Testy i jakość
 
-- **Testy jednostkowe (Vitest, 66 testów):** fingerprinting, redakcja, klucze API, wykrywanie anomalii, statystyki żądań, zakresy czasu, oś czasu i status incydentu, podobieństwo, ocena alertów, ochrona webhooków przed SSRF, budowanie promptów analizy i czatu, parsowanie wyniku, kolejka ingestu, statystyki platformy, kursor logów, drzewo trace'a, realtime.
-- **Testy E2E (6)** na prawdziwym, zmigrowanym Postgresie. Obejmują izolację projektów, ingest z maskowaniem, zdegradowane metryki, oś czasu z dowodami, analizę AI z czatem i edycję profilu.
+- **Testy jednostkowe (Vitest, 73 testy):** fingerprinting, redakcja, klucze API, wykrywanie anomalii, statystyki żądań, zakresy czasu, oś czasu i status incydentu, podobieństwo, ocena alertów, ochrona webhooków przed SSRF, budowanie promptów analizy i czatu, parsowanie wyniku, kolejka ingestu, statystyki platformy, kursor logów, drzewo trace'a, realtime, format błędów API.
 - oxlint + Prettier na backendzie, ESLint + Vitest (44 testy logiki formularzy) na frontendzie.
-- **CI (GitHub Actions):** każdy push i pull request uruchamia trzy joby: lint, build i testy jednostkowe backendu; testy e2e na Postgresie i Redisie uruchamianych jako service containers; lint, testy i build frontendu.
+- **CI (GitHub Actions):** każdy push i pull request uruchamia dwa joby: lint, build i testy jednostkowe backendu; lint, testy i build frontendu.
 
 ## Bezpieczeństwo
 

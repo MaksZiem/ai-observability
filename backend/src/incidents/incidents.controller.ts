@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -50,6 +49,7 @@ import { Incident } from './entities/incident.entity.js';
 import { IncidentEvidenceService } from './incident-evidence.service.js';
 import { IncidentsService } from './incidents.service.js';
 import { SimilarIncidentsService } from './similar-incidents.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('incidents')
 @ApiBearerAuth(BEARER_AUTH)
@@ -86,7 +86,7 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async create(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Body() dto: CreateIncidentDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -110,7 +110,7 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query() query: ListIncidentsQueryDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -131,8 +131,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -160,8 +160,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async update(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: UpdateIncidentDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -186,8 +186,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async getEvidence(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -215,8 +215,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async getTimeline(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -244,8 +244,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async findSimilar(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -269,8 +269,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async findNotes(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -297,8 +297,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async addNote(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: CreateIncidentNoteDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -327,8 +327,8 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async findLinks(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -364,8 +364,8 @@ export class IncidentsController {
     type: ConflictErrorDto,
   })
   async addLink(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: CreateIncidentLinkDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -392,9 +392,9 @@ export class IncidentsController {
     type: NotFoundErrorDto,
   })
   async removeLink(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
-    @Param('linkId', ParseUUIDPipe) linkId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
+    @Param('linkId', ParseIdPipe) linkId: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);

@@ -9,7 +9,6 @@ Wymagania: Node 24, PostgreSQL, Redis (kolejka ingestu).
 ```bash
 psql -d postgres -c "CREATE ROLE observability WITH LOGIN PASSWORD 'observability';"
 psql -d postgres -c "CREATE DATABASE ai_observability OWNER observability;"
-psql -d postgres -c "CREATE DATABASE ai_observability_test OWNER observability;"
 
 cp .env.example .env
 npm install
@@ -25,14 +24,13 @@ API działa pod `http://localhost:3001/api`, health check pod `/api/health`.
 |---|---|
 | `DATABASE_URL` | baza aplikacji |
 | `REDIS_URL` | Redis dla kolejki ingestu (domyślnie `redis://localhost:6379`) |
-| `QUEUE_PREFIX` | prefiks kluczy kolejki w Redisie (domyślnie `observability`; testy e2e używają `observability-test`) |
+| `QUEUE_PREFIX` | prefiks kluczy kolejki w Redisie (domyślnie `observability`) |
 | `JWT_SECRET` | min. 32 znaki, np. `openssl rand -base64 48` |
 | `JWT_EXPIRES_IN_SECONDS` | ważność tokena dostępu (domyślnie 3600) |
 | `GEMINI_API_KEY` | klucz z aistudio.google.com |
 | `GEMINI_MODEL` | domyślnie `gemini-3.8-flash` |
 | `ALLOW_PRIVATE_WEBHOOKS` | `true` tylko lokalnie — pozwala na webhooki do `localhost` |
 | `FRONTEND_URL` | origin dopuszczony przez CORS |
-| `TEST_DATABASE_URL` | opcjonalnie; domyślnie `DATABASE_URL` z sufiksem `_test` |
 
 ## Skrypty
 
@@ -40,7 +38,6 @@ API działa pod `http://localhost:3001/api`, health check pod `/api/health`.
 |---|---|
 | `npm run start:dev` | serwer z przeładowaniem |
 | `npm test` | testy jednostkowe |
-| `npm run test:e2e` | build, migracje bazy testowej i test pełnego przepływu (AI zastąpione atrapą) |
 | `npm run demo` | wypełnia działający backend danymi demo (patrz niżej) |
 | `npm run migration:generate -- src/database/migrations/Nazwa` | nowa migracja z encji |
 | `npm run migration:run` | wykonanie migracji |

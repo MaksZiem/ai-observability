@@ -2,7 +2,6 @@ import {
   Controller,
   MessageEvent,
   Param,
-  ParseUUIDPipe,
   Query,
   Sse,
   UnauthorizedException,
@@ -28,6 +27,7 @@ import {
 import { ProjectsService } from '../projects/projects.service.js';
 import { ProjectEventType } from './project-event.js';
 import { RealtimeService } from './realtime.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('realtime')
 @Public()
@@ -69,7 +69,7 @@ export class RealtimeController {
     type: NotFoundErrorDto,
   })
   async stream(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Query('token') token: string | undefined,
   ): Promise<Observable<MessageEvent>> {
     const payload = await this.verifyStreamToken(token);

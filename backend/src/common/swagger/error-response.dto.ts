@@ -1,14 +1,15 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ErrorResponseDto {
   @ApiProperty({ description: 'Kod statusu HTTP', example: 404 })
   statusCode: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description:
       'Stały kod błędu. Frontend tłumaczy komunikat na podstawie tego pola, a nie pola message',
+    example: 'NOT_FOUND',
   })
-  code?: string;
+  code: string;
 
   @ApiProperty({
     description:
@@ -18,48 +19,33 @@ export class ErrorResponseDto {
   })
   message: string | string[];
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Wartości wstawiane do przetłumaczonego komunikatu',
     type: 'object',
     additionalProperties: { oneOf: [{ type: 'string' }, { type: 'number' }] },
     example: {},
   })
-  params?: Record<string, string | number>;
-
-  @ApiPropertyOptional({
-    description: 'Nazwa błędu HTTP (zwracana przez wbudowane wyjątki Nest)',
-    example: 'Not Found',
-  })
-  error?: string;
+  params: Record<string, string | number>;
 }
 
 function errorDto(
   name: string,
   statusCode: number,
-  error: string,
   message: string | string[],
-  code?: string,
+  code: string,
 ) {
   class Dto extends ErrorResponseDto {
     @ApiProperty({ example: statusCode })
     declare statusCode: number;
 
-    @ApiPropertyOptional({
-      example: code,
-      description: code
-        ? undefined
-        : 'Dla tego statusu zwykle nieobecny (wbudowany wyjątek Nest)',
-    })
-    declare code?: string;
+    @ApiProperty({ example: code })
+    declare code: string;
 
     @ApiProperty({
       oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }],
       example: message,
     })
     declare message: string | string[];
-
-    @ApiPropertyOptional({ example: error })
-    declare error?: string;
   }
 
   Object.defineProperty(Dto, 'name', { value: name });
@@ -69,38 +55,37 @@ function errorDto(
 export const BadRequestErrorDto = errorDto(
   'BadRequestErrorDto',
   400,
-  'Bad Request',
   [
     'name should not be empty',
     'environment must be one of the following values: development, staging, production',
   ],
+  'VALIDATION_FAILED',
 );
 
 export const UnauthorizedErrorDto = errorDto(
   'UnauthorizedErrorDto',
   401,
   'Unauthorized',
-  'Unauthorized',
+  'UNAUTHORIZED',
 );
 
 export const ForbiddenErrorDto = errorDto(
   'ForbiddenErrorDto',
   403,
-  'Forbidden',
   'Forbidden resource',
+  'FORBIDDEN',
 );
 
 export const NotFoundErrorDto = errorDto(
   'NotFoundErrorDto',
   404,
-  'Not Found',
   'Incident not found',
+  'NOT_FOUND',
 );
 
 export const ConflictErrorDto = errorDto(
   'ConflictErrorDto',
   409,
-  'Conflict',
   'Already linked to this incident',
   'INCIDENT_LINK_EXISTS',
 );
@@ -108,14 +93,13 @@ export const ConflictErrorDto = errorDto(
 export const TooManyRequestsErrorDto = errorDto(
   'TooManyRequestsErrorDto',
   429,
-  'Too Many Requests',
   'ThrottlerException: Too Many Requests',
+  'TOO_MANY_REQUESTS',
 );
 
 export const ServiceUnavailableErrorDto = errorDto(
   'ServiceUnavailableErrorDto',
   503,
-  'Service Unavailable',
   'The AI assistant is unavailable, try again later',
   'AI_UNAVAILABLE',
 );

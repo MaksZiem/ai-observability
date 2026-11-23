@@ -17,8 +17,8 @@ repo: https://github.com/MaksZiem/ai-observability
 demo: https://ai-observability.zmax-dev.pl
 apiDocs: https://api.ai-observability.zmax-dev.pl/api/docs
 quality:
-  tests: 116
-  kinds: [unit, e2e, frontend]
+  tests: 117
+  kinds: [unit, frontend]
   framework: Vitest
   ci: https://github.com/MaksZiem/ai-observability/actions/workflows/ci.yml
   covered:
@@ -26,7 +26,6 @@ quality:
     - "Secret redaction before anything is stored"
     - "Anomaly detection, incident timeline and similar incidents"
     - "Alert evaluation and SSRF checks for webhooks"
-    - "E2E on a real Postgres: project isolation, ingest, the full AI analysis flow"
 cover: screenshots/cover.webp
 screenshots:
   - file: screenshots/overview.webp
@@ -98,7 +97,7 @@ This platform:
 | Scheduling | `@nestjs/schedule` | Alert evaluation loop every 60 s, guarded against overlapping runs |
 | AI | Gemini via `@google/genai` | JSON output mode, validated against a Zod schema. `AnalysisModel` is an abstraction, so it can be swapped |
 | Security | argon2, JWT, `@nestjs/throttler` | Separate rate limits for the dashboard API and ingestion (1200 req/min per key) |
-| Tests | Vitest (unit + e2e against a real Postgres) | The e2e suite runs the whole investigation flow |
+| Tests | Vitest | Unit tests for backend logic and frontend forms |
 
 ## Architecture
 
@@ -430,10 +429,9 @@ The stored event has `"authorization": "[REDACTED]"`, and it lands in the `Datab
 
 ## Testing & quality
 
-- **Unit tests (Vitest, 66 tests):** fingerprinting, redaction, API keys, anomaly detection, request stats, time ranges, incident timeline, incident status, similarity scoring, alert evaluation, webhook SSRF checks, analysis and chat prompt builders, result parsing, ingest queue, platform stats, log cursor, trace tree, realtime.
-- **E2E tests (6)** against a real migrated Postgres. They cover project isolation, ingest + masking, degraded metrics, timeline + evidence, AI analysis + chat, and profile updates.
+- **Unit tests (Vitest, 73 tests):** fingerprinting, redaction, API keys, anomaly detection, request stats, time ranges, incident timeline, incident status, similarity scoring, alert evaluation, webhook SSRF checks, analysis and chat prompt builders, result parsing, ingest queue, platform stats, log cursor, trace tree, realtime, API error format.
 - oxlint + Prettier on the backend, ESLint + Vitest (44 tests of form logic) on the frontend.
-- **CI (GitHub Actions):** every push and pull request runs three jobs: backend lint, build and unit tests; e2e tests against Postgres and Redis started as service containers; frontend lint, tests and build.
+- **CI (GitHub Actions):** every push and pull request runs two jobs: backend lint, build and unit tests; frontend lint, tests and build.
 
 ## Security
 

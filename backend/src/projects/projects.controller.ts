@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -35,6 +34,7 @@ import { ProjectWithApiKeyDto } from './dto/project-with-api-key.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { Project } from './entities/project.entity.js';
 import { ProjectsService } from './projects.service.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('projects')
 @ApiBearerAuth(BEARER_AUTH)
@@ -84,7 +84,7 @@ export class ProjectsController {
     type: NotFoundErrorDto,
   })
   findOne(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     return this.projectsService.findOne(id, user.sub);
@@ -110,7 +110,7 @@ export class ProjectsController {
     type: NotFoundErrorDto,
   })
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: UpdateProjectDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -138,7 +138,7 @@ export class ProjectsController {
     type: NotFoundErrorDto,
   })
   rotateApiKey(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     return this.projectsService.rotateApiKey(id, user.sub);
@@ -161,7 +161,7 @@ export class ProjectsController {
     type: NotFoundErrorDto,
   })
   remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     return this.projectsService.remove(id, user.sub);

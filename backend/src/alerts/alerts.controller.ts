@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -36,6 +35,7 @@ import { AlertsService } from './alerts.service.js';
 import { CreateAlertRuleDto } from './dto/create-alert-rule.dto.js';
 import { UpdateAlertRuleDto } from './dto/update-alert-rule.dto.js';
 import { AlertRule } from './entities/alert-rule.entity.js';
+import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
 
 @ApiTags('alerts')
 @ApiBearerAuth(BEARER_AUTH)
@@ -72,7 +72,7 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async create(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @Body() dto: CreateAlertRuleDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -92,7 +92,7 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async findAll(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -108,8 +108,8 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async findOne(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -132,8 +132,8 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async update(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @Body() dto: UpdateAlertRuleDto,
     @CurrentUser() user: JwtPayload,
   ) {
@@ -155,8 +155,8 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async evaluate(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
@@ -174,8 +174,8 @@ export class AlertsController {
     type: NotFoundErrorDto,
   })
   async remove(
-    @Param('projectId', ParseUUIDPipe) projectId: string,
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('projectId', ParseIdPipe) projectId: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() user: JwtPayload,
   ) {
     await this.projectsService.findOne(projectId, user.sub);
