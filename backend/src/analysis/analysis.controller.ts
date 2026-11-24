@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiAcceptedResponse,
@@ -17,6 +18,7 @@ import {
   ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 import type { JwtPayload } from '../auth/jwt-payload.js';
@@ -24,6 +26,7 @@ import {
   BadRequestErrorDto,
   NotFoundErrorDto,
   UnauthorizedErrorDto,
+  TooManyRequestsErrorDto,
 } from '../common/swagger/error-response.dto.js';
 import { BEARER_AUTH } from '../common/swagger/swagger.setup.js';
 import { ProjectsService } from '../projects/projects.service.js';
@@ -31,6 +34,7 @@ import { AnalysisService } from './analysis.service.js';
 import { RequestAnalysisDto } from './dto/request-analysis.dto.js';
 import { IncidentAnalysis } from './entities/incident-analysis.entity.js';
 import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
+import { AiLimitGuard } from '../ai-usage/ai-limit.guard.js';
 
 @ApiTags('analysis')
 @ApiBearerAuth(BEARER_AUTH)
@@ -56,6 +60,12 @@ export class AnalysisController {
   ) {}
 
   @Post()
+  @UseGuards(AiLimitGuard)
+  @ApiTooManyRequestsResponse({
+    description:
+      'Dzienny limit wywołań AI użytkownika wyczerpany (kod AI_DAILY_LIMIT)',
+    type: TooManyRequestsErrorDto,
+  })
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({
     summary: 'Zleć analizę incydentu przez AI',

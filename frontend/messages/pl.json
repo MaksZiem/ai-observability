@@ -62,7 +62,8 @@
         "choicesRequired": "Wybierz metrykę, warunek i ważność.",
         "threshold": "Próg musi być liczbą równą 0 lub większą.",
         "window": "Okno musi mieć od 1 do {max} pełnych minut.",
-        "failed": "Nie udało się utworzyć alertu. Spróbuj ponownie."
+        "failed": "Nie udało się utworzyć alertu. Spróbuj ponownie.",
+        "DEMO_ACCOUNT_LOCKED": "Na koncie demo nie można wysyłać webhooków. Utwórz alert bez adresu webhooka."
       }
     }
   },
@@ -106,7 +107,8 @@
       "pending": "Analizuję dowody. Strona odświeży się, gdy wynik będzie gotowy.",
       "failed": "Analiza nie powiodła się.",
       "tokens": "{count} tokenów",
-      "history": "Historia analiz ({count})"
+      "history": "Historia analiz ({count})",
+      "AI_DAILY_LIMIT": "Wykorzystano dzienny limit funkcji AI. Spróbuj ponownie jutro."
     },
     "chat": {
       "you": "Ty",
@@ -126,7 +128,8 @@
         "tooLong": "Pytanie może mieć maksymalnie {max} znaków.",
         "AI_UNAVAILABLE": "Asystent AI jest niedostępny. Spróbuj później.",
         "rateLimited": "Za dużo pytań naraz. Odczekaj chwilę.",
-        "failed": "Asystent nie zdołał odpowiedzieć. Spróbuj ponownie."
+        "failed": "Asystent nie zdołał odpowiedzieć. Spróbuj ponownie.",
+        "AI_DAILY_LIMIT": "Wykorzystano dzienny limit funkcji AI. Spróbuj ponownie jutro."
       }
     }
   },
@@ -604,7 +607,8 @@
         "length": "Nowe hasło musi mieć od 8 do 128 znaków.",
         "mismatch": "Nowe hasła się nie zgadzają.",
         "sameAsCurrent": "Wybierz hasło inne niż obecne.",
-        "CURRENT_PASSWORD_INCORRECT": "Obecne hasło jest nieprawidłowe."
+        "CURRENT_PASSWORD_INCORRECT": "Obecne hasło jest nieprawidłowe.",
+        "DEMO_ACCOUNT_LOCKED": "Na koncie demo ta akcja jest wyłączona."
       }
     }
   },

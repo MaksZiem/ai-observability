@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -10,6 +10,7 @@ import {
   ApiServiceUnavailableResponse,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 import type { JwtPayload } from '../auth/jwt-payload.js';
@@ -18,6 +19,7 @@ import {
   NotFoundErrorDto,
   ServiceUnavailableErrorDto,
   UnauthorizedErrorDto,
+  TooManyRequestsErrorDto,
 } from '../common/swagger/error-response.dto.js';
 import { BEARER_AUTH } from '../common/swagger/swagger.setup.js';
 import { ProjectsService } from '../projects/projects.service.js';
@@ -25,6 +27,7 @@ import { SendChatMessageDto } from './dto/send-chat-message.dto.js';
 import { IncidentChatMessage } from './entities/incident-chat-message.entity.js';
 import { IncidentChatService } from './incident-chat.service.js';
 import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
+import { AiLimitGuard } from '../ai-usage/ai-limit.guard.js';
 
 @ApiTags('analysis')
 @ApiBearerAuth(BEARER_AUTH)
@@ -70,6 +73,12 @@ export class IncidentChatController {
   }
 
   @Post()
+  @UseGuards(AiLimitGuard)
+  @ApiTooManyRequestsResponse({
+    description:
+      'Dzienny limit wywołań AI użytkownika wyczerpany (kod AI_DAILY_LIMIT)',
+    type: TooManyRequestsErrorDto,
+  })
   @ApiOperation({
     summary: 'Zadaj pytanie o incydent',
     description:

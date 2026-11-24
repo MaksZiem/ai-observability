@@ -38,7 +38,7 @@ API działa pod `http://localhost:3001/api`, health check pod `/api/health`.
 |---|---|
 | `npm run start:dev` | serwer z przeładowaniem |
 | `npm test` | testy jednostkowe |
-| `npm run demo` | wypełnia działający backend danymi demo (patrz niżej) |
+| `npm run seed:demo` | resetuje konto demo i wypełnia je danymi przez działający backend (patrz niżej) |
 | `npm run migration:generate -- src/database/migrations/Nazwa` | nowa migracja z encji |
 | `npm run migration:run` | wykonanie migracji |
 | `npm run lint` / `npm run format` | oxlint / Prettier |
@@ -48,13 +48,13 @@ API działa pod `http://localhost:3001/api`, health check pod `/api/health`.
 Przy działającym backendzie:
 
 ```bash
-npm run demo
+npm run seed:demo
 ```
 
-Tworzy użytkownika `demo@example.com` / `demo-password` i od nowa projekt „My E-commerce API” z 3 godzinami ruchu:
+Usuwa konto demo razem z jego danymi, zakłada je od nowa (`demo-login@example.com` / `password-demo`) i tworzy projekt „My E-commerce API” z 3 godzinami ruchu:
 deploy `v1.42.3` (zmniejszenie puli połączeń do 5) → po 4 minutach wzrost latency i błędów `DatabaseConnectionTimeout`
 → alert tworzy incydent z podpiętymi dowodami. Do tego dwa historyczne, rozwiązane incydenty do wyszukiwania podobnych.
-Adres API można zmienić przez `DEMO_API_URL`.
+Adres API można zmienić przez `DEMO_API_URL`. Ta sama komenda (`seed:demo:prod` w kontenerze) co noc resetuje konto demo na produkcji.
 
 ## Kolejka ingestu
 

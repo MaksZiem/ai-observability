@@ -36,6 +36,13 @@ import { CreateAlertRuleDto } from './dto/create-alert-rule.dto.js';
 import { UpdateAlertRuleDto } from './dto/update-alert-rule.dto.js';
 import { AlertRule } from './entities/alert-rule.entity.js';
 import { ParseIdPipe } from '../common/pipes/parse-id.pipe.js';
+import { demoAccountLocked, isDemoAccount } from '../demo/demo-account.js';
+
+function assertDemoWebhook(user: JwtPayload, webhookUrl?: string | null) {
+  if (webhookUrl && isDemoAccount(user)) {
+    throw demoAccountLocked('The demo account cannot send alert webhooks');
+  }
+}
 
 @ApiTags('alerts')
 @ApiBearerAuth(BEARER_AUTH)
@@ -76,6 +83,7 @@ export class AlertsController {
     @Body() dto: CreateAlertRuleDto,
     @CurrentUser() user: JwtPayload,
   ) {
+    assertDemoWebhook(user, dto.webhookUrl);
     await this.projectsService.findOne(projectId, user.sub);
     return this.alertsService.create(projectId, user.sub, dto);
   }
@@ -137,6 +145,7 @@ export class AlertsController {
     @Body() dto: UpdateAlertRuleDto,
     @CurrentUser() user: JwtPayload,
   ) {
+    assertDemoWebhook(user, dto.webhookUrl);
     await this.projectsService.findOne(projectId, user.sub);
     return this.alertsService.update(projectId, id, dto);
   }

@@ -10,12 +10,14 @@ import { IncidentChatMessage } from './entities/incident-chat-message.entity.js'
 import { GeminiAnalysisModel } from './gemini-analysis.model.js';
 import { IncidentChatController } from './incident-chat.controller.js';
 import { IncidentChatService } from './incident-chat.service.js';
+import { AiUsageModule } from '../ai-usage/ai-usage.module.js';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([IncidentAnalysis, IncidentChatMessage]),
     IncidentsModule,
     ProjectsModule,
+    AiUsageModule,
   ],
   controllers: [AnalysisController, IncidentChatController],
   providers: [

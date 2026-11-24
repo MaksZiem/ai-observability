@@ -1,6 +1,10 @@
-const API_URL = process.env.DEMO_API_URL ?? 'http://localhost:3001/api';
-const EMAIL = process.env.DEMO_EMAIL ?? 'demo@example.com';
-const PASSWORD = process.env.DEMO_PASSWORD ?? 'demo-password';
+import { User } from '../users/entities/user.entity.js';
+import { DEMO_EMAIL, DEMO_PASSWORD } from '../demo/demo-account.js';
+import dataSource from './data-source.js';
+
+const API_URL =
+  process.env.DEMO_API_URL ??
+  `http://localhost:${process.env.PORT ?? 3001}/api`;
 const PROJECT_NAME = 'My E-commerce API';
 
 const MINUTE_MS = 60_000;
@@ -62,22 +66,22 @@ async function call<T>(
   return (response.status === 204 ? undefined : await response.json()) as T;
 }
 
-async function authenticate(): Promise<string> {
+async function removeDemoAccount(): Promise<void> {
+  await dataSource.initialize();
   try {
-    const { accessToken } = await call<{ accessToken: string }>(
-      'POST',
-      '/auth/login',
-      { body: { email: EMAIL, password: PASSWORD } },
-    );
-    return accessToken;
-  } catch {
-    const { accessToken } = await call<{ accessToken: string }>(
-      'POST',
-      '/auth/register',
-      { body: { email: EMAIL, password: PASSWORD, name: 'Alice' } },
-    );
-    return accessToken;
+    await dataSource.getRepository(User).delete({ email: DEMO_EMAIL });
+  } finally {
+    await dataSource.destroy();
   }
+}
+
+async function authenticate(): Promise<string> {
+  const { accessToken } = await call<{ accessToken: string }>(
+    'POST',
+    '/auth/register',
+    { body: { email: DEMO_EMAIL, password: DEMO_PASSWORD, name: 'Demo User' } },
+  );
+  return accessToken;
 }
 
 async function recreateProject(
@@ -311,6 +315,7 @@ async function createPastIncident(
 }
 
 async function main(): Promise<void> {
+  await removeDemoAccount();
   const now = Date.now();
   const token = await authenticate();
   const { projectId, apiKey } = await recreateProject(token);
@@ -440,8 +445,8 @@ async function main(): Promise<void> {
 
   console.log(
     [
-      'Demo data ready.',
-      `  Login:     ${EMAIL} / ${PASSWORD}`,
+      'Demo account reset.',
+      `  Login:     ${DEMO_EMAIL} / ${DEMO_PASSWORD}`,
       `  Project:   ${PROJECT_NAME} (${projectId})`,
       `  API key:   ${apiKey}`,
       `  Telemetry: ${telemetry.spans.length} spans, ${telemetry.logs.length} logs, ${telemetry.errors.length} errors`,

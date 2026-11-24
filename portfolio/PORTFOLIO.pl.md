@@ -82,7 +82,7 @@ Ta platforma:
 - **Realtime:** strumień Server-Sent Events per projekt z nowymi błędami, incydentami, alertami i statusem analiz.
 - **Monitorowanie samej platformy:** opóźnienie ingestu, liczba paczek przyjętych, zapisanych, ponowionych i przeniesionych do dead-letter queue, głębokość kolejki, błędy alertów i AI.
 - **Redakcja sekretów:** hasła, tokeny, JWT, nagłówki `Bearer`, klucze API i numery kart (ze sprawdzeniem Luhna) są maskowane przed zapisem.
-- **Generator demo:** `npm run demo` tworzy 3 godziny realistycznego ruchu plus wadliwe wdrożenie, które wywołuje incydent.
+- **Generator demo:** `npm run seed:demo` tworzy 3 godziny realistycznego ruchu plus wadliwe wdrożenie, które wywołuje incydent.
 
 ## Stack technologiczny
 
@@ -396,7 +396,7 @@ Zapisane zdarzenie ma `"authorization": "[REDACTED]"` i trafia do grupy `Databas
 
 ## Przykładowy przebieg
 
-`npm run demo` tworzy projekt *My E-commerce API* i symuluje 3 godziny ruchu dla `api` i `payment-service`:
+`npm run seed:demo` tworzy projekt *My E-commerce API* i symuluje 3 godziny ruchu dla `api` i `payment-service`:
 
 1. **Historia:** wdrożenia `v1.42.1` i `v1.42.2` oraz rozwiązany incydent z przeszłości *„Database connection pool exhaustion”* (naprawiony podniesieniem puli z 5 do 20 połączeń).
 2. **Wadliwe wdrożenie:** `v1.42.3` na `payment-service`, *„Reduce database connection pool size to 5”*, 40 minut temu.
@@ -452,11 +452,11 @@ cp .env.example .env            # DATABASE_URL, REDIS_URL, JWT_SECRET, GEMINI_AP
 npm install
 npm run migration:run
 npm run start:dev               # http://localhost:3001/api
-npm run demo                    # tworzy użytkownika demo, projekt, telemetrię i incydenty
+npm run seed:demo               # tworzy użytkownika demo, projekt, telemetrię i incydenty
 
 cd ../frontend
 npm install
-npm run dev                     # http://localhost:3000  (demo@example.com / demo-password)
+npm run dev                     # http://localhost:3000  (demo-login@example.com / password-demo)
 ```
 
 ## Ograniczenia i plany

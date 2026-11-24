@@ -13,6 +13,7 @@ import { IncidentLink } from '../incidents/entities/incident-link.entity.js';
 import { IncidentNote } from '../incidents/entities/incident-note.entity.js';
 import { Incident } from '../incidents/entities/incident.entity.js';
 import { Span } from '../traces/entities/span.entity.js';
+import { AiUsage } from '../ai-usage/ai-usage.entity.js';
 
 export function createDataSourceOptions(url: string): DataSourceOptions {
   return {
@@ -32,6 +33,7 @@ export function createDataSourceOptions(url: string): DataSourceOptions {
       IncidentAnalysis,
       IncidentChatMessage,
       AlertRule,
+      AiUsage,
     ],
     migrations: [join(import.meta.dirname, 'migrations', '*.js')],
     synchronize: false,

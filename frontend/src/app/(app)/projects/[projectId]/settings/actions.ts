@@ -43,6 +43,9 @@ export async function changePassword(
           : t("errors.validation");
       return { error: message, success: false };
     }
+    if (error instanceof ApiError && error.code === "DEMO_ACCOUNT_LOCKED") {
+      return { error: t("projects.password.errors.DEMO_ACCOUNT_LOCKED"), success: false };
+    }
     if (error instanceof ApiError && error.status === 429) {
       return { error: t("auth.errors.tooManyAttempts"), success: false };
     }

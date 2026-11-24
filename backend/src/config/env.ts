@@ -14,6 +14,7 @@ const envSchema = z.object({
   GEMINI_API_KEY: z.string().min(1),
   ALLOW_PRIVATE_WEBHOOKS: z.stringbool().default(false),
   GEMINI_MODEL: z.string().min(1).default('gemini-3.8-flash'),
+  AI_DAILY_LIMIT_PER_USER: z.coerce.number().int().positive().default(30),
 });
 
 export type Env = z.infer<typeof envSchema>;

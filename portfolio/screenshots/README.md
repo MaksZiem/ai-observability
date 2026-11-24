@@ -1,6 +1,6 @@
 # Screenshots to capture
 
-Run `npm run demo` in `backend/` first so the data matches the "Example run" section. Recommended: 1600×1000 WebP.
+Run `npm run seed:demo` in `backend/` first so the data matches the "Example run" section. Recommended: 1600×1000 WebP.
 
 | File | What to show |
 |---|---|

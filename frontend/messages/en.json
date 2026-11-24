@@ -62,7 +62,8 @@
         "choicesRequired": "Choose a metric, condition and severity.",
         "threshold": "The threshold must be a number of 0 or more.",
         "window": "The window must be 1 to {max} whole minutes.",
-        "failed": "Could not create the alert. Try again."
+        "failed": "Could not create the alert. Try again.",
+        "DEMO_ACCOUNT_LOCKED": "Webhooks are disabled on the demo account. Create the alert without a webhook URL."
       }
     }
   },
@@ -106,7 +107,8 @@
       "pending": "Analyzing the evidence. This page updates when the result is ready.",
       "failed": "The analysis failed.",
       "tokens": "{count} tokens",
-      "history": "Analysis history ({count})"
+      "history": "Analysis history ({count})",
+      "AI_DAILY_LIMIT": "You've used today's AI limit. Try again tomorrow."
     },
     "chat": {
       "you": "You",
@@ -126,7 +128,8 @@
         "tooLong": "Questions are limited to {max} characters.",
         "AI_UNAVAILABLE": "The AI assistant is unavailable, try again later.",
         "rateLimited": "Too many questions at once. Wait a moment.",
-        "failed": "The assistant could not answer. Try again."
+        "failed": "The assistant could not answer. Try again.",
+        "AI_DAILY_LIMIT": "You've used today's AI limit. Try again tomorrow."
       }
     }
   },
@@ -604,7 +607,8 @@
         "length": "The new password must be 8 to 128 characters.",
         "mismatch": "The new passwords do not match.",
         "sameAsCurrent": "Choose a password different from the current one.",
-        "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect."
+        "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect.",
+        "DEMO_ACCOUNT_LOCKED": "This action is disabled on the demo account."
       }
     }
   },

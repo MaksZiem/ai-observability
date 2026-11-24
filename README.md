@@ -133,7 +133,7 @@ The **ingest path** and the **query path** are separate: ingestion only authenti
 
 <br>
 
-`npm run demo` simulates 3 hours of traffic for `api` and `payment-service`:
+`npm run seed:demo` simulates 3 hours of traffic for `api` and `payment-service`:
 
 1. 🚀 Deployment `v1.42.3` *"Reduce database connection pool size to 5"*.
 2. 🐢 4 minutes later, PostgreSQL spans slow down and ~35% of `POST /payments` fail with `DatabaseConnectionTimeout`.
@@ -166,9 +166,9 @@ cp .env.example .env      # DATABASE_URL, REDIS_URL, JWT_SECRET, GEMINI_API_KEY,
 npm install
 npm run migration:run
 npm run start:dev
-npm run demo              # demo user, project, 3 h of telemetry and an incident
+npm run seed:demo         # demo user, project, 3 h of telemetry and an incident
 
-# frontend → http://localhost:3000   (demo@example.com / demo-password)
+# frontend → http://localhost:3000   (demo-login@example.com / password-demo)
 cd ../frontend
 npm install
 npm run dev
@@ -197,7 +197,7 @@ ai-observability/
 │   │   ├── alerts/       rules, evaluator, webhooks
 │   │   ├── realtime/     SSE stream per project
 │   │   └── platform/     self-monitoring
-│   └── scripts/demo.ts   demo data seeder
+│   └── src/database/seed-demo.ts   demo data seeder
 ├── frontend/             Next.js dashboard
 └── portfolio/            case study (EN/PL) and screenshots
 ```

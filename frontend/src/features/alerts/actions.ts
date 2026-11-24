@@ -47,9 +47,11 @@ export async function createAlertRule(
   } catch (apiError) {
     return {
       error:
-        apiError instanceof ApiError && apiError.status === 400
-          ? t("errors.validation")
-          : t("alerts.form.errors.failed"),
+        apiError instanceof ApiError && apiError.code === "DEMO_ACCOUNT_LOCKED"
+          ? t("alerts.form.errors.DEMO_ACCOUNT_LOCKED")
+          : apiError instanceof ApiError && apiError.status === 400
+            ? t("errors.validation")
+            : t("alerts.form.errors.failed"),
       values,
       createdName: null,
     };

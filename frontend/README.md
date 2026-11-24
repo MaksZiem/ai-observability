@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Aplikacja działa pod `http://localhost:3000`. Po `npm run demo` w backendzie można się zalogować jako `demo@example.com` / `demo-password`.
+Aplikacja działa pod `http://localhost:3000`. Po `npm run seed:demo` w backendzie można się zalogować jako `demo-login@example.com` / `password-demo`.
 
 ## Zmienne środowiskowe (`.env.local`)
 
